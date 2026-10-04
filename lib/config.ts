@@ -21,12 +21,6 @@ export type FormaEntrega = {
 
 export const formasEntrega: FormaEntrega[] = [
   {
-    id: "retirada",
-    titulo: "Retirada na loja",
-    descricao: ["Endereço da loja a definir", "Aguarde a confirmação da vendedora para retirar."],
-    valor: 0,
-  },
-  {
     id: "excursao",
     titulo: "Excursão / Ônibus",
     descricao: [
