@@ -25,3 +25,8 @@ Abra http://localhost:3000. Sem banco configurado, os pedidos de teste ficam em 
 2. Em **Storage**, crie um banco **Upstash for Redis** e conecte ao projeto
    (isso cria as variáveis `KV_REST_API_URL` e `KV_REST_API_TOKEN`).
 3. Faça um novo deploy.
+
+## Painel de pedidos
+
+Acesse `/painel`. A senha fica na variável de ambiente `PAINEL_SENHA`
+(Vercel → Settings → Environment Variables; para testes locais, em `.env.local`).
