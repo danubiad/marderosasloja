@@ -33,7 +33,7 @@ export const formasEntrega: FormaEntrega[] = [
       "Envie as informações da excursão para a vendedora: dia, data e horário.",
       "Caso a entrega não seja possível, uma nova taxa de motoboy será cobrada.",
     ],
-    valor: 20,
+    valor: 30,
   },
   {
     id: "correios",
