@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { IconeBusca, IconeSeta } from "@/components/icones";
-import type { Produto } from "@/data/produtos";
+import type { Categoria, Produto } from "@/data/produtos";
 import { formatarPreco } from "@/lib/format";
 
 type Ordem = "recentes" | "menor" | "maior" | "nome";
@@ -17,10 +17,10 @@ const ordens: { id: Ordem; nome: string }[] = [
   { id: "nome", nome: "Nome A-Z" },
 ];
 
-type Props = { produtos: Produto[]; categorias: string[] };
+type Props = { produtos: Produto[]; categorias: readonly Categoria[] };
 
 export function Vitrine({ produtos, categorias }: Props) {
-  const [categoria, setCategoria] = useState<string | null>(null);
+  const [categoria, setCategoria] = useState<Categoria | null>(null);
   const [ordem, setOrdem] = useState<Ordem>("recentes");
   const [novidades, setNovidades] = useState(false);
   const [promocoes, setPromocoes] = useState(false);
@@ -31,7 +31,7 @@ export function Vitrine({ produtos, categorias }: Props) {
     const termo = busca.trim().toLowerCase();
     const filtrados = produtos.filter(
       (p) =>
-        (!categoria || p.categoria === categoria) &&
+        (!categoria || p.categorias.includes(categoria)) &&
         (!novidades || p.novidade) &&
         (!promocoes || p.precoDe) &&
         (!termo || `${p.nome} ${p.referencia}`.toLowerCase().includes(termo)),
@@ -117,7 +117,11 @@ export function Vitrine({ produtos, categorias }: Props) {
       </div>
 
       {lista.length === 0 ? (
-        <p className="px-4 py-16 text-center text-suave">Nenhum produto encontrado.</p>
+        <p className="px-4 py-16 text-center text-suave">
+          {categoria && !busca && !novidades && !promocoes
+            ? `Em breve novidades em ${categoria}.`
+            : "Nenhum produto encontrado."}
+        </p>
       ) : (
         <ul className="grid grid-cols-2 gap-x-3 gap-y-8 px-3 pb-10 md:grid-cols-3 lg:grid-cols-4">
           {lista.map((p, i) => (

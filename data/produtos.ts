@@ -10,13 +10,29 @@ export type Cor = {
   foto?: string;
 };
 
+/** Categorias do catálogo, na ordem em que aparecem no filtro. */
+export const categorias = [
+  "Conjuntos",
+  "Calcinhas",
+  "Kits",
+  "Camisolas",
+  "Baby Doll",
+  "Pijama",
+  "Cueca",
+  "Sutiã Avulso",
+  "Plus Size",
+] as const;
+
+export type Categoria = (typeof categorias)[number];
+
 export type Produto = {
   id: string;
   slug: string;
   referencia: string;
   nome: string;
   descricao: string;
-  categoria: string;
+  /** Um produto pode estar em mais de uma categoria (ex.: ["Conjuntos", "Plus Size"]) */
+  categorias: Categoria[];
   preco: number;
   /** Preço antigo, para produtos em promoção */
   precoDe?: number;
@@ -36,7 +52,7 @@ export const produtos: Produto[] = [
     nome: "Conjunto Renda Floral",
     descricao:
       "Conjunto em renda floral com sutiã com bojo e calcinha fio duplo. Alças reguláveis e fecho nas costas.",
-    categoria: "Conjuntos",
+    categorias: ["Conjuntos"],
     preco: 39.9,
     novidade: true,
     fotos: [],
@@ -54,7 +70,7 @@ export const produtos: Produto[] = [
     referencia: "MR-102",
     nome: "Sutiã Microfibra Sem Costura",
     descricao: "Sutiã em microfibra com bojo bolha, sem costura, toque macio e invisível sob a roupa.",
-    categoria: "Sutiãs",
+    categorias: ["Sutiã Avulso"],
     preco: 24.9,
     fotos: [],
     cores: [
@@ -71,7 +87,7 @@ export const produtos: Produto[] = [
     referencia: "MR-103",
     nome: "Calcinha Cós Alto Renda",
     descricao: "Calcinha cós alto com detalhe em renda na cintura. Forro em algodão.",
-    categoria: "Calcinhas",
+    categorias: ["Calcinhas"],
     preco: 12.9,
     precoDe: 15.9,
     fotos: [],
@@ -85,11 +101,11 @@ export const produtos: Produto[] = [
   },
   {
     id: "4",
-    slug: "body-renda-decote",
+    slug: "camisola-renda-decote",
     referencia: "MR-104",
-    nome: "Body Renda Decote V",
-    descricao: "Body em renda com decote V profundo, alças finas e fechamento com colchete.",
-    categoria: "Bodies",
+    nome: "Camisola Renda Decote V",
+    descricao: "Camisola curta em renda com decote V profundo e alças finas reguláveis.",
+    categorias: ["Camisolas"],
     preco: 54.9,
     novidade: true,
     fotos: [],
@@ -106,7 +122,7 @@ export const produtos: Produto[] = [
     referencia: "MR-105",
     nome: "Short Doll Cetim",
     descricao: "Short doll em cetim com acabamento em renda. Blusa com alça regulável.",
-    categoria: "Pijamas",
+    categorias: ["Pijama"],
     preco: 44.9,
     precoDe: 52.9,
     fotos: [],
@@ -124,7 +140,7 @@ export const produtos: Produto[] = [
     referencia: "MR-106",
     nome: "Kit 3 Calcinhas Algodão",
     descricao: "Kit com 3 calcinhas em algodão com elastano, modelo tradicional, cores sortidas.",
-    categoria: "Calcinhas",
+    categorias: ["Kits", "Calcinhas"],
     preco: 19.9,
     fotos: [],
     cores: [{ nome: "Sortido", hex: "#c9a55a" }],
@@ -132,8 +148,6 @@ export const produtos: Produto[] = [
     criadoEm: "2026-08-15",
   },
 ];
-
-export const categorias = Array.from(new Set(produtos.map((p) => p.categoria))).sort();
 
 export function buscarProduto(id: string) {
   return produtos.find((p) => p.id === id);
