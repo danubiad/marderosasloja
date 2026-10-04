@@ -18,7 +18,7 @@ export type Cor = {
 export const TAMANHOS_PADRAO = ["P", "M", "G", "GG"];
 
 /** Grade de tamanhos dos produtos Plus Size. */
-export const TAMANHOS_PLUS = ["G1", "G2", "G3"];
+export const TAMANHOS_PLUS = ["48", "50", "52", "54"];
 
 /** Categorias do catálogo, na ordem em que aparecem no filtro. */
 export const categorias = [
