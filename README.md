@@ -7,6 +7,7 @@ e link de conferência, e a cliente envia o pedido para o WhatsApp da loja.
 ## Onde editar
 
 - **Produtos:** `data/produtos.ts` (fotos em `public/produtos/`)
+- **Bolinhas de cor com recorte da foto:** `npm run amostra -- <foto> <nome> <x%> <y%> [tamanho%]`
 - **Loja, WhatsApp, pedido mínimo, entregas e cupons:** `lib/config.ts`
 
 ## Rodar no computador

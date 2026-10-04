@@ -1,14 +1,24 @@
 // Cadastro dos produtos do catálogo.
 // Para adicionar fotos, coloque os arquivos em /public/produtos e informe o caminho em `fotos`
 // (ex.: "/produtos/conjunto-renda-1.jpg"). Fotos por cor vão em `cores[].foto`.
+// As bolinhas de cor usam um recorte do tecido/estampa (`cores[].amostra`), gerado com
+// `npm run amostra` (veja scripts/recortar-amostra.mjs).
 
 export type Cor = {
   nome: string;
-  /** Cor da bolinha, em hexadecimal */
+  /** Cor da bolinha, em hexadecimal (usada enquanto não há recorte da foto) */
   hex: string;
   /** Foto opcional mostrando o produto nessa cor */
   foto?: string;
+  /** Recorte do tecido ou da estampa, mostrado dentro da bolinha (ex.: "/produtos/amostras/mr-101-preto.webp") */
+  amostra?: string;
 };
+
+/** Grade de tamanhos padrão de todos os produtos. */
+export const TAMANHOS_PADRAO = ["P", "M", "G", "GG"];
+
+/** Grade de tamanhos dos produtos Plus Size. */
+export const TAMANHOS_PLUS = ["G1", "G2", "G3"];
 
 /** Categorias do catálogo, na ordem em que aparecem no filtro. */
 export const categorias = [
@@ -61,7 +71,7 @@ export const produtos: Produto[] = [
       { nome: "Vinho", hex: "#6b1e2e" },
       { nome: "Nude", hex: "#e3c4a8" },
     ],
-    tamanhos: ["P", "M", "G", "GG"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-10-01",
   },
   {
@@ -78,7 +88,7 @@ export const produtos: Produto[] = [
       { nome: "Branco", hex: "#f7f5f0" },
       { nome: "Nude", hex: "#e3c4a8" },
     ],
-    tamanhos: ["40", "42", "44", "46"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-09-20",
   },
   {
@@ -96,7 +106,7 @@ export const produtos: Produto[] = [
       { nome: "Rosa", hex: "#e8a6b4" },
       { nome: "Off White", hex: "#efe9dd" },
     ],
-    tamanhos: ["P", "M", "G"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-09-10",
   },
   {
@@ -113,7 +123,7 @@ export const produtos: Produto[] = [
       { nome: "Preto", hex: "#111111" },
       { nome: "Vermelho", hex: "#a3101f" },
     ],
-    tamanhos: ["P", "M", "G"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-09-28",
   },
   {
@@ -131,7 +141,7 @@ export const produtos: Produto[] = [
       { nome: "Rosê", hex: "#d9a0a0" },
       { nome: "Preto", hex: "#111111" },
     ],
-    tamanhos: ["P", "M", "G", "GG"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-08-30",
   },
   {
@@ -144,7 +154,7 @@ export const produtos: Produto[] = [
     preco: 19.9,
     fotos: [],
     cores: [{ nome: "Sortido", hex: "#c9a55a" }],
-    tamanhos: ["P", "M", "G", "GG"],
+    tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-08-15",
   },
 ];

@@ -155,7 +155,7 @@ export function Vitrine({ produtos, categorias }: Props) {
                 {p.cores.length > 1 && (
                   <div className="mt-2 flex justify-center gap-2">
                     {p.cores.slice(0, 5).map((c) => (
-                      <BolinhaCor key={c.nome} hex={c.hex} className="size-5" />
+                      <BolinhaCor key={c.nome} hex={c.hex} amostra={c.amostra} className="size-5" />
                     ))}
                   </div>
                 )}

@@ -5,7 +5,7 @@ import { BolinhaCor } from "@/components/BolinhaCor";
 import { chaveGrade, type Grade } from "@/lib/calculo";
 
 type Props = {
-  cores: { nome: string; hex: string }[];
+  cores: { nome: string; hex: string; amostra?: string }[];
   tamanhos: string[];
   grade: Grade;
   onChange?: (grade: Grade) => void;
@@ -70,7 +70,7 @@ export function GradeQuantidade({
               <tr key={cor.nome} className="border-t border-white">
                 <th scope="row" className="bg-fundo px-1 py-2 font-normal">
                   <div className="flex flex-col items-center gap-1">
-                    <BolinhaCor hex={cor.hex} className="size-10" />
+                    <BolinhaCor hex={cor.hex} amostra={cor.amostra} className="size-10" />
                     <span className="text-xs leading-tight text-suave">{cor.nome}</span>
                   </div>
                 </th>

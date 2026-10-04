@@ -10,7 +10,7 @@ export type ItemPedido = {
   nome: string;
   foto?: string;
   preco: number;
-  cores: { nome: string; hex: string }[];
+  cores: { nome: string; hex: string; amostra?: string }[];
   tamanhos: string[];
   grade: Grade;
   pecas: number;

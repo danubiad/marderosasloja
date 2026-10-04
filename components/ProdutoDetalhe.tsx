@@ -84,7 +84,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
                   onClick={() => irPara(indice)}
                   className="flex w-16 shrink-0 flex-col items-center gap-1 disabled:cursor-default"
                 >
-                  <BolinhaCor hex={c.hex} className="size-12" />
+                  <BolinhaCor hex={c.hex} amostra={c.amostra} className="size-12" />
                   <span className="w-full truncate text-center text-xs">{c.nome}</span>
                 </button>
               );
