@@ -10,7 +10,7 @@ export const loja = {
 };
 
 /** Valor mínimo do pedido em reais (0 = sem mínimo). */
-export const pedidoMinimo = 300;
+export const pedidoMinimo = 350;
 
 export type FormaEntrega = {
   id: string;
