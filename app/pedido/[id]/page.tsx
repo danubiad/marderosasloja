@@ -10,6 +10,9 @@ import { Resumo } from "@/components/Resumo";
 import { loja } from "@/lib/config";
 import { formatarCep, formatarPreco, formatarTelefone, mascararDocumento } from "@/lib/format";
 import { buscarPedido } from "@/lib/pedidos";
+import { LojaProvider } from "@/lib/loja";
+import { AtualizarSozinho } from "@/components/AtualizarSozinho";
+import { ConferenciaPedido } from "@/components/ConferenciaPedido";
 
 export const metadata: Metadata = {
   title: `Pedido — ${loja.nome}`,
@@ -37,13 +40,17 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
     "",
     `Conferência do pedido: ${link}`,
   ].join("\n");
-  const linkWhatsapp = `https://wa.me/${loja.whatsapp}?text=${encodeURIComponent(mensagem)}`;
+  const destino = pedido.revendedora ? `55${pedido.revendedora.whatsapp}` : loja.whatsapp;
+  const linkWhatsapp = `https://wa.me/${destino}?text=${encodeURIComponent(mensagem)}`;
+  const conferenciaIniciada = Object.keys(pedido.conferencia ?? {}).length > 0;
+  const voltar = pedido.revendedora ? `/r/${pedido.revendedora.usuario}` : "/";
 
   const data = new Date(pedido.criadoEm).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
   const e = pedido.endereco;
 
   return (
-    <>
+    <LojaProvider revendedora={pedido.revendedora}>
+      <AtualizarSozinho segundos={30} />
       <Cabecalho titulo={`Pedido ${pedido.numero}`} semCarrinho />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-6">
         {enviado && (
@@ -53,7 +60,9 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
             </div>
             <h1 className="mt-6 text-2xl font-bold">Seu pedido foi enviado.</h1>
             <p className="mt-4 max-w-md text-lg">
-              Agora envie o pedido no WhatsApp da loja para que uma de nossas vendedoras finalize com você.
+              {pedido.revendedora
+                ? `Agora envie o pedido no WhatsApp de ${pedido.revendedora.nome} para finalizar a compra.`
+                : "Agora envie o pedido no WhatsApp da loja para que uma de nossas vendedoras finalize com você."}
               Obrigada pela preferência!
             </p>
             <a
@@ -72,6 +81,11 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
           <span>{data}</span>
         </div>
 
+        {conferenciaIniciada ? (
+          <div className="mt-4">
+            <ConferenciaPedido pedido={pedido} modo="cliente" />
+          </div>
+        ) : (
         <ul className="mt-4 divide-y divide-linha">
           {pedido.itens.map((item) => (
             <li key={item.produtoId} className="py-6 first:pt-2">
@@ -97,6 +111,7 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
             </li>
           ))}
         </ul>
+        )}
 
         <Resumo
           pecas={pedido.pecas}
@@ -111,7 +126,7 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
           <section className="rounded-md border border-linha p-5">
             <h2 className="text-lg font-bold">Cliente</h2>
             <p className="mt-2 text-suave">{pedido.cliente.nome}</p>
-            <p className="text-suave">{mascararDocumento(pedido.cliente.documento)}</p>
+            {pedido.cliente.documento && <p className="text-suave">{mascararDocumento(pedido.cliente.documento)}</p>}
             <p className="text-suave">{formatarTelefone(pedido.cliente.telefone)}</p>
           </section>
           <section className="rounded-md border border-linha p-5">
@@ -134,10 +149,10 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
           </section>
         )}
 
-        <Link href="/" className="mt-8 block rounded-md bg-texto px-6 py-4 text-center text-lg font-bold text-white">
+        <Link href={voltar} className="mt-8 block rounded-md bg-texto px-6 py-4 text-center text-lg font-bold text-white">
           Voltar ao catálogo
         </Link>
       </main>
-    </>
+    </LojaProvider>
   );
 }

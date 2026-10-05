@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useLoja } from "@/lib/loja";
 import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { IconeBusca, IconeSeta } from "@/components/icones";
@@ -20,6 +21,7 @@ const ordens: { id: Ordem; nome: string }[] = [
 type Props = { produtos: Produto[]; categorias: readonly Categoria[] };
 
 export function Vitrine({ produtos, categorias }: Props) {
+  const { base } = useLoja();
   const [categoria, setCategoria] = useState<Categoria | null>(null);
   const [ordem, setOrdem] = useState<Ordem>("recentes");
   const [novidades, setNovidades] = useState(false);
@@ -126,7 +128,7 @@ export function Vitrine({ produtos, categorias }: Props) {
         <ul className="grid grid-cols-2 gap-x-3 gap-y-8 px-3 pb-10 md:grid-cols-3 lg:grid-cols-4">
           {lista.map((p, i) => (
             <li key={p.id}>
-              <Link href={`/produto/${p.slug}`} className="group block text-center">
+              <Link href={`${base}/produto/${p.slug}`} className="group block text-center">
                 <div className="relative">
                   <FotoProduto
                     src={p.fotos[0]}

@@ -68,7 +68,17 @@ export const formasEntrega: FormaEntrega[] = [
   },
 ];
 
-export type Cupom = { codigo: string; percentual: number };
+/** No catálogo da revendedora, a entrega é combinada direto com ela. */
+export const formasEntregaRevendedora: FormaEntrega[] = [
+  {
+    id: "combinar",
+    titulo: "Combinar entrega com a vendedora",
+    descricao: ["A vendedora entra em contato para combinar a entrega e o pagamento."],
+    valor: 0,
+  },
+];
+
+export type Cupom ={ codigo: string; percentual: number };
 
 export const cupons: Cupom[] = [{ codigo: "BEMVINDA10", percentual: 10 }];
 

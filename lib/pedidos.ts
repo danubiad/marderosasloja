@@ -1,131 +1,77 @@
 import "server-only";
-import { promises as fs } from "fs";
-import path from "path";
-import { Redis } from "@upstash/redis";
-import type { Grade } from "@/lib/calculo";
+import { kv } from "@/lib/kv";
+import {
+  chaveConferencia,
+  type Conferencia,
+  type Pedido,
+  type StatusPedido,
+  type Substituicao,
+} from "@/lib/tipos-pedido";
 
-export type ItemPedido = {
-  produtoId: string;
-  referencia: string;
-  nome: string;
-  foto?: string;
-  preco: number;
-  cores: { nome: string; hex: string; amostra?: string }[];
-  tamanhos: string[];
-  legendaTamanhos?: Record<string, string>;
-  grade: Grade;
-  pecas: number;
-  subtotal: number;
-};
+export * from "@/lib/tipos-pedido";
 
-export type Pedido = {
-  id: string;
-  numero: number;
-  criadoEm: string;
-  cliente: {
-    nome: string;
-    documento: string;
-    telefone: string;
-  };
-  endereco: {
-    cep: string;
-    logradouro: string;
-    numero: string;
-    complemento: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
-  };
-  entrega: { id: string; titulo: string; valor: number };
-  itens: ItemPedido[];
-  observacao: string;
-  cupom?: string;
-  pecas: number;
-  subtotal: number;
-  desconto: number;
-  frete: number;
-  total: number;
-  /** Andamento do pedido, alterado pelo painel. Pedidos antigos sem status contam como "novo". */
-  status?: StatusPedido;
-};
-
-export const statusPedido = {
-  novo: "Novo",
-  separando: "Em separação",
-  enviado: "Enviado",
-  concluido: "Concluído",
-  cancelado: "Cancelado",
-} as const;
-
-export type StatusPedido = keyof typeof statusPedido;
-
-// Em produção (Vercel) os pedidos ficam no Upstash Redis.
-// Sem as variáveis de ambiente, usa um arquivo local (apenas para testes no computador).
-const redis =
-  process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN
-    ? new Redis({ url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN })
-    : process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-      ? Redis.fromEnv()
-      : null;
-
-const ARQUIVO = path.join(process.cwd(), ".data", "pedidos.json");
 const NUMERO_INICIAL = 1000;
 
-async function lerArquivo(): Promise<Pedido[]> {
-  try {
-    return JSON.parse(await fs.readFile(ARQUIVO, "utf8"));
-  } catch {
-    return [];
-  }
-}
-
 export async function proximoNumero(): Promise<number> {
-  if (redis) return NUMERO_INICIAL + (await redis.incr("pedidos:numero"));
-  const pedidos = await lerArquivo();
-  return NUMERO_INICIAL + pedidos.length + 1;
+  return NUMERO_INICIAL + (await kv.incr("pedidos:numero"));
 }
 
 export async function salvarPedido(pedido: Pedido) {
-  if (redis) {
-    await redis.set(`pedido:${pedido.id}`, pedido);
-    await redis.lpush("pedidos", pedido.id);
-    return;
-  }
-  if (process.env.VERCEL) throw new Error("Banco de dados de pedidos não configurado");
-  const pedidos = await lerArquivo();
-  pedidos.push(pedido);
-  await fs.mkdir(path.dirname(ARQUIVO), { recursive: true });
-  await fs.writeFile(ARQUIVO, JSON.stringify(pedidos, null, 2));
+  await kv.set(`pedido:${pedido.id}`, pedido);
+  await kv.lpush("pedidos", pedido.id);
+  if (pedido.revendedora) await kv.lpush(`revendedora:${pedido.revendedora.usuario}:pedidos`, pedido.id);
 }
 
 export async function buscarPedido(id: string): Promise<Pedido | null> {
-  if (redis) return await redis.get<Pedido>(`pedido:${id}`);
-  const pedidos = await lerArquivo();
-  return pedidos.find((p) => p.id === id) ?? null;
+  return kv.get<Pedido>(`pedido:${id}`);
+}
+
+async function listarIds(chave: string, limite: number) {
+  const ids = await kv.lrange(chave, 0, limite - 1);
+  const pedidos = await kv.mget<Pedido>(ids.map((id) => `pedido:${id}`));
+  return pedidos.filter((p): p is Pedido => p !== null);
 }
 
 /** Pedidos do mais recente para o mais antigo. */
-export async function listarPedidos(limite = 500): Promise<Pedido[]> {
-  if (redis) {
-    const ids = await redis.lrange<string>("pedidos", 0, limite - 1);
-    if (ids.length === 0) return [];
-    const pedidos = await redis.mget<(Pedido | null)[]>(...ids.map((id) => `pedido:${id}`));
-    return pedidos.filter((p): p is Pedido => p !== null);
-  }
-  const pedidos = await lerArquivo();
-  return pedidos.reverse().slice(0, limite);
+export function listarPedidos(limite = 500) {
+  return listarIds("pedidos", limite);
 }
 
-export async function atualizarStatus(id: string, status: StatusPedido) {
-  if (redis) {
-    const pedido = await redis.get<Pedido>(`pedido:${id}`);
-    if (!pedido) return;
-    await redis.set(`pedido:${id}`, { ...pedido, status });
-    return;
-  }
-  const pedidos = await lerArquivo();
-  const pedido = pedidos.find((p) => p.id === id);
-  if (!pedido) return;
-  pedido.status = status;
-  await fs.writeFile(ARQUIVO, JSON.stringify(pedidos, null, 2));
+export function listarPedidosDaRevendedora(usuario: string, limite = 300) {
+  return listarIds(`revendedora:${usuario}:pedidos`, limite);
+}
+
+async function atualizar(id: string, fn: (p: Pedido) => void) {
+  const pedido = await buscarPedido(id);
+  if (!pedido) return null;
+  fn(pedido);
+  await kv.set(`pedido:${id}`, pedido);
+  return pedido;
+}
+
+export function atualizarStatus(id: string, status: StatusPedido) {
+  return atualizar(id, (p) => void (p.status = status));
+}
+
+/** Marca um item (ou uma substituição) como separado (ok), em falta, ou limpa a marca. */
+export function marcarItem(id: string, chave: string, estado: Conferencia | null) {
+  return atualizar(id, (p) => {
+    p.conferencia ??= {};
+    if (estado) p.conferencia[chave] = estado;
+    else delete p.conferencia[chave];
+  });
+}
+
+export function adicionarSubstituicao(id: string, sub: Substituicao) {
+  return atualizar(id, (p) => {
+    p.substituicoes ??= [];
+    p.substituicoes.push(sub);
+  });
+}
+
+export function removerSubstituicao(id: string, subId: string) {
+  return atualizar(id, (p) => {
+    p.substituicoes = (p.substituicoes ?? []).filter((s) => s.id !== subId);
+    if (p.conferencia) delete p.conferencia[chaveConferencia.substituicao(subId)];
+  });
 }

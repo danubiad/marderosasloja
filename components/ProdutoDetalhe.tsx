@@ -9,11 +9,13 @@ import { IconeCarrinho } from "@/components/icones";
 import type { Produto, Video } from "@/data/produtos";
 import { totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
+import { useLoja } from "@/lib/loja";
 import { loja } from "@/lib/config";
 import { formatarPreco } from "@/lib/format";
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { itens, definirGrade } = useCarrinho();
+  const { base } = useLoja();
   const grade = itens[produto.id] ?? {};
   const pecas = totalPecas(grade);
   const temPreco = produto.preco > 0;
@@ -67,7 +69,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
                   className="h-full w-full object-contain"
                 />
                 <Link
-                  href={`/videos#${s.videoId}`}
+                  href={`${base}/videos#${s.videoId}`}
                   className="absolute right-3 top-3 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-white"
                 >
                   Ver no feed de vídeos
@@ -200,14 +202,14 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
         <div className="mt-6 grid gap-3">
           {pecas > 0 && (
             <Link
-              href="/carrinho"
+              href={`${base}/carrinho`}
               className="flex items-center justify-center gap-2 rounded-md bg-dourado-escuro px-4 py-3.5 text-lg font-bold text-white"
             >
               Ver carrinho
             </Link>
           )}
           <Link
-            href="/"
+            href={base || "/"}
             className="flex items-center justify-center gap-2 rounded-md border-2 border-texto px-4 py-3 text-lg font-bold text-texto"
           >
             <IconeCarrinho className="size-6" /> Continuar comprando

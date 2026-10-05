@@ -8,12 +8,14 @@ import { IconeCarrinho, IconeMais, IconeSacola, IconeSom, IconeVoltar } from "@/
 import type { Produto, Video } from "@/data/produtos";
 import { totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
+import { useLoja } from "@/lib/loja";
 import { formatarPreco } from "@/lib/format";
 
 export type ItemFeed = { id: string; produto: Produto; video: Video };
 
 export function FeedVideos({ itens }: { itens: ItemFeed[] }) {
   const router = useRouter();
+  const { base } = useLoja();
   const { itens: carrinho } = useCarrinho();
   const pecasCarrinho = Object.values(carrinho).reduce((acc, g) => acc + totalPecas(g), 0);
   const [mudo, setMudo] = useState(true);
@@ -73,7 +75,7 @@ export function FeedVideos({ itens }: { itens: ItemFeed[] }) {
               <div className="min-w-0 flex-1 rounded-lg bg-white/95 px-4 py-3 shadow-lg">
                 <p className="truncate text-lg uppercase">{produto.nome}</p>
                 <p className="text-sm">{produto.preco > 0 ? formatarPreco(produto.preco) : "Preço em breve"}</p>
-                <Link href={`/produto/${produto.slug}`} className="mt-1 inline-flex items-center gap-1 text-sm text-sky-700">
+                <Link href={`${base}/produto/${produto.slug}`} className="mt-1 inline-flex items-center gap-1 text-sm text-sky-700">
                   <IconeSacola /> Ver produto
                 </Link>
               </div>
@@ -106,14 +108,14 @@ export function FeedVideos({ itens }: { itens: ItemFeed[] }) {
       >
         <button
           type="button"
-          onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))}
+          onClick={() => (window.history.length > 1 ? router.back() : router.push(base || "/"))}
           className="pointer-events-auto rounded-full p-2 text-white"
           aria-label="Voltar"
         >
           <IconeVoltar className="size-7" />
         </button>
         <Link
-          href="/carrinho"
+          href={`${base}/carrinho`}
           className="pointer-events-auto relative rounded-xl bg-white/80 p-2 text-sucesso"
           aria-label={`Carrinho com ${pecasCarrinho} peças`}
         >
@@ -133,6 +135,7 @@ export function FeedVideos({ itens }: { itens: ItemFeed[] }) {
 
 function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: () => void }) {
   const { itens, definirGrade } = useCarrinho();
+  const { base } = useLoja();
   const grade = itens[produto.id] ?? {};
   const pecas = totalPecas(grade);
   const temPreco = produto.preco > 0;
@@ -180,7 +183,7 @@ function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: ()
 
         <div className="mt-4 grid gap-2">
           {pecas > 0 && (
-            <Link href="/carrinho" className="rounded-md bg-dourado-escuro px-4 py-3 text-center text-lg font-bold text-white">
+            <Link href={`${base}/carrinho`} className="rounded-md bg-dourado-escuro px-4 py-3 text-center text-lg font-bold text-white">
               Ver carrinho
             </Link>
           )}
@@ -191,7 +194,7 @@ function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: ()
           >
             Continuar assistindo
           </button>
-          <Link href={`/produto/${produto.slug}`} className="py-2 text-center text-sm text-sky-700 underline">
+          <Link href={`${base}/produto/${produto.slug}`} className="py-2 text-center text-sm text-sky-700 underline">
             Ver página do produto
           </Link>
         </div>
