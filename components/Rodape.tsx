@@ -1,13 +1,12 @@
 import { IconeWhatsapp } from "@/components/icones";
-import { loja, pedidoMinimo } from "@/lib/config";
-import { formatarPreco } from "@/lib/format";
+import { loja, pedidoMinimo, textoPedidoMinimo } from "@/lib/config";
 
 export function Rodape() {
   return (
     <footer className="mt-auto border-t border-linha bg-creme px-4 py-10 text-center text-sm text-suave">
       <p className="mx-auto max-w-md">{loja.slogan}</p>
       {pedidoMinimo > 0 && (
-        <p className="mt-2 font-medium text-dourado-escuro">Pedido mínimo: {formatarPreco(pedidoMinimo)}</p>
+        <p className="mt-2 font-medium text-dourado-escuro">{textoPedidoMinimo}</p>
       )}
       <a
         href={`https://wa.me/${loja.whatsapp}`}

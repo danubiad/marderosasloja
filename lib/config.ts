@@ -12,6 +12,37 @@ export const loja = {
 /** Valor mínimo do pedido em reais (0 = sem mínimo). */
 export const pedidoMinimo = 350;
 
+/** Alternativa ao valor mínimo: quantidade mínima de peças (0 = não vale). */
+export const pecasMinimas = 10;
+
+/** O pedido pode ser fechado se atingir o valor mínimo OU a quantidade mínima de peças. */
+export function atingiuMinimo(subtotal: number, pecas: number) {
+  return subtotal >= pedidoMinimo || (pecasMinimas > 0 && pecas >= pecasMinimas);
+}
+
+export const textoPedidoMinimo = `Pedido mínimo R$ ${pedidoMinimo.toFixed(2).replace(".", ",")}${
+  pecasMinimas > 0 ? ` ou ${pecasMinimas} peças variadas` : ""
+}`;
+
+/** Perfil da loja mostrado no topo do catálogo, no estilo de uma bio do Instagram. */
+export const perfil = {
+  usuario: "marderosasloja",
+  nome: "Mar de Rosas Lingerie | Moda Íntima",
+  foto: "/logo/perfil.webp",
+  categoria: "Loja de roupas femininas",
+  bio: ["Somos de Itaguari Goiás", "Lingerie no atacado desde 2010", "Enviamos pra todo Brasil e exterior"],
+  instagram: "https://www.instagram.com/marderosasloja/",
+  seguidores: "54,2 mil",
+  desde: "2010",
+};
+
+/** Banners do topo: foto + produto para onde o banner leva. */
+export const banners = [
+  { foto: "/banners/1.webp", produto: "conjunto-antonely", alt: "Conjunto Antonely vermelho" },
+  { foto: "/banners/2.webp", produto: "robe-avulso-de-tule-fino", alt: "Robe de tule rosê" },
+  { foto: "/banners/3.webp", produto: "conjunto-rafaele", alt: "Conjunto Rafaele preto" },
+];
+
 export type FormaEntrega = {
   id: string;
   titulo: string;

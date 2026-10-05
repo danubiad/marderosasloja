@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FaixaAviso } from "@/components/FaixaAviso";
 import { useCarrinho } from "@/lib/carrinho";
 import { totalPecas } from "@/lib/calculo";
 import { IconeCarrinho, IconeVideo, IconeVoltar } from "@/components/icones";
@@ -25,6 +26,7 @@ export function Cabecalho({ voltar, titulo, semCarrinho, children }: Props) {
       className="sticky z-30 border-b border-linha bg-white/95 backdrop-blur"
       style={{ top: "env(safe-area-inset-top, 0px)" }}
     >
+      <FaixaAviso />
       <div className="mx-auto flex h-16 max-w-5xl items-center gap-3 px-4">
         {voltar ? (
           <button

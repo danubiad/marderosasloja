@@ -11,7 +11,7 @@ import { IconeEscudo, IconeLixeira, IconeWhatsapp } from "@/components/icones";
 import { Resumo } from "@/components/Resumo";
 import { calcularResumo } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
-import { buscarCupom, loja, pedidoMinimo } from "@/lib/config";
+import { atingiuMinimo, buscarCupom, loja, pecasMinimas, pedidoMinimo, textoPedidoMinimo } from "@/lib/config";
 import { formatarPreco } from "@/lib/format";
 
 export default function PaginaCarrinho() {
@@ -20,7 +20,7 @@ export default function PaginaCarrinho() {
   const [codigo, setCodigo] = useState(cupom);
   const [erroCupom, setErroCupom] = useState("");
   const resumo = calcularResumo(itens, cupom);
-  const faltaMinimo = pedidoMinimo - resumo.subtotal;
+  const liberado = atingiuMinimo(resumo.subtotal, resumo.pecas);
 
   function aplicarCupom() {
     if (!codigo.trim()) {
@@ -163,11 +163,13 @@ export default function PaginaCarrinho() {
         <BarraTotal
           total={resumo.total}
           rotulo="Continuar"
-          desabilitado={faltaMinimo > 0}
+          desabilitado={!liberado}
           aviso={
-            faltaMinimo > 0
-              ? `Pedido mínimo de ${formatarPreco(pedidoMinimo)}. Faltam ${formatarPreco(faltaMinimo)}.`
-              : undefined
+            liberado
+              ? undefined
+              : `${textoPedidoMinimo}. Faltam ${formatarPreco(pedidoMinimo - resumo.subtotal)}${
+                  pecasMinimas > 0 ? ` ou ${pecasMinimas - resumo.pecas} ${pecasMinimas - resumo.pecas === 1 ? "peça" : "peças"}` : ""
+                }.`
           }
           onClick={() => router.push("/finalizar")}
         />

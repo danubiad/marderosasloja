@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 import { calcularResumo, type Itens } from "@/lib/calculo";
-import { pedidoMinimo } from "@/lib/config";
+import { atingiuMinimo } from "@/lib/config";
 import { documentoValido, somenteDigitos } from "@/lib/format";
 import { proximoNumero, salvarPedido, type Pedido } from "@/lib/pedidos";
 
@@ -37,7 +37,8 @@ export async function POST(request: Request) {
   const itens = (typeof corpo.itens === "object" && corpo.itens ? corpo.itens : {}) as Itens;
   const resumo = calcularResumo(itens, texto(corpo.cupom, 40), texto(corpo.entregaId, 40));
   if (resumo.linhas.length === 0) return Response.json({ erro: "Carrinho vazio." }, { status: 400 });
-  if (resumo.subtotal < pedidoMinimo) return Response.json({ erro: "Pedido abaixo do valor mínimo." }, { status: 400 });
+  if (!atingiuMinimo(resumo.subtotal, resumo.pecas))
+    return Response.json({ erro: "Pedido abaixo do mínimo." }, { status: 400 });
   if (!resumo.entrega) return Response.json({ erro: "Escolha a forma de entrega." }, { status: 400 });
 
   const pedido: Pedido = {

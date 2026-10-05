@@ -1,5 +1,5 @@
 // Produtos do catálogo. Gerado a partir das fotos em Imagens/catalogo; pode editar à vontade.
-import { IDADES_INFANTIL, TAMANHOS_INFANTIL, TAMANHOS_PADRAO, TAMANHOS_PLUS, type Produto } from "./tipos";
+import { IDADES_INFANTIL, TAMANHOS_INFANTIL, TAMANHOS_PADRAO, type Produto } from "./tipos";
 
 export const catalogo: Produto[] = [
   {

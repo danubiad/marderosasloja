@@ -7,7 +7,7 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { Resumo } from "@/components/Resumo";
 import { calcularResumo } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
-import { formasEntrega, pedidoMinimo } from "@/lib/config";
+import { atingiuMinimo, formasEntrega } from "@/lib/config";
 import {
   documentoValido,
   formatarCep,
@@ -70,10 +70,10 @@ export default function PaginaFinalizar() {
   }, []);
 
   useEffect(() => {
-    if (carregado && (resumo.linhas.length === 0 || resumo.subtotal < pedidoMinimo) && !enviando) {
+    if (carregado && (resumo.linhas.length === 0 || !atingiuMinimo(resumo.subtotal, resumo.pecas)) && !enviando) {
       router.replace("/carrinho");
     }
-  }, [carregado, resumo.linhas.length, resumo.subtotal, enviando, router]);
+  }, [carregado, resumo.linhas.length, resumo.subtotal, resumo.pecas, enviando, router]);
 
   function atualizar(campo: keyof Dados, valor: string) {
     setDados((d) => ({ ...d, [campo]: valor }));
