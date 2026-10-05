@@ -105,7 +105,7 @@ function Cadastro() {
       <button type="submit" disabled={enviando} className="rounded-md bg-dourado-escuro py-3.5 text-lg font-bold text-white disabled:opacity-50">
         {enviando ? "Criando..." : "Criar meu catálogo"}
       </button>
-      <p className="text-center text-xs text-suave">Seu catálogo fica no ar assim que a Mar de Rosas aprovar o cadastro.</p>
+      <p className="text-center text-xs text-suave">Seu catálogo fica no ar na hora, assim que você criar o cadastro.</p>
     </form>
   );
 }

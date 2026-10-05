@@ -45,7 +45,7 @@ export async function cadastrar(_estado: string, formData: FormData): Promise<st
     whatsapp,
     margem,
     senhaHash: await gerarHashSenha(senha),
-    status: "pendente",
+    status: "ativa",
     criadoEm: new Date().toISOString(),
   });
   await kv.set(`revendedora-whatsapp:${whatsapp}`, usuario);

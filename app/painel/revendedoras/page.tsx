@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const etiquetas = {
-  pendente: { nome: "Aguardando aprovação", cor: "bg-amber-100 text-amber-900" },
+  pendente: { nome: "Ativa", cor: "bg-green-100 text-green-900" },
   ativa: { nome: "Ativa", cor: "bg-green-100 text-green-900" },
   bloqueada: { nome: "Bloqueada", cor: "bg-neutral-200 text-neutral-700" },
 };
@@ -30,8 +30,8 @@ export default async function Revendedoras() {
       <AbasPainel atual="/painel/revendedoras" />
       <main className="mx-auto w-full max-w-5xl px-4 pb-16 pt-5">
         <p className="rounded-md bg-creme px-4 py-3 text-sm">
-          As revendedoras se cadastram em <strong>/revendedora</strong>. O catálogo delas só fica no ar depois que você aprovar
-          aqui. Envie este link para quem quiser revender: <code className="font-semibold">marderosasloja.vercel.app/revendedora</code>
+          As revendedoras se cadastram em <strong>/revendedora</strong> e o catálogo entra no ar na hora (aprovação automática). Se precisar, use Bloquear para tirar um catálogo do ar
+          . Envie este link para quem quiser revender: <code className="font-semibold">marderosasloja.vercel.app/revendedora</code>
         </p>
 
         {lista.length === 0 ? (
@@ -59,14 +59,14 @@ export default async function Revendedoras() {
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {r.status !== "ativa" && (
+                    {r.status === "bloqueada" && (
                       <form action={mudarStatusRevendedora.bind(null, r.usuario, "ativa")}>
                         <button type="submit" className="rounded-md bg-sucesso px-3 py-2 text-sm font-semibold text-white">
-                          {r.status === "pendente" ? "Aprovar" : "Reativar"}
+                          Reativar
                         </button>
                       </form>
                     )}
-                    {r.status === "ativa" && (
+                    {r.status !== "bloqueada" && (
                       <a
                         href={`/r/${r.usuario}`}
                         target="_blank"

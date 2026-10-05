@@ -38,26 +38,16 @@ export default async function PainelRevendedora() {
       </header>
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-5">
-        {r.status === "pendente" ? (
-          <section className="rounded-lg border border-amber-300 bg-amber-50 p-4">
-            <p className="font-semibold text-amber-900">Cadastro em análise</p>
-            <p className="mt-1 text-sm text-amber-900">
-              Seu catálogo <strong>/r/{r.usuario}</strong> fica no ar assim que a Mar de Rosas aprovar. Enquanto isso, você já pode
-              ajustar sua margem abaixo.
-            </p>
-          </section>
-        ) : (
-          <section className="rounded-lg border border-linha p-4">
-            <p className="text-sm text-suave">Seu catálogo</p>
-            <p className="break-all text-lg font-semibold">marderosasloja.vercel.app/r/{r.usuario}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <CompartilharLink caminho={`/r/${r.usuario}`} nome={r.nome} />
-              <Link href={`/r/${r.usuario}`} target="_blank" className="rounded-md border border-linha px-4 py-2.5 font-semibold">
-                Abrir catálogo
-              </Link>
-            </div>
-          </section>
-        )}
+        <section className="rounded-lg border border-linha p-4">
+          <p className="text-sm text-suave">Seu catálogo</p>
+          <p className="break-all text-lg font-semibold">marderosasloja.vercel.app/r/{r.usuario}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <CompartilharLink caminho={`/r/${r.usuario}`} nome={r.nome} />
+            <Link href={`/r/${r.usuario}`} target="_blank" className="rounded-md border border-linha px-4 py-2.5 font-semibold">
+              Abrir catálogo
+            </Link>
+          </div>
+        </section>
 
         <section className="mt-4 rounded-lg border border-linha p-4">
           <h2 className="mb-3 text-lg font-semibold">Meu perfil</h2>

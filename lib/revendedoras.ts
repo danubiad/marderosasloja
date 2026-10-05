@@ -37,10 +37,10 @@ export function buscarRevendedora(usuario: string) {
   return kv.get<Revendedora>(`revendedora:${usuario}`);
 }
 
-/** Revendedora ativa (para mostrar o catálogo público). */
+/** Revendedora com catálogo no ar (aprovação é automática: só as bloqueadas ficam fora). */
 export async function buscarRevendedoraAtiva(usuario: string) {
   const r = await buscarRevendedora(usuario);
-  return r?.status === "ativa" ? r : null;
+  return r && r.status !== "bloqueada" ? r : null;
 }
 
 export async function listarRevendedoras() {
