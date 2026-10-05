@@ -6,7 +6,7 @@ import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeCarrinho } from "@/components/icones";
-import type { Produto } from "@/data/produtos";
+import type { Produto, Video } from "@/data/produtos";
 import { totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
 import { loja } from "@/lib/config";
@@ -18,12 +18,16 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const pecas = totalPecas(grade);
   const temPreco = produto.preco > 0;
 
-  // Galeria: fotos gerais + fotos por cor
+  // Galeria: fotos gerais + vídeos + fotos por cor
+  type Slide = { src?: string; cor?: string; video?: Video; videoId?: string };
   const fotosCores = produto.cores.filter((c) => c.foto);
-  const slides = [
-    ...(produto.fotos.length ? produto.fotos : [undefined]).map((src) => ({ src, cor: undefined as string | undefined })),
+  const videos = produto.videos ?? [];
+  const slides: Slide[] = [
+    ...(produto.fotos.length ? produto.fotos : [undefined]).map((src) => ({ src })),
+    ...videos.map((video, i) => ({ video, videoId: `${produto.slug}-${i + 1}` })),
     ...fotosCores.map((c) => ({ src: c.foto, cor: c.nome })),
   ];
+  const primeiroVideo = slides.findIndex((s) => s.video);
   const [slideAtual, setSlideAtual] = useState(0);
   const galeria = useRef<HTMLDivElement>(null);
 
@@ -48,17 +52,39 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           onScroll={(e) => setSlideAtual(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}
           className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
         >
-          {slides.map((s, i) => (
-            <FotoProduto
-              key={i}
-              src={s.src}
-              alt={s.cor ? `${produto.nome} — ${s.cor}` : produto.nome}
-              cores={produto.cores}
-              priority={i === 0}
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="aspect-[4/5] w-full shrink-0 snap-center"
-            />
-          ))}
+          {slides.map((s, i) =>
+            s.video ? (
+              <div key={i} className="relative aspect-[4/5] w-full shrink-0 snap-center bg-black">
+                <video
+                  ref={(el) => {
+                    if (el && i !== slideAtual) el.pause();
+                  }}
+                  src={s.video.src}
+                  poster={s.video.capa}
+                  controls
+                  playsInline
+                  preload="none"
+                  className="h-full w-full object-contain"
+                />
+                <Link
+                  href={`/videos#${s.videoId}`}
+                  className="absolute right-3 top-3 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-white"
+                >
+                  Ver no feed de vídeos
+                </Link>
+              </div>
+            ) : (
+              <FotoProduto
+                key={i}
+                src={s.src}
+                alt={s.cor ? `${produto.nome} — ${s.cor}` : produto.nome}
+                cores={produto.cores}
+                priority={i === 0}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="aspect-[4/5] w-full shrink-0 snap-center"
+              />
+            ),
+          )}
         </div>
         {slides.length > 1 && (
           <div className="flex justify-center gap-2 py-3">
@@ -74,8 +100,22 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           </div>
         )}
 
-        {produto.cores.length > 0 && (
+        {(produto.cores.length > 0 || primeiroVideo >= 0) && (
           <div className="flex gap-4 overflow-x-auto bg-fundo px-4 py-3">
+            {primeiroVideo >= 0 && (
+              <button
+                type="button"
+                onClick={() => irPara(primeiroVideo)}
+                className="flex w-16 shrink-0 flex-col items-center gap-1"
+              >
+                <span className="flex size-12 items-center justify-center rounded-full bg-suave text-white">
+                  <svg viewBox="0 0 24 24" className="ml-0.5 size-6" fill="currentColor" aria-hidden>
+                    <path d="M8 5v14l11-7L8 5Z" />
+                  </svg>
+                </span>
+                <span className="text-xs">{videos.length > 1 ? `Vídeos (${videos.length})` : "Vídeo"}</span>
+              </button>
+            )}
             {produto.cores.map((c) => {
               const indice = slides.findIndex((s) => s.cor === c.nome);
               return (

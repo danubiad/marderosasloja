@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCarrinho } from "@/lib/carrinho";
 import { totalPecas } from "@/lib/calculo";
-import { IconeCarrinho, IconeVoltar } from "@/components/icones";
+import { IconeCarrinho, IconeVideo, IconeVoltar } from "@/components/icones";
 
 type Props = {
   /** Mostra seta de voltar no lugar do logo */
@@ -46,6 +46,12 @@ export function Cabecalho({ voltar, titulo, semCarrinho, children }: Props) {
         </div>
 
         {children}
+
+        {!semCarrinho && (
+          <Link href="/videos" className="rounded-full p-2 hover:bg-fundo" aria-label="Vídeos">
+            <IconeVideo />
+          </Link>
+        )}
 
         {!semCarrinho && (
           <Link

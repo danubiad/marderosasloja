@@ -10,6 +10,44 @@ export function IconeCarrinho({ className = "size-7" }: Props) {
   );
 }
 
+export function IconeVideo({ className = "size-7" }: Props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className={className} aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M10 8.5v7l5.5-3.5L10 8.5Z" fill="currentColor" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconeSom({ ligado, className = "size-6" }: Props & { ligado: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className} aria-hidden>
+      <path d="M4 9h4l5-4v14l-5-4H4V9Z" fill="currentColor" strokeLinejoin="round" />
+      {ligado ? (
+        <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" strokeLinecap="round" />
+      ) : (
+        <path d="m17 9.5 5 5m0-5-5 5" strokeLinecap="round" />
+      )}
+    </svg>
+  );
+}
+
+export function IconeMais({ className = "size-7" }: Props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className={className} aria-hidden>
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeSacola({ className = "size-4" }: Props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className} aria-hidden>
+      <path d="M5 8h14l-1 12H6L5 8Zm4 0V6a3 3 0 0 1 6 0v2" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function IconeBusca({ className = "size-6" }: Props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className} aria-hidden>

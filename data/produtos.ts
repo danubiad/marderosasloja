@@ -1,11 +1,12 @@
-// Cadastro dos produtos: a lista fica em data/catalogo.ts.
-// Fotos em /public/produtos/<produto>/ e recortes das bolinhas em /public/produtos/amostras/
-// (novos recortes: `npm run amostra`, veja scripts/recortar-amostra.mjs).
+// Cadastro dos produtos: a lista fica em data/catalogo.ts e os vídeos em data/videos.ts.
+// Fotos em /public/produtos/<produto>/, recortes das bolinhas em /public/produtos/amostras/
+// e vídeos em /public/videos/<produto>/ (novos recortes: `npm run amostra`).
 import { catalogo } from "./catalogo";
+import { videosPorProduto } from "./videos";
 
 export * from "./tipos";
 
-export const produtos = catalogo;
+export const produtos = catalogo.map((p) => ({ ...p, videos: p.videos ?? videosPorProduto[p.slug] ?? [] }));
 
 export function buscarProduto(id: string) {
   return produtos.find((p) => p.id === id);

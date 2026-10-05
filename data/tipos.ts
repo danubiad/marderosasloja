@@ -8,6 +8,12 @@ export type Cor = {
   amostra?: string;
 };
 
+export type Video = {
+  src: string;
+  /** Imagem mostrada antes do vídeo começar */
+  capa: string;
+};
+
 /** Grade de tamanhos padrão de todos os produtos. */
 export const TAMANHOS_PADRAO = ["P", "M", "G", "GG"];
 
@@ -44,6 +50,8 @@ export type Produto = {
   precoDe?: number;
   novidade?: boolean;
   fotos: string[];
+  /** Vídeos do produto (mostrados na página do produto e no feed de vídeos) */
+  videos?: Video[];
   cores: Cor[];
   tamanhos: string[];
   /** Data de cadastro (AAAA-MM-DD), usada na ordenação "Mais recentes" */
