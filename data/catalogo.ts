@@ -671,7 +671,8 @@ export const catalogo: Produto[] = [
       { nome: "Marinho", hex: "#143965", foto: "/produtos/pijama-americano-suede-plus-size/11.webp", amostra: "/produtos/amostras/pijama-americano-suede-plus-size-marinho.webp" },
       { nome: "Vinho", hex: "#79042d", foto: "/produtos/pijama-americano-suede-plus-size/12.webp", amostra: "/produtos/amostras/pijama-americano-suede-plus-size-vinho.webp" },
     ],
-    tamanhos: TAMANHOS_PLUS,
+    tamanhos: ["XG"],
+    legendaTamanhos: { XG: "veste 48 ao 52" },
     criadoEm: "2026-10-04",
   },
   {
