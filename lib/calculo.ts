@@ -26,7 +26,8 @@ export function calcularResumo(itens: Itens, codigoCupom?: string, entregaId?: s
   const linhas: LinhaResumo[] = [];
   for (const [id, grade] of Object.entries(itens)) {
     const produto = buscarProduto(id);
-    if (!produto) continue;
+    // Produtos sem preço definido ainda não podem ser pedidos
+    if (!produto || produto.preco <= 0) continue;
     // Ignora combinações que não existem mais no cadastro
     const gradeValida: Grade = {};
     for (const cor of produto.cores) {

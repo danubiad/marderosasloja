@@ -148,15 +148,20 @@ export function Vitrine({ produtos, categorias }: Props) {
                   )}
                 </div>
                 <h2 className="mt-3 truncate px-1 uppercase">{p.nome}</h2>
-                <p className="font-bold">
-                  {p.precoDe && <span className="mr-2 text-sm font-normal text-suave line-through">{formatarPreco(p.precoDe)}</span>}
-                  {formatarPreco(p.preco)}
-                </p>
+                {p.preco > 0 ? (
+                  <p className="font-bold">
+                    {p.precoDe && <span className="mr-2 text-sm font-normal text-suave line-through">{formatarPreco(p.precoDe)}</span>}
+                    {formatarPreco(p.preco)}
+                  </p>
+                ) : (
+                  <p className="text-sm text-suave">Preço em breve</p>
+                )}
                 {p.cores.length > 1 && (
                   <div className="mt-2 flex justify-center gap-2">
                     {p.cores.slice(0, 5).map((c) => (
                       <BolinhaCor key={c.nome} hex={c.hex} amostra={c.amostra} className="size-5" />
                     ))}
+                    {p.cores.length > 5 && <span className="text-xs leading-5 text-suave">+{p.cores.length - 5}</span>}
                   </div>
                 )}
               </Link>

@@ -9,12 +9,14 @@ import { IconeCarrinho } from "@/components/icones";
 import type { Produto } from "@/data/produtos";
 import { totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
+import { loja } from "@/lib/config";
 import { formatarPreco } from "@/lib/format";
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { itens, definirGrade } = useCarrinho();
   const grade = itens[produto.id] ?? {};
   const pecas = totalPecas(grade);
+  const temPreco = produto.preco > 0;
 
   // Galeria: fotos gerais + fotos por cor
   const fotosCores = produto.cores.filter((c) => c.foto);
@@ -94,12 +96,16 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
       </div>
 
       <div className="px-4 pb-10 pt-5 md:px-0 md:pt-0">
-        <p className="text-right text-3xl font-bold">
-          {produto.precoDe && (
-            <span className="mr-2 text-base font-normal text-suave line-through">{formatarPreco(produto.precoDe)}</span>
-          )}
-          {formatarPreco(produto.preco)}
-        </p>
+        {temPreco ? (
+          <p className="text-right text-3xl font-bold">
+            {produto.precoDe && (
+              <span className="mr-2 text-base font-normal text-suave line-through">{formatarPreco(produto.precoDe)}</span>
+            )}
+            {formatarPreco(produto.preco)}
+          </p>
+        ) : (
+          <p className="text-right text-lg text-suave">Preço em breve</p>
+        )}
         <div className="mt-2 flex items-start gap-3">
           <div className="flex-1">
             <h1 className="text-2xl font-bold uppercase leading-tight">{produto.nome}</h1>
@@ -115,9 +121,19 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           </button>
         </div>
 
-        <p className="mt-4 uppercase leading-relaxed text-suave">{produto.descricao}</p>
+        {produto.descricao && <p className="mt-4 uppercase leading-relaxed text-suave">{produto.descricao}</p>}
 
-        {pecas === 0 && (
+        {!temPreco && (
+          <div className="mt-6 rounded border border-linha bg-creme px-4 py-3 text-center">
+            Este produto estará disponível para pedido em breve. Dúvidas?{" "}
+            <a href={`https://wa.me/${loja.whatsapp}`} target="_blank" rel="noopener noreferrer" className="font-semibold underline">
+              Fale com a vendedora
+            </a>
+            .
+          </div>
+        )}
+
+        {temPreco && pecas === 0 && (
           <div className="mt-6 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-center text-orange-600">
             <strong>ATENÇÃO!</strong> Aperte no + para incluir a quantidade de peças desejadas.
           </div>
@@ -128,15 +144,17 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
             cores={produto.cores}
             tamanhos={produto.tamanhos}
             grade={grade}
-            onChange={(g) => definirGrade(produto.id, g)}
+            onChange={temPreco ? (g) => definirGrade(produto.id, g) : undefined}
             permitirDigitar
           />
         </div>
 
-        <div className="mt-6 flex justify-between">
-          <span>{pecas} pç.</span>
-          <span className="font-semibold">{formatarPreco(pecas * produto.preco)}</span>
-        </div>
+        {temPreco && (
+          <div className="mt-6 flex justify-between">
+            <span>{pecas} pç.</span>
+            <span className="font-semibold">{formatarPreco(pecas * produto.preco)}</span>
+          </div>
+        )}
 
         <div className="mt-6 grid gap-3">
           {pecas > 0 && (
