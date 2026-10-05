@@ -9,7 +9,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Diamante Borboleta",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 60.00,
     fotos: ["/produtos/baby-doll-diamante-borboleta/5.webp","/produtos/baby-doll-diamante-borboleta/29.webp","/produtos/baby-doll-diamante-borboleta/31.webp","/produtos/baby-doll-diamante-borboleta/26.webp","/produtos/baby-doll-diamante-borboleta/40.webp"],
     cores: [
       { nome: "Vermelho", hex: "#950212", foto: "/produtos/baby-doll-diamante-borboleta/5.webp", amostra: "/produtos/amostras/baby-doll-diamante-borboleta-vermelho.webp" },
@@ -39,7 +39,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Mônica",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 30.00,
     fotos: ["/produtos/baby-doll-monica/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#bc172d", foto: "/produtos/baby-doll-monica/1.webp", amostra: "/produtos/amostras/baby-doll-monica-vermelho.webp" },
@@ -62,7 +62,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Babadinho Diamante",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 60.00,
     fotos: ["/produtos/baby-doll-babadinho-diamante/1.webp","/produtos/baby-doll-babadinho-diamante/3.webp","/produtos/baby-doll-babadinho-diamante/4.webp","/produtos/baby-doll-babadinho-diamante/6.webp","/produtos/baby-doll-babadinho-diamante/7.webp"],
     cores: [
       { nome: "Azul Petróleo", hex: "#749aba", foto: "/produtos/baby-doll-babadinho-diamante/1.webp", amostra: "/produtos/amostras/baby-doll-babadinho-diamante-azul-petroleo.webp" },
@@ -81,7 +81,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Bolsinho",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-bolsinho/1.webp"],
     cores: [
       { nome: "Cerejinha com Preto", hex: "#bb9da1", foto: "/produtos/baby-doll-bolsinho/1.webp", amostra: "/produtos/amostras/baby-doll-bolsinho-cerejinha-com-preto.webp" },
@@ -104,7 +104,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Cropet",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 55.00,
     fotos: ["/produtos/baby-doll-cropet/1.webp"],
     cores: [
       { nome: "Coração Marrom", hex: "#b4b4c3", foto: "/produtos/baby-doll-cropet/1.webp", amostra: "/produtos/amostras/baby-doll-cropet-coracao-marrom.webp" },
@@ -170,7 +170,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Luciana",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-luciana/1.webp"],
     cores: [
       { nome: "Listrado Verde", hex: "#9aaf9b", foto: "/produtos/baby-doll-luciana/1.webp", amostra: "/produtos/amostras/baby-doll-luciana-listrado-verde.webp" },
@@ -192,7 +192,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Magna",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-magna/1.webp"],
     cores: [
       { nome: "Preto com Renda Dourada", hex: "#153f58", foto: "/produtos/baby-doll-magna/1.webp", amostra: "/produtos/amostras/baby-doll-magna-preto-com-renda-dourada.webp" },
@@ -214,7 +214,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Mayara",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 35.00,
     fotos: ["/produtos/baby-doll-mayara/1.webp"],
     cores: [
       { nome: "Rosê", hex: "#b07b89", foto: "/produtos/baby-doll-mayara/1.webp", amostra: "/produtos/amostras/baby-doll-mayara-rose.webp" },
@@ -300,7 +300,7 @@ export const catalogo: Produto[] = [
     nome: "Camisola Tifany",
     descricao: "",
     categorias: ["Camisolas"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/camisola-tifany/1.webp"],
     cores: [
       { nome: "Pink", hex: "#d7166f", foto: "/produtos/camisola-tifany/1.webp", amostra: "/produtos/amostras/camisola-tifany-pink.webp" },
@@ -401,7 +401,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Cropet Daniela",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 54.90,
     fotos: ["/produtos/conjunto-cropet-daniela/2.webp","/produtos/conjunto-cropet-daniela/7.webp","/produtos/conjunto-cropet-daniela/8.webp","/produtos/conjunto-cropet-daniela/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#e0564e", foto: "/produtos/conjunto-cropet-daniela/2.webp", amostra: "/produtos/amostras/conjunto-cropet-daniela-vermelho.webp" },
@@ -418,7 +418,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Cropet Felipa",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 54.90,
     fotos: ["/produtos/conjunto-cropet-felipa/2.webp","/produtos/conjunto-cropet-felipa/1.webp","/produtos/conjunto-cropet-felipa/5.webp"],
     cores: [
       { nome: "Branco", hex: "#d0bfd3", foto: "/produtos/conjunto-cropet-felipa/2.webp", amostra: "/produtos/amostras/conjunto-cropet-felipa-branco.webp" },
@@ -436,7 +436,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Cropet Tule Bordado",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 54.90,
     fotos: ["/produtos/conjunto-cropet-tule-bordado/1.webp","/produtos/conjunto-cropet-tule-bordado/4.webp","/produtos/conjunto-cropet-tule-bordado/8.webp"],
     cores: [
       { nome: "Vermelho", hex: "#d6566d", foto: "/produtos/conjunto-cropet-tule-bordado/3.webp", amostra: "/produtos/amostras/conjunto-cropet-tule-bordado-vermelho.webp" },
@@ -579,7 +579,7 @@ export const catalogo: Produto[] = [
     nome: "Cueca Sem Costura",
     descricao: "",
     categorias: ["Cueca"],
-    preco: 0,
+    preco: 29.90,
     fotos: ["/produtos/cueca-sem-costura/3.webp"],
     cores: [
       { nome: "Cinza", hex: "#9d9faa", foto: "/produtos/cueca-sem-costura/1.webp", amostra: "/produtos/amostras/cueca-sem-costura-cinza.webp" },
@@ -623,7 +623,7 @@ export const catalogo: Produto[] = [
     nome: "Pijama Algodão Regata",
     descricao: "",
     categorias: ["Pijama"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/pijama-algodao-regata/1.webp"],
     cores: [
       { nome: "Verde Água com Rosa", hex: "#57a5c4", foto: "/produtos/pijama-algodao-regata/1.webp", amostra: "/produtos/amostras/pijama-algodao-regata-verde-agua-com-rosa.webp" },
@@ -642,7 +642,7 @@ export const catalogo: Produto[] = [
     nome: "Pijama Americano Fluity Liso",
     descricao: "",
     categorias: ["Pijama"],
-    preco: 0,
+    preco: 70.00,
     fotos: ["/produtos/pijama-americano-fluity-liso/1.webp"],
     cores: [
       { nome: "Chocolate", hex: "#443026", foto: "/produtos/pijama-americano-fluity-liso/1.webp", amostra: "/produtos/amostras/pijama-americano-fluity-liso-chocolate.webp" },
@@ -660,7 +660,7 @@ export const catalogo: Produto[] = [
     nome: "Pijama Americano Suede Plus Size",
     descricao: "",
     categorias: ["Pijama","Plus Size"],
-    preco: 0,
+    preco: 65.00,
     fotos: ["/produtos/pijama-americano-suede-plus-size/1.webp"],
     cores: [
       { nome: "Preto", hex: "#14293c", foto: "/produtos/pijama-americano-suede-plus-size/7.webp", amostra: "/produtos/amostras/pijama-americano-suede-plus-size-preto.webp" },
@@ -724,7 +724,7 @@ export const catalogo: Produto[] = [
     nome: "Robe Avulso de Tule Fino",
     descricao: "",
     categorias: ["Robes"],
-    preco: 0,
+    preco: 69.90,
     fotos: ["/produtos/robe-avulso-de-tule-fino/4.webp","/produtos/robe-avulso-de-tule-fino/1.webp","/produtos/robe-avulso-de-tule-fino/15.webp"],
     cores: [
       { nome: "Rosê", hex: "#e07e7f", foto: "/produtos/robe-avulso-de-tule-fino/1.webp", amostra: "/produtos/amostras/robe-avulso-de-tule-fino-rose.webp" },
@@ -744,7 +744,7 @@ export const catalogo: Produto[] = [
     nome: "Kit Robe e Camisola",
     descricao: "",
     categorias: ["Kits"],
-    preco: 0,
+    preco: 129.00,
     fotos: ["/produtos/kit-robe-e-camisola/1.webp","/produtos/kit-robe-e-camisola/5.webp","/produtos/kit-robe-e-camisola/8.webp"],
     cores: [
       { nome: "Chocolate", hex: "#673629", foto: "/produtos/kit-robe-e-camisola/13.webp", amostra: "/produtos/amostras/kit-robe-e-camisola-chocolate.webp" },
