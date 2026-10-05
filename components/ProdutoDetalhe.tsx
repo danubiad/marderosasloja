@@ -183,6 +183,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           <GradeQuantidade
             cores={produto.cores}
             tamanhos={produto.tamanhos}
+            legendas={produto.legendaTamanhos}
             grade={grade}
             onChange={temPreco ? (g) => definirGrade(produto.id, g) : undefined}
             permitirDigitar

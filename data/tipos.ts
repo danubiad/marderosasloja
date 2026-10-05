@@ -20,6 +20,19 @@ export const TAMANHOS_PADRAO = ["P", "M", "G", "GG"];
 /** Grade de tamanhos dos produtos Plus Size. */
 export const TAMANHOS_PLUS = ["48", "50", "52", "54"];
 
+/** Grade de tamanhos infantil. */
+export const TAMANHOS_INFANTIL = ["PP", "P", "M", "G", "GG", "XG"];
+
+/** Idade de cada tamanho infantil, mostrada embaixo do tamanho na grade. */
+export const IDADES_INFANTIL: Record<string, string> = {
+  PP: "2 a 4 anos",
+  P: "4 a 6 anos",
+  M: "6 a 8 anos",
+  G: "8 a 10 anos",
+  GG: "10 a 12 anos",
+  XG: "12 a 14 anos",
+};
+
 /** Categorias do catálogo, na ordem em que aparecem no filtro. */
 export const categorias = [
   "Conjuntos",
@@ -28,6 +41,7 @@ export const categorias = [
   "Camisolas",
   "Robes",
   "Baby Doll",
+  "Baby Doll Infantil",
   "Pijama",
   "Cueca",
   "Sutiã Avulso",
@@ -54,6 +68,8 @@ export type Produto = {
   videos?: Video[];
   cores: Cor[];
   tamanhos: string[];
+  /** Texto curto embaixo de cada tamanho na grade (ex.: idade nos infantis) */
+  legendaTamanhos?: Record<string, string>;
   /** Data de cadastro (AAAA-MM-DD), usada na ordenação "Mais recentes" */
   criadoEm: string;
 };

@@ -81,6 +81,7 @@ export default function PaginaCarrinho() {
                   <GradeQuantidade
                     cores={produto.cores}
                     tamanhos={produto.tamanhos}
+                    legendas={produto.legendaTamanhos}
                     grade={grade}
                     onChange={(g) => definirGrade(produto.id, g)}
                     somenteComQuantidade

@@ -7,6 +7,8 @@ import { chaveGrade, type Grade } from "@/lib/calculo";
 type Props = {
   cores: { nome: string; hex: string; amostra?: string }[];
   tamanhos: string[];
+  /** Texto embaixo de cada tamanho (ex.: idade nos infantis) */
+  legendas?: Record<string, string>;
   grade: Grade;
   onChange?: (grade: Grade) => void;
   /** Mostra apenas as cores que têm quantidade (usado no carrinho e no pedido) */
@@ -18,6 +20,7 @@ type Props = {
 export function GradeQuantidade({
   cores,
   tamanhos,
+  legendas,
   grade,
   onChange,
   somenteComQuantidade,
@@ -61,6 +64,9 @@ export function GradeQuantidade({
               {tamanhos.map((t) => (
                 <th key={t} className="border-l border-linha px-1 py-3 text-lg font-normal">
                   {t}
+                  {legendas?.[t] && (
+                    <span className="block text-[11px] leading-tight text-suave">{legendas[t]}</span>
+                  )}
                 </th>
               ))}
             </tr>

@@ -83,7 +83,13 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
                   <p className="mt-1 font-semibold">{formatarPreco(item.preco)}</p>
                 </div>
               </div>
-              <GradeQuantidade cores={item.cores} tamanhos={item.tamanhos} grade={item.grade} somenteComQuantidade />
+              <GradeQuantidade
+                cores={item.cores}
+                tamanhos={item.tamanhos}
+                legendas={item.legendaTamanhos}
+                grade={item.grade}
+                somenteComQuantidade
+              />
               <div className="mt-4 flex justify-between">
                 <span>{item.pecas} pç.</span>
                 <span>{formatarPreco(item.subtotal)}</span>

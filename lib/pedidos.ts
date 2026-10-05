@@ -12,6 +12,7 @@ export type ItemPedido = {
   preco: number;
   cores: { nome: string; hex: string; amostra?: string }[];
   tamanhos: string[];
+  legendaTamanhos?: Record<string, string>;
   grade: Grade;
   pecas: number;
   subtotal: number;

@@ -1,5 +1,5 @@
 // Produtos do catálogo. Gerado a partir das fotos em Imagens/catalogo; pode editar à vontade.
-import { TAMANHOS_PADRAO, TAMANHOS_PLUS, type Produto } from "./tipos";
+import { IDADES_INFANTIL, TAMANHOS_INFANTIL, TAMANHOS_PADRAO, TAMANHOS_PLUS, type Produto } from "./tipos";
 
 export const catalogo: Produto[] = [
   {
@@ -148,7 +148,7 @@ export const catalogo: Produto[] = [
     referencia: "MR-007",
     nome: "Baby Doll Infantil",
     descricao: "",
-    categorias: ["Baby Doll"],
+    categorias: ["Baby Doll Infantil"],
     preco: 45.00,
     fotos: ["/produtos/baby-doll-infantil/3.webp","/produtos/baby-doll-infantil/1.webp"],
     cores: [
@@ -160,7 +160,8 @@ export const catalogo: Produto[] = [
       { nome: "Ursinho Rosa", hex: "#f5b9d5", foto: "/produtos/baby-doll-infantil/8.webp", amostra: "/produtos/amostras/baby-doll-infantil-ursinho-rosa.webp" },
       { nome: "Vaquinha Rosa", hex: "#e9bcd3", foto: "/produtos/baby-doll-infantil/9.webp", amostra: "/produtos/amostras/baby-doll-infantil-vaquinha-rosa.webp" },
     ],
-    tamanhos: TAMANHOS_PADRAO,
+    tamanhos: TAMANHOS_INFANTIL,
+    legendaTamanhos: IDADES_INFANTIL,
     criadoEm: "2026-10-04",
   },
   {
