@@ -30,6 +30,12 @@ export const videosPorProduto: Record<string, Video[]> = {
       "capa": "/videos/conjunto-cropet-daniela/1.webp"
     }
   ],
+  "conjunto-gisele": [
+    {
+      "src": "/videos/conjunto-gisele/1.mp4",
+      "capa": "/videos/conjunto-gisele/1.webp"
+    }
+  ],
   "conjunto-luciana": [
     {
       "src": "/videos/conjunto-luciana/1.mp4",
