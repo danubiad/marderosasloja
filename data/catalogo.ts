@@ -124,7 +124,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Felícia",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-felicia/12.webp","/produtos/baby-doll-felicia/16.webp","/produtos/baby-doll-felicia/14.webp"],
     cores: [
       { nome: "Corações Vermelho", hex: "#e2b2d4", foto: "/produtos/baby-doll-felicia/1.webp", amostra: "/produtos/amostras/baby-doll-felicia-coracoes-vermelho.webp" },
@@ -149,7 +149,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Infantil",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-infantil/3.webp","/produtos/baby-doll-infantil/1.webp"],
     cores: [
       { nome: "Joaninha", hex: "#ec7c7e", foto: "/produtos/baby-doll-infantil/2.webp", amostra: "/produtos/amostras/baby-doll-infantil-joaninha.webp" },
@@ -236,7 +236,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Short Curto",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/baby-doll-short-curto/1.webp"],
     cores: [
       { nome: "Rosê", hex: "#b9777d", foto: "/produtos/baby-doll-short-curto/1.webp", amostra: "/produtos/amostras/baby-doll-short-curto-rose.webp" },
@@ -257,7 +257,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Tifany",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/baby-doll-tifany/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#b7021d", foto: "/produtos/baby-doll-tifany/1.webp", amostra: "/produtos/amostras/baby-doll-tifany-vermelho.webp" },
@@ -278,7 +278,7 @@ export const catalogo: Produto[] = [
     nome: "Baby Doll Triângulo",
     descricao: "",
     categorias: ["Baby Doll"],
-    preco: 0,
+    preco: 44.90,
     fotos: ["/produtos/baby-doll-triangulo/1.webp"],
     cores: [
       { nome: "Vinho", hex: "#6c1947", foto: "/produtos/baby-doll-triangulo/1.webp", amostra: "/produtos/amostras/baby-doll-triangulo-vinho.webp" },
@@ -320,7 +320,7 @@ export const catalogo: Produto[] = [
     nome: "Camisola Vivian",
     descricao: "",
     categorias: ["Camisolas"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/camisola-vivian/1.webp"],
     cores: [
       { nome: "Azul Royal", hex: "#012876", foto: "/produtos/camisola-vivian/1.webp", amostra: "/produtos/amostras/camisola-vivian-azul-royal.webp" },
@@ -342,7 +342,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Antonely",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 45.00,
     fotos: ["/produtos/conjunto-antonely/5.webp","/produtos/conjunto-antonely/1.webp","/produtos/conjunto-antonely/2.webp"],
     cores: [
       { nome: "Nude", hex: "#c9bdba", foto: "/produtos/conjunto-antonely/2.webp", amostra: "/produtos/amostras/conjunto-antonely-nude.webp" },
@@ -364,7 +364,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Camila",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/conjunto-camila/1.webp"],
     cores: [
       { nome: "Off White com Renda Dourada", hex: "#cfceba", foto: "/produtos/conjunto-camila/1.webp", amostra: "/produtos/amostras/conjunto-camila-off-white-com-renda-dourada.webp" },
@@ -384,7 +384,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Cecília",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 55.00,
     fotos: ["/produtos/conjunto-cecilia/4.webp","/produtos/conjunto-cecilia/1.webp","/produtos/conjunto-cecilia/2.webp","/produtos/conjunto-cecilia/3.webp"],
     cores: [
       { nome: "Branco", hex: "#e8e6e8", foto: "/produtos/conjunto-cecilia/4.webp", amostra: "/produtos/amostras/conjunto-cecilia-branco.webp" },
@@ -453,7 +453,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Emily",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/conjunto-emily/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#8e1224", foto: "/produtos/conjunto-emily/1.webp", amostra: "/produtos/amostras/conjunto-emily-vermelho.webp" },
@@ -474,7 +474,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Emília",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/conjunto-emilia/1.webp"],
     cores: [
       { nome: "Preto com Nude", hex: "#967c66", foto: "/produtos/conjunto-emilia/2.webp", amostra: "/produtos/amostras/conjunto-emilia-preto-com-nude.webp" },
@@ -492,7 +492,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Luciana",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/conjunto-luciana/1.webp","/produtos/conjunto-luciana/2.webp","/produtos/conjunto-luciana/3.webp","/produtos/conjunto-luciana/5.webp"],
     cores: [
       { nome: "Branco com Dourado", hex: "#a4a49c", foto: "/produtos/conjunto-luciana/7.webp", amostra: "/produtos/amostras/conjunto-luciana-branco-com-dourado.webp" },
@@ -511,7 +511,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Rafaela",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 48.00,
     fotos: ["/produtos/conjunto-rafaela/1.webp"],
     cores: [
       { nome: "Azul Céu", hex: "#598eb9", foto: "/produtos/conjunto-rafaela/1.webp", amostra: "/produtos/amostras/conjunto-rafaela-azul-ceu.webp" },
@@ -536,7 +536,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Rafaele",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 44.90,
     fotos: ["/produtos/conjunto-rafaele/2.webp","/produtos/conjunto-rafaele/1.webp"],
     cores: [
       { nome: "Preto", hex: "#1a1a26", foto: "/produtos/conjunto-rafaele/2.webp", amostra: "/produtos/amostras/conjunto-rafaele-preto.webp" },
@@ -559,7 +559,7 @@ export const catalogo: Produto[] = [
     nome: "Conjunto Sem Bojo Reforçado",
     descricao: "",
     categorias: ["Conjuntos"],
-    preco: 0,
+    preco: 44.90,
     fotos: ["/produtos/conjunto-sem-bojo-reforcado/2.webp","/produtos/conjunto-sem-bojo-reforcado/8.webp","/produtos/conjunto-sem-bojo-reforcado/11.webp","/produtos/conjunto-sem-bojo-reforcado/10.webp"],
     cores: [
       { nome: "Chocolate", hex: "#4f2722", foto: "/produtos/conjunto-sem-bojo-reforcado/3.webp", amostra: "/produtos/amostras/conjunto-sem-bojo-reforcado-chocolate.webp" },
@@ -605,7 +605,7 @@ export const catalogo: Produto[] = [
     nome: "Kit Conjunto Aline",
     descricao: "",
     categorias: ["Kits"],
-    preco: 0,
+    preco: 75.00,
     fotos: ["/produtos/kit-conjunto-aline/7.webp","/produtos/kit-conjunto-aline/4.webp","/produtos/kit-conjunto-aline/15.webp","/produtos/kit-conjunto-aline/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#f33049", foto: "/produtos/kit-conjunto-aline/13.webp", amostra: "/produtos/amostras/kit-conjunto-aline-vermelho.webp" },
@@ -680,7 +680,7 @@ export const catalogo: Produto[] = [
     nome: "Pijama Infantil Menino",
     descricao: "",
     categorias: ["Pijama"],
-    preco: 0,
+    preco: 44.90,
     fotos: ["/produtos/pijama-infantil-menino/2.webp"],
     cores: [
       { nome: "Super-heróis Verde", hex: "#67664a", foto: "/produtos/pijama-infantil-menino/1.webp", amostra: "/produtos/amostras/pijama-infantil-menino-super-herois-verde.webp" },
