@@ -715,7 +715,8 @@ export const catalogo: Produto[] = [
       { nome: "Barquinhos Marinho", hex: "#232b57", foto: "/produtos/pijama-infantil-menino/29.webp", amostra: "/produtos/amostras/pijama-infantil-menino-barquinhos-marinho.webp" },
       { nome: "Nuvens Marinho", hex: "#40414d", foto: "/produtos/pijama-infantil-menino/30.webp", amostra: "/produtos/amostras/pijama-infantil-menino-nuvens-marinho.webp" },
     ],
-    tamanhos: ["PP","P","M","G","GG"],
+    tamanhos: ["PP", "P", "M", "G", "GG"],
+    legendaTamanhos: IDADES_INFANTIL,
     criadoEm: "2026-10-04",
   },
   {
