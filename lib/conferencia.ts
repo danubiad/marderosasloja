@@ -2,7 +2,7 @@ import "server-only";
 import { randomBytes } from "crypto";
 import { buscarProduto } from "@/data/produtos";
 import { precoComMargem } from "@/lib/margem";
-import { adicionarSubstituicao, type Pedido } from "@/lib/pedidos";
+import { adicionarSubstituicao, clientePodeSubstituir, quantidadeSemSubstituir, type Pedido } from "@/lib/pedidos";
 
 /** Valida e grava uma substituição para um item marcado como em falta. */
 export async function substituirItem(
@@ -12,7 +12,7 @@ export async function substituirItem(
   cor: string,
   tamanho: string,
   quantidade: number,
-  por: "loja" | "revendedora",
+  por: "loja" | "revendedora" | "cliente",
 ) {
   if (pedido.conferencia?.[origem] !== "falta") throw new Error("Só é possível substituir itens em falta.");
   const produto = buscarProduto(produtoId);
@@ -20,6 +20,11 @@ export async function substituirItem(
   if (!produto || produto.preco <= 0 || !corInfo || !produto.tamanhos.includes(tamanho)) throw new Error("Produto inválido.");
   const qtd = Math.floor(quantidade);
   if (!(qtd >= 1 && qtd <= 999)) throw new Error("Quantidade inválida.");
+  if (por === "cliente") {
+    // A cliente só troca o que faltou, sem aumentar o pedido, e só antes do envio
+    if (!clientePodeSubstituir(pedido)) throw new Error("Este pedido já foi enviado e não pode mais ser alterado.");
+    if (qtd > quantidadeSemSubstituir(pedido, origem)) throw new Error("A quantidade passa do que ficou em falta.");
+  }
 
   await adicionarSubstituicao(pedido.id, {
     id: randomBytes(6).toString("base64url"),

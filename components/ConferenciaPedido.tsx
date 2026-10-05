@@ -5,7 +5,15 @@ import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { produtos } from "@/data/produtos";
 import { formatarPreco } from "@/lib/format";
-import { chaveConferencia, resumoConferencia, type Conferencia, type Pedido, type Substituicao } from "@/lib/tipos-pedido";
+import { precoComMargem } from "@/lib/margem";
+import {
+  chaveConferencia,
+  quantidadeSemSubstituir,
+  resumoConferencia,
+  type Conferencia,
+  type Pedido,
+  type Substituicao,
+} from "@/lib/tipos-pedido";
 
 type Modo = "cliente" | "loja" | "revendedora";
 
@@ -13,7 +21,8 @@ type Props = {
   pedido: Pedido;
   modo: Modo;
   marcar?: (chave: string, estado: Conferencia | null) => Promise<void>;
-  substituir?: (origem: string, produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<void>;
+  /** Devolve uma mensagem de erro, se a troca não puder ser salva */
+  substituir?: (origem: string, produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<string | void>;
   removerSubstituicao?: (subId: string) => Promise<void>;
 };
 
@@ -21,7 +30,8 @@ export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSub
   const conf = pedido.conferencia ?? {};
   const subs = pedido.substituicoes ?? [];
   const r = resumoConferencia(pedido);
-  const podeSubstituir = Boolean(substituir) && (modo === "loja" || modo === "revendedora");
+  const podeSubstituir = Boolean(substituir);
+  const margem = pedido.revendedora?.margem ?? 0;
 
   return (
     <div>
@@ -75,22 +85,27 @@ export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSub
                         marca={conf[chaveConferencia.substituicao(s.id)]}
                         marcar={marcar && ((e) => marcar(chaveConferencia.substituicao(s.id), e))}
                         remover={
-                          removerSubstituicao &&
-                          (modo === "loja" || (modo === "revendedora" && !conf[chaveConferencia.substituicao(s.id)]))
+                          removerSubstituicao && podeDesfazer(modo, s, conf[chaveConferencia.substituicao(s.id)])
                             ? () => removerSubstituicao(s.id)
                             : undefined
                         }
                       />
                     ))}
-                    {marca === "falta" && podeSubstituir && (
+                    {marca === "falta" && podeSubstituir && (modo !== "cliente" || quantidadeSemSubstituir(pedido, chave) > 0) && (
                       <FormSubstituicao
-                        quantidadeSugerida={q}
+                        quantidadeSugerida={modo === "cliente" ? quantidadeSemSubstituir(pedido, chave) : q}
+                        quantidadeMaxima={modo === "cliente" ? quantidadeSemSubstituir(pedido, chave) : 999}
                         produtoInicial={item.produtoId}
+                        margem={margem}
                         onSalvar={(p, c, t, qtd) => substituir!(chave, p, c, t, qtd)}
                       />
                     )}
                     {marca === "falta" && modo === "cliente" && subsDaLinha.length === 0 && (
-                      <p className="ml-11 mt-1 text-xs text-promo">Em falta. A vendedora vai combinar uma troca com você.</p>
+                      <p className="ml-11 mt-1 text-xs text-promo">
+                        {podeSubstituir
+                          ? "Em falta. Toque em Substituir esta peça para escolher outra."
+                          : "Em falta. A vendedora vai combinar uma troca com você."}
+                      </p>
                     )}
                   </li>
                 );
@@ -115,6 +130,15 @@ export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSub
     </div>
   );
 }
+
+/** Loja desfaz qualquer troca; revendedora e cliente só as que a loja ainda não conferiu (a cliente, só as dela). */
+function podeDesfazer(modo: Modo, sub: Substituicao, marca?: Conferencia) {
+  if (modo === "loja") return true;
+  if (marca) return false;
+  return modo === "revendedora" || sub.por === "cliente";
+}
+
+const nomeQuemSubstituiu = { loja: "loja", revendedora: "revendedora", cliente: "cliente" } as const;
 
 function Marca({ marca }: { marca?: Conferencia }) {
   if (marca === "ok")
@@ -200,7 +224,7 @@ function LinhaSubstituicao({
   return (
     <div className="ml-6 mt-1 border-l-2 border-sky-300 pl-3">
       <p className="text-xs font-medium text-sky-800">
-        ↳ Substituído por ({sub.por === "loja" ? "loja" : "revendedora"}):
+        ↳ Substituído por ({nomeQuemSubstituiu[sub.por]}):
         {remover && (
           <button
             type="button"
@@ -226,12 +250,16 @@ function LinhaSubstituicao({
 
 function FormSubstituicao({
   quantidadeSugerida,
+  quantidadeMaxima,
   produtoInicial,
+  margem,
   onSalvar,
 }: {
   quantidadeSugerida: number;
+  quantidadeMaxima: number;
   produtoInicial: string;
-  onSalvar: (produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<void>;
+  margem: number;
+  onSalvar: (produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<string | void>;
 }) {
   const [aberto, setAberto] = useState(false);
   const [produtoId, setProdutoId] = useState(produtoInicial);
@@ -271,7 +299,7 @@ function FormSubstituicao({
             .filter((p) => p.preco > 0)
             .map((p) => (
               <option key={p.id} value={p.id}>
-                {p.nome}
+                {p.nome} · {formatarPreco(precoComMargem(p.preco, margem))}
               </option>
             ))}
         </select>
@@ -317,9 +345,9 @@ function FormSubstituicao({
         <input
           type="number"
           min={1}
-          max={999}
+          max={quantidadeMaxima}
           value={quantidade}
-          onChange={(e) => setQuantidade(Math.max(1, Number(e.target.value) || 1))}
+          onChange={(e) => setQuantidade(Math.min(quantidadeMaxima, Math.max(1, Number(e.target.value) || 1)))}
           className="w-20 rounded border border-linha bg-white px-2 py-1.5 text-center"
         />
       </label>
@@ -334,7 +362,8 @@ function FormSubstituicao({
             if (!cor || !tamanho) return setErro("Escolha a cor e o tamanho.");
             setErro("");
             iniciar(async () => {
-              await onSalvar(produtoId, cor, tamanho, quantidade);
+              const falha = await onSalvar(produtoId, cor, tamanho, quantidade);
+              if (falha) return setErro(falha);
               setAberto(false);
             });
           }}

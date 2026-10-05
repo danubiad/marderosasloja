@@ -40,7 +40,8 @@ export default async function PedidoRevendedora({ params }: PageProps<"/revended
         <p className="mt-4 rounded-md bg-creme px-4 py-3 text-sm">
           A loja marca cada peça na separação: <strong className="text-sucesso">✓</strong> separada,{" "}
           <strong className="text-promo">✕</strong> em falta. Esta página atualiza sozinha. Nas peças em falta, combine com sua
-          cliente e toque em <strong>Substituir esta peça</strong>.
+          cliente e toque em <strong>Substituir esta peça</strong>. Sua cliente também pode escolher a troca pelo link do
+          pedido e reenviar para você no WhatsApp.
         </p>
 
         <section className="mt-4">

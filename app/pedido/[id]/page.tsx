@@ -9,10 +9,11 @@ import { IconeCheck, IconeWhatsapp } from "@/components/icones";
 import { Resumo } from "@/components/Resumo";
 import { loja } from "@/lib/config";
 import { formatarCep, formatarPreco, formatarTelefone, mascararDocumento } from "@/lib/format";
-import { buscarPedido } from "@/lib/pedidos";
+import { buscarPedido, chaveConferencia, clientePodeSubstituir, resumoConferencia } from "@/lib/pedidos";
 import { LojaProvider } from "@/lib/loja";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { ConferenciaPedido } from "@/components/ConferenciaPedido";
+import { removerSubstituicaoCliente, substituirCliente } from "./actions";
 
 export const metadata: Metadata = {
   title: `Pedido — ${loja.nome}`,
@@ -43,6 +44,37 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
   const destino = pedido.revendedora ? `55${pedido.revendedora.whatsapp}` : loja.whatsapp;
   const linkWhatsapp = `https://wa.me/${destino}?text=${encodeURIComponent(mensagem)}`;
   const conferenciaIniciada = Object.keys(pedido.conferencia ?? {}).length > 0;
+  const podeSubstituir = clientePodeSubstituir(pedido);
+
+  // Depois que a cliente troca peças em falta, ela reenvia o pedido atualizado para a vendedora
+  const trocasDaCliente = (pedido.substituicoes ?? []).filter((s) => s.por === "cliente");
+  const r = resumoConferencia(pedido);
+  const linkReenviar =
+    trocasDaCliente.length > 0
+      ? `https://wa.me/${destino}?text=${encodeURIComponent(
+          [
+            `Olá! Escolhi as trocas das peças em falta do *Pedido ${pedido.numero}*:`,
+            "",
+            ...trocasDaCliente.map((s) => {
+              const [produtoId, cor, tam] = s.origem.split("|");
+              const original = pedido.itens.find((i) => i.produtoId === produtoId)?.nome ?? "";
+              return `• ${original} ${cor} ${tam} → ${s.quantidade}x ${s.nome} ${s.cor} ${s.tamanho}`;
+            }),
+            "",
+            `Peças: ${r.pecas}`,
+            `Novo total: ${formatarPreco(r.total)}`,
+            "",
+            `Pedido atualizado: ${link}`,
+          ].join("\n"),
+        )}`
+      : null;
+  const faltasSemTroca = pedido.itens.some((i) =>
+    Object.keys(i.grade).some((cg) => {
+      const [cor, tam] = cg.split("|");
+      const chave = chaveConferencia.item(i.produtoId, cor, tam);
+      return pedido.conferencia?.[chave] === "falta" && !pedido.substituicoes?.some((s) => s.origem === chave);
+    }),
+  );
   const voltar = pedido.revendedora ? `/r/${pedido.revendedora.usuario}` : "/";
 
   const data = new Date(pedido.criadoEm).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
@@ -83,7 +115,28 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
 
         {conferenciaIniciada ? (
           <div className="mt-4">
-            <ConferenciaPedido pedido={pedido} modo="cliente" />
+            {podeSubstituir && faltasSemTroca && (
+              <p className="mb-3 rounded-md bg-creme px-4 py-3 text-sm">
+                Algumas peças ficaram em falta (<strong className="text-promo">✕</strong>). Toque em{" "}
+                <strong>Substituir esta peça</strong> para escolher outra e depois reenvie o pedido no WhatsApp.
+              </p>
+            )}
+            <ConferenciaPedido
+              pedido={pedido}
+              modo="cliente"
+              substituir={podeSubstituir ? substituirCliente.bind(null, pedido.id) : undefined}
+              removerSubstituicao={podeSubstituir ? removerSubstituicaoCliente.bind(null, pedido.id) : undefined}
+            />
+            {linkReenviar && podeSubstituir && (
+              <a
+                href={linkReenviar}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-sucesso px-6 py-4 text-lg font-bold text-white"
+              >
+                <IconeWhatsapp className="size-6" /> Reenviar pedido no WhatsApp
+              </a>
+            )}
           </div>
         ) : (
         <ul className="mt-4 divide-y divide-linha">

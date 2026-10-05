@@ -36,7 +36,7 @@ export type Substituicao = {
   preco: number;
   precoAtacado: number;
   /** Quem fez a substituição */
-  por: "loja" | "revendedora";
+  por: "loja" | "revendedora" | "cliente";
   em: string;
 };
 
@@ -94,6 +94,21 @@ export const chaveConferencia = {
   item: (produtoId: string, cor: string, tamanho: string) => `${produtoId}|${cor}|${tamanho}`,
   substituicao: (subId: string) => `sub:${subId}`,
 };
+
+/** A cliente pode trocar as peças em falta enquanto o pedido não foi enviado. */
+export function clientePodeSubstituir(p: Pedido) {
+  const status = p.status ?? "novo";
+  return status === "novo" || status === "separando";
+}
+
+/** Quantas peças de um item em falta ainda não foram substituídas. */
+export function quantidadeSemSubstituir(p: Pedido, origem: string) {
+  const [produtoId, cor, tamanho] = origem.split("|");
+  const item = p.itens.find((i) => i.produtoId === produtoId);
+  const original = item?.grade[`${cor}|${tamanho}`] ?? 0;
+  const substituidas = (p.substituicoes ?? []).filter((s) => s.origem === origem).reduce((t, s) => t + s.quantidade, 0);
+  return Math.max(0, original - substituidas);
+}
 
 /** Totais do pedido considerando os itens em falta e as substituições. */
 export function resumoConferencia(p: Pedido) {

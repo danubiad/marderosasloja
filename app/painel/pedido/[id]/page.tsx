@@ -53,7 +53,8 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
           <strong className="text-promo">✕</strong> se estiver em falta.
           {p.revendedora
             ? " A revendedora vê as marcas em tempo real no cadastro dela e pode escolher a substituição."
-            : " Nas peças em falta, você pode registrar a substituição combinada com a cliente."}
+            : " Nas peças em falta, você pode registrar a substituição combinada com a cliente."}{" "}
+          A cliente também pode escolher a troca pelo link do pedido (até o pedido ser enviado).
         </p>
 
         <section className="mt-4">
