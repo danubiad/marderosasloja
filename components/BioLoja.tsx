@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { IconeWhatsapp } from "@/components/icones";
-import { loja, perfil, textoPedidoMinimo } from "@/lib/config";
+import { loja, perfil } from "@/lib/config";
 
 /** Cartão no estilo de uma bio do Instagram, com os dados da loja. */
 export function BioLoja({ totalProdutos }: { totalProdutos: number }) {
@@ -67,8 +67,12 @@ export function BioLoja({ totalProdutos }: { totalProdutos: number }) {
 
         <div className="mt-3 flex flex-wrap gap-2 border-t border-linha pt-3 text-xs font-medium">
           <span className="rounded-full bg-green-50 px-3 py-1.5 text-sucesso">✓ Atacado</span>
-          <span className="rounded-full bg-fundo px-3 py-1.5">{textoPedidoMinimo}</span>
-          <span className="rounded-full bg-fundo px-3 py-1.5">Desde {perfil.desde}</span>
+          <span className="rounded-full bg-fundo px-3 py-1.5">
+            <strong>{perfil.pedidos.toLocaleString("pt-BR")}</strong> pedidos
+          </span>
+          <span className="rounded-full bg-fundo px-3 py-1.5">
+            <strong>{perfil.visitas.toLocaleString("pt-BR")}</strong> visitas
+          </span>
         </div>
       </div>
     </section>

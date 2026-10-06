@@ -36,6 +36,9 @@ export const perfil = {
   instagram: "https://www.instagram.com/marderosasloja/",
   seguidores: "54,2 mil",
   desde: "2010",
+  /** Números mostrados nos selos do cartão da loja */
+  pedidos: 2404,
+  visitas: 1170493,
 };
 
 /** Banners do topo: foto + produto para onde o banner leva. */
