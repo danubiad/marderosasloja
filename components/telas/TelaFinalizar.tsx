@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BarraTotal } from "@/components/BarraTotal";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Resumo } from "@/components/Resumo";
@@ -17,6 +17,7 @@ import {
   somenteDigitos,
 } from "@/lib/format";
 import { useLoja } from "@/lib/loja";
+import { rastrear } from "@/lib/pixel";
 
 type Etapa = "identificacao" | "endereco" | "entrega";
 
@@ -68,6 +69,13 @@ export function TelaFinalizar() {
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
   });
   const liberado = revendedora ? true : atingiuMinimo(resumo.subtotal, resumo.pecas);
+
+  const pixelIniciado = useRef(false);
+  useEffect(() => {
+    if (!carregado || pixelIniciado.current || resumo.linhas.length === 0) return;
+    pixelIniciado.current = true;
+    rastrear("InitiateCheckout", { value: resumo.total, currency: "BRL", num_items: resumo.pecas });
+  }, [carregado, resumo.linhas.length, resumo.total, resumo.pecas]);
 
   useEffect(() => {
     try {
@@ -142,6 +150,13 @@ export function TelaFinalizar() {
       });
       const r = await resposta.json();
       if (!resposta.ok) throw new Error(r.erro ?? "Não foi possível enviar o pedido.");
+      rastrear("Purchase", {
+        value: resumo.total,
+        currency: "BRL",
+        num_items: resumo.pecas,
+        content_type: "product",
+        content_ids: resumo.linhas.map((l) => l.produto.referencia),
+      });
       router.push(`/pedido/${r.id}?enviado=1`);
       limpar();
     } catch (err) {

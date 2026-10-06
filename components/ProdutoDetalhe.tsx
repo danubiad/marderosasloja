@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
@@ -12,6 +12,7 @@ import { useCarrinho } from "@/lib/carrinho";
 import { useLoja } from "@/lib/loja";
 import { loja } from "@/lib/config";
 import { formatarPreco } from "@/lib/format";
+import { rastrear } from "@/lib/pixel";
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { itens, definirGrade } = useCarrinho();
@@ -19,6 +20,17 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const grade = itens[produto.id] ?? {};
   const pecas = totalPecas(grade);
   const temPreco = produto.preco > 0;
+  const dadosPixel = { content_ids: [produto.referencia], content_name: produto.nome, content_type: "product", value: produto.preco, currency: "BRL" };
+
+  useEffect(() => {
+    rastrear("ViewContent", dadosPixel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- uma vez por produto
+  }, [produto.id]);
+
+  function mudarGrade(g: typeof grade) {
+    if (pecas === 0 && totalPecas(g) > 0) rastrear("AddToCart", dadosPixel);
+    definirGrade(produto.id, g);
+  }
 
   // Galeria: fotos gerais + vídeos + fotos por cor
   type Slide = { src?: string; cor?: string; video?: Video; videoId?: string };
@@ -187,7 +199,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
             tamanhos={produto.tamanhos}
             legendas={produto.legendaTamanhos}
             grade={grade}
-            onChange={temPreco ? (g) => definirGrade(produto.id, g) : undefined}
+            onChange={temPreco ? mudarGrade : undefined}
             permitirDigitar
           />
         </div>
