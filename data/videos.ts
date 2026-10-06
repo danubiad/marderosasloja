@@ -85,5 +85,37 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/kit-conjunto-aline/3.mp4",
       "capa": "/videos/kit-conjunto-aline/3.webp"
     }
+  ],
+  "conjunto-liso-plus-size": [
+    {
+      "src": "/videos/conjunto-liso-plus-size/1.mp4",
+      "capa": "/videos/conjunto-liso-plus-size/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-liso-plus-size/2.mp4",
+      "capa": "/videos/conjunto-liso-plus-size/2.webp"
+    }
+  ],
+  "conjunto-basico": [
+    {
+      "src": "/videos/conjunto-basico/1.mp4",
+      "capa": "/videos/conjunto-basico/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-basico/2.mp4",
+      "capa": "/videos/conjunto-basico/2.webp"
+    },
+    {
+      "src": "/videos/conjunto-basico/3.mp4",
+      "capa": "/videos/conjunto-basico/3.webp"
+    },
+    {
+      "src": "/videos/conjunto-basico/4.mp4",
+      "capa": "/videos/conjunto-basico/4.webp"
+    },
+    {
+      "src": "/videos/conjunto-basico/5.mp4",
+      "capa": "/videos/conjunto-basico/5.webp"
+    }
   ]
 };
