@@ -6,6 +6,7 @@ import { listarRevendedoras } from "@/lib/revendedoras";
 import { mudarStatusRevendedora } from "../actions";
 import { AbasPainel } from "../AbasPainel";
 import { bloqueioPainel, linkWhatsapp, momentoAtual, tempoAtras } from "../acesso";
+import { loja } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Revendedoras — Painel Mar de Rosas",
@@ -31,7 +32,7 @@ export default async function Revendedoras() {
       <main className="mx-auto w-full max-w-5xl px-4 pb-16 pt-5">
         <p className="rounded-md bg-creme px-4 py-3 text-sm">
           As revendedoras se cadastram em <strong>/revendedora</strong> e o catálogo entra no ar na hora (aprovação automática). Se precisar, use Bloquear para tirar um catálogo do ar
-          . Envie este link para quem quiser revender: <code className="font-semibold">marderosasloja.vercel.app/revendedora</code>
+          . Envie este link para quem quiser revender: <code className="font-semibold">{loja.dominio}/revendedora</code>
         </p>
 
         {lista.length === 0 ? (

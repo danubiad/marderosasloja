@@ -43,3 +43,5 @@ next-env.d.ts
 # pedidos locais de teste
 /.data
 
+.vercel
+.env*

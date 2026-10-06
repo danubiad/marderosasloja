@@ -8,6 +8,7 @@ import { revendedoraLogada } from "@/lib/revendedoras";
 import { sairRevendedora } from "../actions";
 import { CompartilharLink } from "./CompartilharLink";
 import { FormPerfil } from "./FormPerfil";
+import { loja } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Minha área — Revendedora Mar de Rosas",
@@ -40,7 +41,7 @@ export default async function PainelRevendedora() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-5">
         <section className="rounded-lg border border-linha p-4">
           <p className="text-sm text-suave">Seu catálogo</p>
-          <p className="break-all text-lg font-semibold">marderosasloja.vercel.app/r/{r.usuario}</p>
+          <p className="break-all text-lg font-semibold">{loja.dominio}/r/{r.usuario}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <CompartilharLink caminho={`/r/${r.usuario}`} nome={r.nome} />
             <Link href={`/r/${r.usuario}`} target="_blank" className="rounded-md border border-linha px-4 py-2.5 font-semibold">

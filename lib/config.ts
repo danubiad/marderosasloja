@@ -7,6 +7,8 @@ export const loja = {
   whatsapp: "5562995249197",
   whatsappExibicao: "(62) 99524-9197",
   vendedora: "Mar de Rosas",
+  /** Endereço do site, usado nos links que as revendedoras divulgam */
+  dominio: "lojamarderosas.com.br",
 };
 
 /** Valor mínimo do pedido em reais (0 = sem mínimo). */

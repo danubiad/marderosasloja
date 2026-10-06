@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { loja } from "@/lib/config";
 
 export function CompartilharLink({ caminho, nome }: { caminho: string; nome: string }) {
   const [copiado, setCopiado] = useState(false);
 
   async function compartilhar() {
-    const url = `${window.location.origin}${caminho}`;
+    const url = `https://${loja.dominio}${caminho}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: `Catálogo de ${nome}`, text: "Confira meu catálogo de moda íntima Mar de Rosas!", url });

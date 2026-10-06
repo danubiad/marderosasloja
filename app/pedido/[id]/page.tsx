@@ -29,7 +29,8 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
   const h = await headers();
   const host = h.get("x-forwarded-host") ?? h.get("host");
   const protocolo = h.get("x-forwarded-proto") ?? "https";
-  const link = `${protocolo}://${host}/pedido/${pedido.id}`;
+  const base = host?.startsWith("localhost") ? `${protocolo}://${host}` : `https://${loja.dominio}`;
+  const link = `${base}/pedido/${pedido.id}`;
 
   const mensagem = [
     `Olá! Acabei de fazer o *Pedido ${pedido.numero}* no catálogo.`,
