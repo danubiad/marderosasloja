@@ -3,14 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { diaDaSemana, diaSP, diasNoMes, ultimosDias } from "@/lib/datas";
-import { lerRegistros } from "@/lib/diario";
+import { lerRegistros, salvarRegistro } from "@/lib/diario";
 import { somarEventos } from "@/lib/eventos";
 import { formatarPreco } from "@/lib/format";
+import { buscarConexaoMeta, gastosMeta, seguidoresInstagram } from "@/lib/meta-ads";
 import { buscarMetaDiaria } from "@/lib/metas";
 import { listarPedidos, type Pedido, type StatusPedido } from "@/lib/pedidos";
-import { mudarMetaDiaria, mudarRegistroDia } from "../actions";
+import { desconectarMetaAds, mudarMetaDiaria, mudarRegistroDia } from "../actions";
 import { AbasPainel } from "../AbasPainel";
 import { bloqueioPainel, momentoAtual } from "../acesso";
+import { FormConectarMeta } from "./FormConectarMeta";
 
 export const metadata: Metadata = {
   title: "Dados — Painel Mar de Rosas",
@@ -57,12 +59,24 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
   // Para o crescimento do Instagram, olha também até 60 dias antes do período (último número anotado)
   const diasAntes = ultimosDias(dias.length + 60, agora).filter((d) => d < dias.at(-1)!);
 
-  const [eventos, todos, metaDiaria, registros] = await Promise.all([
+  const [eventos, todos, metaDiaria, registros, conexao] = await Promise.all([
     somarEventos(dias),
     listarPedidos(2000),
     buscarMetaDiaria(),
-    lerRegistros([...new Set([...dias, ...diasAntes, diaForm])]),
+    lerRegistros([...new Set([...dias, ...diasAntes, diaForm, hoje])]),
+    buscarConexaoMeta(),
   ]);
+
+  // Dados automáticos do Meta: gasto da conta de anúncios e seguidores do Instagram (guardados no dia de hoje)
+  const [gastosAuto, seguidoresAgora] = conexao
+    ? await Promise.all([gastosMeta(conexao, dias.at(-1)!, dias[0]), seguidoresInstagram(conexao)])
+    : [null, null];
+  if (seguidoresAgora !== null && registros[hoje].seguidores !== seguidoresAgora) {
+    registros[hoje] = { ...registros[hoje], seguidores: seguidoresAgora };
+    await salvarRegistro(hoje, { seguidores: seguidoresAgora });
+  }
+  const gastoDoDia = (d: string) =>
+    gastosAuto === null && registros[d].gasto === undefined ? undefined : (gastosAuto?.[d] ?? 0) + (registros[d].gasto ?? 0);
   const doDia = (p: Pedido) => diaSP(p.criadoEm);
   const vendas = todos.filter((p) => vendaFechada.includes(p.status ?? "novo"));
 
@@ -76,7 +90,7 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
   const pecasMedias = vendasPeriodo.length ? vendasPeriodo.reduce((t, p) => t + p.pecas, 0) / vendasPeriodo.length : 0;
 
   // Tráfego, Instagram e WhatsApp (anotados no painel)
-  const gasto = dias.reduce((t, d) => t + (registros[d].gasto ?? 0), 0);
+  const gasto = dias.reduce((t, d) => t + (gastoDoDia(d) ?? 0), 0);
   const roas = gasto > 0 ? totalVendido / gasto : null;
   const mensagens = dias.reduce((t, d) => t + (registros[d].mensagens ?? 0), 0);
   const diasComMensagens = dias.filter((d) => registros[d].mensagens !== undefined).length;
@@ -160,7 +174,14 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
           </div>
         </Secao>
 
-        <Secao titulo="Instagram e WhatsApp" nota="Números anotados no painel, em “Registrar o dia”.">
+        <Secao
+          titulo="Instagram e WhatsApp"
+          nota={
+            conexao?.instagram
+              ? `Seguidores de @${conexao.instagram.usuario} atualizados sozinhos pelo Meta. Mensagens do WhatsApp anotadas em “Registrar o dia”.`
+              : "Números anotados no painel, em “Registrar o dia”."
+          }
+        >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Numero
               titulo="Seguidores no Instagram"
@@ -188,7 +209,11 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
         >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <Numero titulo="Vendido" valor={formatarPreco(totalVendido)} detalhe={`${vendasPeriodo.length} ${vendasPeriodo.length === 1 ? "venda" : "vendas"}`} />
-            <Numero titulo="Gasto com tráfego" valor={formatarPreco(gasto)} detalhe="anotado no painel" />
+            <Numero
+              titulo="Gasto com tráfego"
+              valor={formatarPreco(gasto)}
+              detalhe={gastosAuto ? "anúncios do Meta + anotado" : "anotado no painel"}
+            />
             <Numero
               titulo="ROAS"
               valor={roas === null ? "—" : `${roas.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}x`}
@@ -220,6 +245,7 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
                 {dias.map((d) => {
                   const r = registros[d];
                   const vendido = vendasPorDia(d);
+                  const gastoDia = gastoDoDia(d);
                   return (
                     <tr key={d} className={d === diaForm ? "bg-creme" : ""}>
                       <td className="px-3 py-2 text-left">
@@ -228,10 +254,10 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
                       <td className="px-3 py-2">{numero(eventos.sessoesPorDia[d] ?? 0)}</td>
                       <td className="px-3 py-2">{r.mensagens === undefined ? "—" : numero(r.mensagens)}</td>
                       <td className="px-3 py-2">{r.seguidores === undefined ? "—" : numero(r.seguidores)}</td>
-                      <td className="px-3 py-2">{r.gasto === undefined ? "—" : formatarPreco(r.gasto)}</td>
+                      <td className="px-3 py-2">{gastoDia === undefined ? "—" : formatarPreco(gastoDia)}</td>
                       <td className="px-3 py-2">{formatarPreco(vendido)}</td>
                       <td className="px-3 py-2">
-                        {r.gasto ? `${(vendido / r.gasto).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}x` : "—"}
+                        {gastoDia ? `${(vendido / gastoDia).toLocaleString("pt-BR", { maximumFractionDigits: 2 })}x` : "—"}
                       </td>
                       <td className="px-3 py-2">
                         <Link href={`/painel/dados?periodo=${periodo}&dia=${d}#registrar`} className="text-dourado-escuro underline">
@@ -254,7 +280,11 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
             </p>
             <input type="hidden" name="dia" value={diaForm} />
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <Campo nome="gasto" titulo="Gasto com tráfego (R$)" valor={registroForm.gasto} />
+              <Campo
+                nome="gasto"
+                titulo={conexao?.contaAnuncio ? "Outro tráfego, fora do Meta (R$)" : "Gasto com tráfego (R$)"}
+                valor={registroForm.gasto}
+              />
               <Campo nome="seguidores" titulo="Seguidores no Instagram" valor={registroForm.seguidores} />
               <Campo nome="mensagens" titulo="Mensagens no WhatsApp" valor={registroForm.mensagens} />
             </div>
@@ -331,6 +361,43 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
                 </li>
               ))}
             </ol>
+          )}
+        </Secao>
+
+        <Secao titulo="Conexão com o Meta">
+          {conexao ? (
+            <div className="flex flex-wrap items-center gap-3 rounded-lg border border-linha p-4 text-sm">
+              <div className="flex-1">
+                <p>
+                  Anúncios:{" "}
+                  {conexao.contaAnuncio ? (
+                    <strong>{conexao.contaAnuncio.nome}</strong>
+                  ) : (
+                    <span className="text-promo">conta de anúncios não encontrada</span>
+                  )}
+                  {gastosAuto === null && conexao.contaAnuncio && <span className="text-promo"> (erro ao buscar o gasto)</span>}
+                </p>
+                <p>
+                  Instagram:{" "}
+                  {conexao.instagram ? <strong>@{conexao.instagram.usuario}</strong> : <span className="text-promo">não encontrado</span>}
+                  {seguidoresAgora === null && conexao.instagram && <span className="text-promo"> (erro ao buscar seguidores)</span>}
+                </p>
+              </div>
+              <form action={desconectarMetaAds}>
+                <button type="submit" className="rounded-md border border-linha px-3 py-1.5">
+                  Desconectar
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="rounded-lg bg-creme p-4 text-sm">
+              <p>
+                Conecte para o <strong>gasto com anúncios</strong> e os <strong>seguidores do Instagram</strong> entrarem sozinhos. Cole
+                o token de um usuário do sistema do Meta Business com acesso à conta de anúncios e ao Instagram (permissões{" "}
+                <code>ads_read</code>, <code>instagram_basic</code>, <code>pages_show_list</code> e <code>pages_read_engagement</code>).
+              </p>
+              <FormConectarMeta />
+            </div>
           )}
         </Secao>
       </main>

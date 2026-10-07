@@ -6,6 +6,7 @@ import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } 
 import { substituirItem } from "@/lib/conferencia";
 import { enviarCompraMeta } from "@/lib/meta-conversoes";
 import { salvarMetaDiaria } from "@/lib/metas";
+import { conectarMeta, desconectarMeta } from "@/lib/meta-ads";
 import { diaSP } from "@/lib/datas";
 import { camposRegistro, salvarRegistro, type RegistroDia } from "@/lib/diario";
 import {
@@ -76,6 +77,21 @@ export async function mudarRegistroDia(formData: FormData) {
     novos[campo] = campo === "gasto" ? Math.round(valor * 100) / 100 : Math.round(valor);
   }
   await salvarRegistro(dia, novos);
+  refresh();
+}
+
+export async function conectarMetaAds(_estado: string, formData: FormData): Promise<string> {
+  await exigirLogin();
+  const token = String(formData.get("token") ?? "").trim();
+  if (token.length < 20) return "Cole o token completo.";
+  const aviso = await conectarMeta(token);
+  refresh();
+  return aviso;
+}
+
+export async function desconectarMetaAds() {
+  await exigirLogin();
+  await desconectarMeta();
   refresh();
 }
 
