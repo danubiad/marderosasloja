@@ -1150,7 +1150,7 @@ export const catalogo: Produto[] = [
     nome: "Kit de Calcinha Fio com Cós de Renda",
     descricao: "Kit com 10 calcinhas em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Calcinhas", "Kits"],
-    preco: 0.00,
+    preco: 140.00,
     novidade: true,
     fotos: ["/produtos/kit-calcinha-fio-cos-de-renda/1.webp"],
     cores: [
@@ -1167,7 +1167,7 @@ export const catalogo: Produto[] = [
     nome: "Kit de Caleçon de Renda",
     descricao: "Kit com 10 calcinhas em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Calcinhas", "Kits"],
-    preco: 0.00,
+    preco: 130.00,
     novidade: true,
     fotos: ["/produtos/kit-calecon-de-renda/1.webp"],
     cores: [
@@ -1218,7 +1218,7 @@ export const catalogo: Produto[] = [
     nome: "Kit de Fio Duplo com Lateral de Renda",
     descricao: "Kit com 10 calcinhas em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Calcinhas", "Kits"],
-    preco: 0.00,
+    preco: 140.00,
     novidade: true,
     fotos: ["/produtos/kit-fio-duplo-lateral-de-renda/1.webp","/produtos/kit-fio-duplo-lateral-de-renda/2.webp","/produtos/kit-fio-duplo-lateral-de-renda/3.webp"],
     cores: [
