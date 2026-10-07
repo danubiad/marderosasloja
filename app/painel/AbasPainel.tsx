@@ -4,6 +4,7 @@ import { sair } from "./actions";
 
 const abas = [
   { href: "/painel", nome: "Pedidos" },
+  { href: "/painel/dados", nome: "Dados" },
   { href: "/painel/carrinhos", nome: "Carrinhos" },
   { href: "/painel/clientes", nome: "Clientes" },
   { href: "/painel/revendedoras", nome: "Revendedoras" },

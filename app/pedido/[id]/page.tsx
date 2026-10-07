@@ -6,6 +6,7 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeCheck, IconeWhatsapp } from "@/components/icones";
+import { LinkWhatsappRastreado } from "@/components/LinkWhatsappRastreado";
 import { Resumo } from "@/components/Resumo";
 import { loja } from "@/lib/config";
 import { formatarCep, formatarPreco, formatarTelefone, mascararDocumento } from "@/lib/format";
@@ -98,14 +99,15 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
                 : "Agora envie o pedido no WhatsApp da loja para que uma de nossas vendedoras finalize com você."}
               Obrigada pela preferência!
             </p>
-            <a
+            <LinkWhatsappRastreado
               href={linkWhatsapp}
+              registrar={!pedido.revendedora}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 flex w-full max-w-md items-center justify-center gap-2 rounded-md bg-sucesso px-6 py-4 text-lg font-bold text-white"
             >
               <IconeWhatsapp className="size-6" /> Enviar pedido no WhatsApp
-            </a>
+            </LinkWhatsappRastreado>
           </section>
         )}
 

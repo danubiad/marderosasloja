@@ -5,6 +5,9 @@ import { refresh } from "next/cache";
 import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } from "@/lib/painel";
 import { substituirItem } from "@/lib/conferencia";
 import { enviarCompraMeta } from "@/lib/meta-conversoes";
+import { salvarMetaDiaria } from "@/lib/metas";
+import { diaSP } from "@/lib/datas";
+import { camposRegistro, salvarRegistro, type RegistroDia } from "@/lib/diario";
 import {
   atualizarStatus,
   buscarPedido,
@@ -49,6 +52,30 @@ export async function mudarStatus(id: string, status: string) {
   if (!(status in statusPedido)) throw new Error("Status inválido");
   const pedido = await atualizarStatus(id, status as StatusPedido);
   if (pedido) await enviarCompraMeta(pedido);
+  refresh();
+}
+
+export async function mudarMetaDiaria(formData: FormData) {
+  await exigirLogin();
+  const valor = Number(String(formData.get("meta") ?? "").replace(/\./g, "").replace(",", "."));
+  if (!Number.isFinite(valor) || valor <= 0 || valor > 10_000_000) throw new Error("Meta inválida");
+  await salvarMetaDiaria(Math.round(valor));
+  refresh();
+}
+
+export async function mudarRegistroDia(formData: FormData) {
+  await exigirLogin();
+  const dia = String(formData.get("dia") ?? "");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || dia > diaSP()) throw new Error("Dia inválido");
+  const novos: RegistroDia = {};
+  for (const campo of camposRegistro) {
+    const texto = String(formData.get(campo) ?? "").trim();
+    if (!texto) continue;
+    const valor = Number(texto.replace(/\./g, "").replace(",", "."));
+    if (!Number.isFinite(valor) || valor < 0 || valor > 100_000_000) throw new Error("Valor inválido");
+    novos[campo] = campo === "gasto" ? Math.round(valor * 100) / 100 : Math.round(valor);
+  }
+  await salvarRegistro(dia, novos);
   refresh();
 }
 

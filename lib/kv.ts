@@ -88,6 +88,20 @@ export const kv = {
     });
   },
 
+  /** Soma `n` a um campo de um hash (contadores). */
+  async hincrby(chave: string, campo: string, n = 1) {
+    if (redis) return void (await redis.hincrby(chave, campo, n));
+    await alterar((db) => {
+      const h = ((db[chave] as Record<string, number>) ??= {});
+      h[campo] = (h[campo] ?? 0) + n;
+    });
+  },
+
+  async hgetall(chave: string): Promise<Record<string, number>> {
+    if (redis) return (await redis.hgetall<Record<string, number>>(chave)) ?? {};
+    return ((await ler())[chave] as Record<string, number>) ?? {};
+  },
+
   async smembers(chave: string): Promise<string[]> {
     if (redis) return await redis.smembers(chave);
     return ((await ler())[chave] as string[]) ?? [];

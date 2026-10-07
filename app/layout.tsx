@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import { Clarity } from "@/components/Clarity";
 import { MetaPixel } from "@/components/MetaPixel";
+import { RegistroVisitas } from "@/components/RegistroVisitas";
 import { CarrinhoProvider } from "@/lib/carrinho";
 import { loja } from "@/lib/config";
 import "./globals.css";
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <CarrinhoProvider>{children}</CarrinhoProvider>
         <MetaPixel />
         <Clarity />
+        <RegistroVisitas />
       </body>
     </html>
   );

@@ -13,6 +13,7 @@ import { useLoja } from "@/lib/loja";
 import { loja } from "@/lib/config";
 import { formatarPreco } from "@/lib/format";
 import { rastrear } from "@/lib/pixel";
+import { registrarEvento } from "@/lib/rastreio";
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { itens, definirGrade } = useCarrinho();
@@ -24,11 +25,15 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
 
   useEffect(() => {
     rastrear("ViewContent", dadosPixel);
+    if (!base) registrarEvento("produto");
     // eslint-disable-next-line react-hooks/exhaustive-deps -- uma vez por produto
   }, [produto.id]);
 
   function mudarGrade(g: typeof grade) {
-    if (pecas === 0 && totalPecas(g) > 0) rastrear("AddToCart", dadosPixel);
+    if (pecas === 0 && totalPecas(g) > 0) {
+      rastrear("AddToCart", dadosPixel);
+      if (!base) registrarEvento("carrinho");
+    }
     definirGrade(produto.id, g);
   }
 
