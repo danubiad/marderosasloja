@@ -5,6 +5,7 @@ import { mudarStatus } from "./actions";
 
 const cores: Record<string, string> = {
   novo: "bg-amber-100 text-amber-900 border-amber-300",
+  confirmado: "bg-emerald-100 text-emerald-900 border-emerald-300",
   separando: "bg-sky-100 text-sky-900 border-sky-300",
   enviado: "bg-violet-100 text-violet-900 border-violet-300",
   concluido: "bg-green-100 text-green-900 border-green-300",

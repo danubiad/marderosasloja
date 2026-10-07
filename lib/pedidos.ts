@@ -75,3 +75,7 @@ export function removerSubstituicao(id: string, subId: string) {
     if (p.conferencia) delete p.conferencia[chaveConferencia.substituicao(subId)];
   });
 }
+
+export function marcarCompraEnviadaMeta(id: string) {
+  return atualizar(id, (p) => void (p.compraEnviadaMeta = new Date().toISOString()));
+}

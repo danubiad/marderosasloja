@@ -1,4 +1,5 @@
 import { randomBytes } from "crypto";
+import { cookies, headers } from "next/headers";
 import { calcularResumo, type Itens } from "@/lib/calculo";
 import { registrarPedidoDaCliente } from "@/lib/clientes";
 import { atingiuMinimo } from "@/lib/config";
@@ -7,6 +8,19 @@ import { proximoNumero, salvarPedido, type Pedido } from "@/lib/pedidos";
 import { buscarRevendedoraAtiva } from "@/lib/revendedoras";
 
 const texto = (v: unknown, max = 200) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+
+/** Cookies do Pixel e dados do navegador, usados depois para enviar a venda confirmada ao Meta. */
+async function dadosMeta(): Promise<Pedido["meta"]> {
+  const c = await cookies();
+  const h = await headers();
+  return {
+    fbp: c.get("_fbp")?.value,
+    fbc: c.get("_fbc")?.value,
+    ip: h.get("x-forwarded-for")?.split(",")[0].trim() || undefined,
+    navegador: h.get("user-agent")?.slice(0, 400) || undefined,
+    url: h.get("referer") || undefined,
+  };
+}
 
 export async function POST(request: Request) {
   let corpo: Record<string, unknown>;
@@ -89,6 +103,7 @@ export async function POST(request: Request) {
     revendedora: revendedora
       ? { usuario: revendedora.usuario, nome: revendedora.nome, whatsapp: revendedora.whatsapp, margem: revendedora.margem }
       : undefined,
+    meta: await dadosMeta(),
   };
 
   try {

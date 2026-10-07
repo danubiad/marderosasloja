@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BarraTotal } from "@/components/BarraTotal";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Resumo } from "@/components/Resumo";
@@ -69,13 +69,6 @@ export function TelaFinalizar() {
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
   });
   const liberado = revendedora ? true : atingiuMinimo(resumo.subtotal, resumo.pecas);
-
-  const pixelIniciado = useRef(false);
-  useEffect(() => {
-    if (!carregado || pixelIniciado.current || resumo.linhas.length === 0) return;
-    pixelIniciado.current = true;
-    rastrear("InitiateCheckout", { value: resumo.total, currency: "BRL", num_items: resumo.pecas });
-  }, [carregado, resumo.linhas.length, resumo.total, resumo.pecas]);
 
   useEffect(() => {
     try {
@@ -150,7 +143,8 @@ export function TelaFinalizar() {
       });
       const r = await resposta.json();
       if (!resposta.ok) throw new Error(r.erro ?? "Não foi possível enviar o pedido.");
-      rastrear("Purchase", {
+      // A compra (Purchase) só é enviada ao Meta quando a loja confirma a venda no painel
+      rastrear("InitiateCheckout", {
         value: resumo.total,
         currency: "BRL",
         num_items: resumo.pecas,

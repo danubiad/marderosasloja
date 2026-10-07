@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } from "@/lib/painel";
 import { substituirItem } from "@/lib/conferencia";
+import { enviarCompraMeta } from "@/lib/meta-conversoes";
 import {
   atualizarStatus,
   buscarPedido,
@@ -46,7 +47,8 @@ async function exigirLogin() {
 export async function mudarStatus(id: string, status: string) {
   await exigirLogin();
   if (!(status in statusPedido)) throw new Error("Status inválido");
-  await atualizarStatus(id, status as StatusPedido);
+  const pedido = await atualizarStatus(id, status as StatusPedido);
+  if (pedido) await enviarCompraMeta(pedido);
   refresh();
 }
 

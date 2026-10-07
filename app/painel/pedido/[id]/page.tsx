@@ -45,7 +45,10 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
               </p>
             )}
           </div>
-          <SeletorStatus id={p.id} status={p.status ?? "novo"} opcoes={statusPedido} />
+          <div className="flex flex-col items-end gap-1">
+            <SeletorStatus id={p.id} status={p.status ?? "novo"} opcoes={statusPedido} />
+            {p.compraEnviadaMeta && <span className="text-xs text-sucesso">✓ Venda enviada ao Meta</span>}
+          </div>
         </div>
 
         <p className="mt-4 rounded-md bg-creme px-4 py-3 text-sm">

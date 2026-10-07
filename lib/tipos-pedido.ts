@@ -78,10 +78,15 @@ export type Pedido = {
   /** Marcas de conferência por item: chave -> ok/falta */
   conferencia?: Record<string, Conferencia>;
   substituicoes?: Substituicao[];
+  /** Dados do navegador da cliente no envio, para o Meta ligar a venda ao anúncio que ela clicou */
+  meta?: { fbp?: string; fbc?: string; ip?: string; navegador?: string; url?: string };
+  /** Quando a venda confirmada foi enviada ao Meta como compra (Purchase) */
+  compraEnviadaMeta?: string;
 };
 
 export const statusPedido = {
   novo: "Novo",
+  confirmado: "Confirmado",
   separando: "Em separação",
   enviado: "Enviado",
   concluido: "Concluído",
@@ -98,7 +103,7 @@ export const chaveConferencia = {
 /** A cliente pode trocar as peças em falta enquanto o pedido não foi enviado. */
 export function clientePodeSubstituir(p: Pedido) {
   const status = p.status ?? "novo";
-  return status === "novo" || status === "separando";
+  return status === "novo" || status === "confirmado" || status === "separando";
 }
 
 /** Quantas peças de um item em falta ainda não foram substituídas. */
