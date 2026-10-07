@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeCarrinho, IconeMais, IconeSacola, IconeSom, IconeVoltar } from "@/components/icones";
-import type { Produto, Video } from "@/data/produtos";
-import { totalPecas } from "@/lib/calculo";
+import { valorDaGrade, type Produto, type Video } from "@/data/produtos";
+import { legendasDaGrade, totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
 import { useLoja } from "@/lib/loja";
 import { formatarPreco } from "@/lib/format";
@@ -168,7 +168,7 @@ function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: ()
           <GradeQuantidade
             cores={produto.cores}
             tamanhos={produto.tamanhos}
-            legendas={produto.legendaTamanhos}
+            legendas={legendasDaGrade(produto)}
             grade={grade}
             onChange={temPreco ? (g) => definirGrade(produto.id, g) : undefined}
           />
@@ -177,7 +177,7 @@ function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: ()
         {temPreco && (
           <div className="mt-4 flex justify-between">
             <span>{pecas} pç.</span>
-            <span className="font-semibold">{formatarPreco(pecas * produto.preco)}</span>
+            <span className="font-semibold">{formatarPreco(valorDaGrade(produto, grade))}</span>
           </div>
         )}
 

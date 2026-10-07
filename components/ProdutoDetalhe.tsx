@@ -6,8 +6,8 @@ import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeCarrinho } from "@/components/icones";
-import type { Produto, Video } from "@/data/produtos";
-import { totalPecas } from "@/lib/calculo";
+import { valorDaGrade, type Produto, type Video } from "@/data/produtos";
+import { legendasDaGrade, totalPecas } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
 import { useLoja } from "@/lib/loja";
 import { loja } from "@/lib/config";
@@ -202,7 +202,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           <GradeQuantidade
             cores={produto.cores}
             tamanhos={produto.tamanhos}
-            legendas={produto.legendaTamanhos}
+            legendas={legendasDaGrade(produto)}
             grade={grade}
             onChange={temPreco ? mudarGrade : undefined}
             permitirDigitar
@@ -212,7 +212,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
         {temPreco && (
           <div className="mt-6 flex justify-between">
             <span>{pecas} pç.</span>
-            <span className="font-semibold">{formatarPreco(pecas * produto.preco)}</span>
+            <span className="font-semibold">{formatarPreco(valorDaGrade(produto, grade))}</span>
           </div>
         )}
 

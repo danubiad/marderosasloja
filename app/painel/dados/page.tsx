@@ -120,7 +120,10 @@ export default async function Dados({ searchParams }: PageProps<"/painel/dados">
     for (const i of p.itens) {
       const r = porProduto.get(i.produtoId) ?? { nome: i.nome, referencia: i.referencia, foto: i.foto, pecas: 0, valor: 0 };
       r.pecas += i.pecas;
-      r.valor += (i.precoAtacado ?? i.preco) * i.pecas;
+      r.valor += Object.entries(i.grade).reduce(
+        (acc, [chave, q]) => acc + q * (i.precosAtacadoTamanho?.[chave.split("|")[1]] ?? i.precoAtacado ?? i.preco),
+        0,
+      );
       porProduto.set(i.produtoId, r);
     }
   const ranking = [...porProduto.values()].sort((a, b) => b.pecas - a.pecas || b.valor - a.valor).slice(0, 10);

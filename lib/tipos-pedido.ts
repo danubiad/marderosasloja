@@ -10,6 +10,9 @@ export type ItemPedido = {
   preco: number;
   /** Preço de atacado da loja */
   precoAtacado?: number;
+  /** Preço em cada tamanho, quando o produto tem preço diferente por tamanho (cliente e atacado) */
+  precosTamanho?: Record<string, number>;
+  precosAtacadoTamanho?: Record<string, number>;
   cores: { nome: string; hex: string; amostra?: string }[];
   tamanhos: string[];
   legendaTamanhos?: Record<string, string>;
@@ -136,8 +139,8 @@ export function resumoConferencia(p: Pedido) {
         continue;
       }
       pecas += q;
-      subtotal += q * item.preco;
-      atacado += q * (item.precoAtacado ?? item.preco);
+      subtotal += q * (item.precosTamanho?.[tam] ?? item.preco);
+      atacado += q * (item.precosAtacadoTamanho?.[tam] ?? item.precoAtacado ?? item.preco);
     }
   }
   for (const s of p.substituicoes ?? []) {

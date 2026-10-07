@@ -1,5 +1,6 @@
-import { buscarProduto, type Produto } from "@/data/produtos";
+import { buscarProduto, precoDoTamanho, valorDaGrade, type Produto } from "@/data/produtos";
 import { buscarCupom, formasEntrega, formasEntregaRevendedora } from "@/lib/config";
+import { formatarPreco } from "@/lib/format";
 import { precoComMargem } from "@/lib/margem";
 
 /** Quantidades de um produto, indexadas por chave "cor|tamanho". */
@@ -10,6 +11,14 @@ export type Itens = Record<string, Grade>;
 
 export function chaveGrade(cor: string, tamanho: string) {
   return `${cor}|${tamanho}`;
+}
+
+/** Legendas da grade; com preço diferente por tamanho, o preço vai embaixo de cada tamanho. */
+export function legendasDaGrade(p: Pick<Produto, "tamanhos" | "legendaTamanhos" | "preco" | "precosTamanho">) {
+  if (!p.precosTamanho) return p.legendaTamanhos;
+  return Object.fromEntries(
+    p.tamanhos.map((t) => [t, [p.legendaTamanhos?.[t], formatarPreco(precoDoTamanho(p, t))].filter(Boolean).join(" · ")]),
+  );
 }
 
 export function totalPecas(grade: Grade) {
@@ -23,7 +32,11 @@ export type LinhaResumo = {
   /** Preço cobrado da cliente (com margem no catálogo da revendedora) */
   preco: number;
   precoAtacado: number;
+  /** Preço cobrado em cada tamanho, quando o produto tem preço diferente por tamanho */
+  precosTamanho?: Record<string, number>;
+  precosAtacadoTamanho?: Record<string, number>;
   subtotal: number;
+  subtotalAtacado: number;
 };
 
 export type OpcoesResumo = {
@@ -54,12 +67,29 @@ export function calcularResumo(itens: Itens, opcoes: OpcoesResumo = {}) {
     }
     const pecas = totalPecas(gradeValida);
     const preco = precoComMargem(produto.preco, margem);
-    if (pecas > 0) linhas.push({ produto, grade: gradeValida, pecas, preco, precoAtacado: produto.preco, subtotal: pecas * preco });
+    const precosAtacadoTamanho = produto.precosTamanho
+      ? Object.fromEntries(produto.tamanhos.map((t) => [t, precoDoTamanho(produto, t)]))
+      : undefined;
+    const precosTamanho = precosAtacadoTamanho
+      ? Object.fromEntries(Object.entries(precosAtacadoTamanho).map(([t, v]) => [t, precoComMargem(v, margem)]))
+      : undefined;
+    if (pecas > 0)
+      linhas.push({
+        produto,
+        grade: gradeValida,
+        pecas,
+        preco,
+        precoAtacado: produto.preco,
+        precosTamanho,
+        precosAtacadoTamanho,
+        subtotal: valorDaGrade({ preco, precosTamanho }, gradeValida),
+        subtotalAtacado: valorDaGrade(produto, gradeValida),
+      });
   }
 
   const pecas = linhas.reduce((acc, l) => acc + l.pecas, 0);
   const subtotal = linhas.reduce((acc, l) => acc + l.subtotal, 0);
-  const totalAtacado = linhas.reduce((acc, l) => acc + l.pecas * l.precoAtacado, 0);
+  const totalAtacado = linhas.reduce((acc, l) => acc + l.subtotalAtacado, 0);
   const cupom = opcoes.codigoCupom && !opcoes.revendedora ? buscarCupom(opcoes.codigoCupom) : undefined;
   const desconto = cupom ? Math.round(subtotal * cupom.percentual) / 100 : 0;
   const entrega = entregasDisponiveis(Boolean(opcoes.revendedora)).find((f) => f.id === opcoes.entregaId);

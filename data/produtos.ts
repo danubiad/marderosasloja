@@ -16,6 +16,9 @@ export function produtosComMargem(margem: number) {
     ...p,
     preco: precoComMargem(p.preco, margem),
     precoDe: p.precoDe ? precoComMargem(p.precoDe, margem) : undefined,
+    precosTamanho: p.precosTamanho
+      ? Object.fromEntries(Object.entries(p.precosTamanho).map(([t, v]) => [t, precoComMargem(v, margem)]))
+      : undefined,
   }));
 }
 

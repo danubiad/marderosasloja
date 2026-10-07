@@ -1,6 +1,6 @@
 import "server-only";
 import { randomBytes } from "crypto";
-import { buscarProduto } from "@/data/produtos";
+import { buscarProduto, precoDoTamanho } from "@/data/produtos";
 import { precoComMargem } from "@/lib/margem";
 import { adicionarSubstituicao, clientePodeSubstituir, quantidadeSemSubstituir, type Pedido } from "@/lib/pedidos";
 
@@ -37,8 +37,8 @@ export async function substituirItem(
     amostra: corInfo.amostra,
     tamanho,
     quantidade: qtd,
-    preco: precoComMargem(produto.preco, pedido.revendedora?.margem ?? 0),
-    precoAtacado: produto.preco,
+    preco: precoComMargem(precoDoTamanho(produto, tamanho), pedido.revendedora?.margem ?? 0),
+    precoAtacado: precoDoTamanho(produto, tamanho),
     por,
     em: new Date().toISOString(),
   });

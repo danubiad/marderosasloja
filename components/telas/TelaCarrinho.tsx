@@ -9,7 +9,7 @@ import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeEscudo, IconeLixeira, IconeWhatsapp } from "@/components/icones";
 import { Resumo } from "@/components/Resumo";
-import { calcularResumo } from "@/lib/calculo";
+import { calcularResumo, legendasDaGrade } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
 import { atingiuMinimo, buscarCupom, loja, pecasMinimas, pedidoMinimo, textoPedidoMinimo } from "@/lib/config";
 import { formatarPreco, formatarTelefone } from "@/lib/format";
@@ -61,7 +61,7 @@ export function TelaCarrinho() {
         ) : (
           <>
             <ul className="divide-y divide-linha">
-              {resumo.linhas.map(({ produto, grade, pecas, preco, subtotal }) => (
+              {resumo.linhas.map(({ produto, grade, pecas, preco, precosTamanho, subtotal }) => (
                 <li key={produto.id} className="py-6 first:pt-0">
                   <div className="mb-3 flex items-center gap-4">
                     <Link href={`${base}/produto/${produto.slug}`} className="shrink-0">
@@ -90,7 +90,7 @@ export function TelaCarrinho() {
                   <GradeQuantidade
                     cores={produto.cores}
                     tamanhos={produto.tamanhos}
-                    legendas={produto.legendaTamanhos}
+                    legendas={legendasDaGrade({ ...produto, preco, precosTamanho })}
                     grade={grade}
                     onChange={(g) => definirGrade(produto.id, g)}
                     somenteComQuantidade

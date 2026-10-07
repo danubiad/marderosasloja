@@ -85,6 +85,8 @@ export async function POST(request: Request) {
       foto: l.produto.fotos[0],
       preco: l.preco,
       precoAtacado: l.precoAtacado,
+      precosTamanho: l.precosTamanho,
+      precosAtacadoTamanho: l.precosAtacadoTamanho,
       cores: l.produto.cores.map(({ nome, hex, amostra }) => ({ nome, hex, amostra })),
       tamanhos: l.produto.tamanhos,
       legendaTamanhos: l.produto.legendaTamanhos,
