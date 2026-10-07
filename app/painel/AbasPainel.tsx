@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CLARITY_ID, CLARITY_PAINEL } from "@/lib/clarity";
 import { sair } from "./actions";
 
 const abas = [
@@ -14,6 +15,11 @@ export function AbasPainel({ atual }: { atual: string }) {
       <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 pt-3">
         <span className="font-serif text-xl font-semibold">Painel</span>
         <div className="flex-1" />
+        {CLARITY_ID && (
+          <a href={CLARITY_PAINEL} target="_blank" rel="noopener noreferrer" className="rounded-md border border-linha px-3 py-1 text-sm">
+            Clarity
+          </a>
+        )}
         <Link href="/" className="text-sm text-suave underline">
           Ver catálogo
         </Link>

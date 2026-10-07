@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Geist } from "next/font/google";
+import { Clarity } from "@/components/Clarity";
 import { MetaPixel } from "@/components/MetaPixel";
 import { CarrinhoProvider } from "@/lib/carrinho";
 import { loja } from "@/lib/config";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col font-sans">
         <CarrinhoProvider>{children}</CarrinhoProvider>
         <MetaPixel />
+        <Clarity />
       </body>
     </html>
   );
