@@ -70,6 +70,10 @@ export const videosPorProduto: Record<string, Video[]> = {
     {
       "src": "/videos/cueca-sem-costura/2.mp4",
       "capa": "/videos/cueca-sem-costura/2.webp"
+    },
+    {
+      "src": "/videos/cueca-sem-costura/3.mp4",
+      "capa": "/videos/cueca-sem-costura/3.webp"
     }
   ],
   "kit-conjunto-aline": [
@@ -116,6 +120,10 @@ export const videosPorProduto: Record<string, Video[]> = {
     {
       "src": "/videos/conjunto-basico/5.mp4",
       "capa": "/videos/conjunto-basico/5.webp"
+    },
+    {
+      "src": "/videos/conjunto-basico/6.mp4",
+      "capa": "/videos/conjunto-basico/6.webp"
     }
   ],
   "conjunto-sem-bojo-tule-bordado": [
