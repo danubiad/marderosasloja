@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Cabecalho } from "@/components/Cabecalho";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
-import { IconeCheck, IconeWhatsapp } from "@/components/icones";
+import { IconeWhatsapp } from "@/components/icones";
 import { LinkWhatsappRastreado } from "@/components/LinkWhatsappRastreado";
 import { Resumo } from "@/components/Resumo";
 import { loja } from "@/lib/config";
@@ -90,13 +90,13 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
         {enviado && (
           <section className="mb-10 flex flex-col items-center text-center">
             <div className="flex size-20 items-center justify-center rounded-full bg-sucesso text-white">
-              <IconeCheck className="size-10" />
+              <IconeWhatsapp className="size-10" />
             </div>
-            <h1 className="mt-6 text-2xl font-bold">Seu pedido foi enviado.</h1>
+            <h1 className="mt-6 text-2xl font-bold">Para enviar seu pedido, clique no botão verde abaixo.</h1>
             <p className="mt-4 max-w-md text-lg">
               {pedido.revendedora
                 ? `Agora envie o pedido no WhatsApp de ${pedido.revendedora.nome} para finalizar a compra.`
-                : "Agora envie o pedido no WhatsApp da loja para que uma de nossas vendedoras finalize com você."}
+                : "Agora envie o pedido no WhatsApp da loja para que uma de nossas vendedoras finalize com você."}{" "}
               Obrigada pela preferência!
             </p>
             <LinkWhatsappRastreado

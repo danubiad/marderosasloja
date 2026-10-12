@@ -67,7 +67,7 @@ export const formasEntrega: FormaEntrega[] = [
   },
   {
     id: "correios",
-    titulo: "A combinar pelos Correios",
+    titulo: "A combinar pelos Correios ou Transportadora",
     descricao: ["Após separar o pedido, fazemos a cotação real do frete."],
     valor: 0,
   },
