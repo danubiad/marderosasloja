@@ -131,5 +131,11 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/conjunto-sem-bojo-tule-bordado/1.mp4",
       "capa": "/videos/conjunto-sem-bojo-tule-bordado/1.webp"
     }
+  ],
+  "conjunto-confort": [
+    {
+      "src": "/videos/conjunto-confort/1.mp4",
+      "capa": "/videos/conjunto-confort/1.webp"
+    }
   ]
 };
