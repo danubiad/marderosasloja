@@ -137,5 +137,57 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/conjunto-confort/1.mp4",
       "capa": "/videos/conjunto-confort/1.webp"
     }
+  ],
+  "baby-doll-lilia": [
+    {
+      "src": "/videos/baby-doll-lilia/1.mp4",
+      "capa": "/videos/baby-doll-lilia/1.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/2.mp4",
+      "capa": "/videos/baby-doll-lilia/2.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/3.mp4",
+      "capa": "/videos/baby-doll-lilia/3.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/4.mp4",
+      "capa": "/videos/baby-doll-lilia/4.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/5.mp4",
+      "capa": "/videos/baby-doll-lilia/5.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/6.mp4",
+      "capa": "/videos/baby-doll-lilia/6.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/7.mp4",
+      "capa": "/videos/baby-doll-lilia/7.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/8.mp4",
+      "capa": "/videos/baby-doll-lilia/8.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/9.mp4",
+      "capa": "/videos/baby-doll-lilia/9.webp"
+    },
+    {
+      "src": "/videos/baby-doll-lilia/10.mp4",
+      "capa": "/videos/baby-doll-lilia/10.webp"
+    }
+  ],
+  "conjunto-andressa": [
+    {
+      "src": "/videos/conjunto-andressa/1.mp4",
+      "capa": "/videos/conjunto-andressa/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-andressa/2.mp4",
+      "capa": "/videos/conjunto-andressa/2.webp"
+    }
   ]
 };
