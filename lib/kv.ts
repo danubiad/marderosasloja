@@ -13,6 +13,7 @@ const redis =
       : null;
 
 const ARQUIVO = path.join(process.cwd(), ".data", "kv.json");
+const contadoresLocais = new Map<string, number>();
 type Banco = Record<string, unknown>;
 
 async function ler(): Promise<Banco> {
@@ -64,6 +65,18 @@ export const kv = {
   async incr(chave: string): Promise<number> {
     if (redis) return await redis.incr(chave);
     return alterar((db) => (db[chave] = Number(db[chave] ?? 0) + 1) as number);
+  },
+
+  /** Contador que se apaga sozinho depois de `segundos` (limite de tentativas). Local: só na memória. */
+  async incrExpira(chave: string, segundos: number): Promise<number> {
+    if (redis) {
+      const n = await redis.incr(chave);
+      if (n === 1) await redis.expire(chave, segundos);
+      return n;
+    }
+    const n = (contadoresLocais.get(chave) ?? 0) + 1;
+    contadoresLocais.set(chave, n);
+    return n;
   },
 
   /** Adiciona no início de uma lista. */

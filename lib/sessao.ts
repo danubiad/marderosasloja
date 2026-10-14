@@ -4,9 +4,12 @@ import { promisify } from "util";
 
 const scryptAsync = promisify(scrypt) as (senha: string, salt: string, tamanho: number) => Promise<Buffer>;
 
-// Chave para assinar os cookies de sessão. Usa SESSAO_SEGREDO se existir, senão a senha do painel.
-function segredo() {
-  return process.env.SESSAO_SEGREDO || process.env.PAINEL_SENHA || "somente-para-testes-locais";
+// Chave aleatória para assinar os cookies de sessão (SESSAO_SEGREDO, na Vercel).
+// Não pode ser a senha do painel: quem tem um cookie poderia testar senhas no próprio computador.
+export function segredo() {
+  if (process.env.SESSAO_SEGREDO) return process.env.SESSAO_SEGREDO;
+  if (process.env.VERCEL) throw new Error("Falta a variável de ambiente SESSAO_SEGREDO");
+  return "somente-para-testes-locais";
 }
 
 export function iguais(a: string, b: string) {

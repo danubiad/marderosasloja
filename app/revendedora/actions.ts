@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { substituirItem } from "@/lib/conferencia";
 import { somenteDigitos } from "@/lib/format";
 import { kv } from "@/lib/kv";
+import { dentroDoLimite } from "@/lib/limite";
 import { MARGEM_MAXIMA } from "@/lib/margem";
 import { buscarPedido, removerSubstituicao } from "@/lib/pedidos";
 import {
@@ -36,6 +37,7 @@ export async function cadastrar(_estado: string, formData: FormData): Promise<st
   if (!usuarioValido(usuario)) return "Endereço do catálogo inválido: use de 3 a 30 letras minúsculas, números ou hífen.";
   if (senha.length < 6) return "A senha precisa ter pelo menos 6 caracteres.";
   if (margem === null) return `A margem precisa ser entre 0% e ${MARGEM_MAXIMA}%.`;
+  if (!(await dentroDoLimite("cadastroRevendedora"))) return "Muitos cadastros seguidos. Aguarde uma hora e tente de novo.";
   if (await buscarRevendedora(usuario)) return "Esse endereço de catálogo já está em uso. Escolha outro.";
   if (await kv.get(`revendedora-whatsapp:${whatsapp}`)) return "Já existe um cadastro com esse WhatsApp. Use a opção Entrar.";
 
@@ -54,6 +56,7 @@ export async function cadastrar(_estado: string, formData: FormData): Promise<st
 }
 
 export async function entrar(_estado: string, formData: FormData): Promise<string> {
+  if (!(await dentroDoLimite("loginRevendedora"))) return "Muitas tentativas. Aguarde 15 minutos e tente de novo.";
   const whatsapp = somenteDigitos(String(formData.get("whatsapp") ?? ""));
   const senha = String(formData.get("senha") ?? "");
   const usuario = await kv.get<string>(`revendedora-whatsapp:${whatsapp}`);

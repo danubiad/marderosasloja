@@ -1,9 +1,10 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { segredo } from "@/lib/sessao";
 
 // A senha do painel fica na variável de ambiente PAINEL_SENHA (Vercel → Settings → Environment Variables).
-// O cookie guarda só uma assinatura derivada da senha; trocar a senha desconecta todo mundo.
+// O cookie guarda só uma assinatura (com a chave SESSAO_SEGREDO) derivada da senha; trocar a senha desconecta todo mundo.
 
 export const COOKIE_PAINEL = "painel";
 export const DURACAO_SESSAO = 60 * 60 * 24 * 30; // 30 dias
@@ -13,7 +14,7 @@ export function painelConfigurado() {
 }
 
 export function tokenSessao() {
-  return createHmac("sha256", process.env.PAINEL_SENHA ?? "").update("painel-mar-de-rosas-v1").digest("hex");
+  return createHmac("sha256", segredo()).update(`painel-mar-de-rosas-v2:${process.env.PAINEL_SENHA ?? ""}`).digest("hex");
 }
 
 function iguais(a: string, b: string) {

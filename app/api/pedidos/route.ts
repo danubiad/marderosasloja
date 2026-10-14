@@ -4,6 +4,7 @@ import { calcularResumo, type Itens } from "@/lib/calculo";
 import { registrarPedidoDaCliente } from "@/lib/clientes";
 import { atingiuMinimo } from "@/lib/config";
 import { documentoValido, somenteDigitos } from "@/lib/format";
+import { dentroDoLimite } from "@/lib/limite";
 import { proximoNumero, salvarPedido, type Pedido } from "@/lib/pedidos";
 import { buscarRevendedoraAtiva } from "@/lib/revendedoras";
 
@@ -23,6 +24,8 @@ async function dadosMeta(): Promise<Pedido["meta"]> {
 }
 
 export async function POST(request: Request) {
+  if (!(await dentroDoLimite("pedido")))
+    return Response.json({ erro: "Muitos pedidos seguidos. Aguarde alguns minutos e tente de novo." }, { status: 429 });
   let corpo: Record<string, unknown>;
   try {
     corpo = await request.json();

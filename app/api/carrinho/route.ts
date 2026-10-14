@@ -1,10 +1,12 @@
 import { calcularResumo, type Itens } from "@/lib/calculo";
 import { registrarAtividade } from "@/lib/clientes";
 import { somenteDigitos } from "@/lib/format";
+import { dentroDoLimite } from "@/lib/limite";
 import { buscarRevendedoraAtiva } from "@/lib/revendedoras";
 
 // Recebe o carrinho da cliente (nome + WhatsApp + itens) para o painel mostrar carrinhos e clientes.
 export async function POST(request: Request) {
+  if (!(await dentroDoLimite("carrinho"))) return Response.json({ erro: "Muitas requisições." }, { status: 429 });
   let corpo: Record<string, unknown>;
   try {
     const texto = await request.text();

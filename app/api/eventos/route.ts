@@ -1,4 +1,5 @@
 import { registrarEvento, tiposEvento, type TipoEvento } from "@/lib/eventos";
+import { dentroDoLimite } from "@/lib/limite";
 
 // Recebe os eventos do catálogo da loja (visita, produto visto, carrinho, clique no WhatsApp).
 
@@ -13,6 +14,7 @@ const rotulo = (v: unknown) =>
     : "";
 
 export async function POST(request: Request) {
+  if (!(await dentroDoLimite("evento"))) return new Response(null, { status: 429 });
   let corpo: Record<string, unknown>;
   try {
     const texto = await request.text();

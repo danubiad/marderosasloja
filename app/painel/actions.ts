@@ -8,6 +8,7 @@ import { enviarCompraMeta } from "@/lib/meta-conversoes";
 import { salvarMetaDiaria } from "@/lib/metas";
 import { conectarMeta, desconectarMeta } from "@/lib/meta-ads";
 import { diaSP } from "@/lib/datas";
+import { dentroDoLimite } from "@/lib/limite";
 import { camposRegistro, salvarRegistro, type RegistroDia } from "@/lib/diario";
 import {
   atualizarStatus,
@@ -22,6 +23,7 @@ import {
 import { buscarRevendedora, salvarRevendedora, type StatusRevendedora } from "@/lib/revendedoras";
 
 export async function entrar(_estado: string, formData: FormData): Promise<string> {
+  if (!(await dentroDoLimite("loginPainel"))) return "Muitas tentativas. Aguarde 15 minutos e tente de novo.";
   const senha = String(formData.get("senha") ?? "");
   if (!senhaCorreta(senha)) {
     // Atraso para dificultar tentativas em sequência
