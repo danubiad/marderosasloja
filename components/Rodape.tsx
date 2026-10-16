@@ -16,9 +16,21 @@ export function Rodape() {
       >
         <IconeWhatsapp className="size-5 text-sucesso" /> {loja.whatsappExibicao}
       </a>
-      <p className="mt-6 text-xs">
-        © {new Date().getFullYear()} {loja.nome}. Todos os direitos reservados.
-      </p>
+      <div className="mx-auto mt-6 max-w-md space-y-1">
+        <p>
+          <span className="font-medium text-texto">Formas de pagamento:</span> {loja.pagamento}
+        </p>
+        <p>
+          <span className="font-medium text-texto">Prazo de postagem:</span> {loja.postagem}
+        </p>
+      </div>
+      <div className="mx-auto mt-6 max-w-md space-y-1 text-xs">
+        <p>{loja.endereco}</p>
+        <p>CNPJ {loja.cnpj}</p>
+        <p className="pt-2">
+          © {new Date().getFullYear()} {loja.nome}. Todos os direitos reservados.
+        </p>
+      </div>
     </footer>
   );
 }

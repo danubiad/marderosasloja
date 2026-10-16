@@ -9,6 +9,11 @@ export const loja = {
   vendedora: "Mar de Rosas",
   /** Endereço do site, usado nos links que as revendedoras divulgam */
   dominio: "lojamarderosas.com.br",
+  // Rodapé do catálogo da loja
+  cnpj: "12.529.165/0001-34",
+  endereco: "Avenida Goiás, nº 73, Centro — Itaguari-GO, CEP 76650-000",
+  pagamento: "Pix ou parcelamento em até 12x no cartão",
+  postagem: "imediato, pois todos os produtos são pronta entrega",
 };
 
 /** Valor mínimo do pedido em reais (0 = sem mínimo). */
