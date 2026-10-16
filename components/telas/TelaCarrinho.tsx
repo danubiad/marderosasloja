@@ -60,6 +60,9 @@ export function TelaCarrinho() {
           </div>
         ) : (
           <>
+            {!revendedora && pedidoMinimo > 0 && (
+              <BarraPedidoMinimo subtotal={resumo.subtotal} pecas={resumo.pecas} />
+            )}
             <ul className="divide-y divide-linha">
               {resumo.linhas.map(({ produto, grade, pecas, preco, precosTamanho, subtotal }) => (
                 <li key={produto.id} className="py-6 first:pt-0">
@@ -184,5 +187,37 @@ export function TelaCarrinho() {
         />
       )}
     </>
+  );
+}
+
+/** Barra de progresso até o pedido mínimo (valor ou peças, o que chegar primeiro). */
+function BarraPedidoMinimo({ subtotal, pecas }: { subtotal: number; pecas: number }) {
+  const atingiu = atingiuMinimo(subtotal, pecas);
+  const progresso = Math.min(1, Math.max(subtotal / pedidoMinimo, pecasMinimas > 0 ? pecas / pecasMinimas : 0));
+  const faltaPecas = pecasMinimas - pecas;
+  return (
+    <div className="mb-6 rounded-lg bg-creme px-4 py-3">
+      <p className={`text-sm font-medium ${atingiu ? "text-sucesso" : "text-texto"}`}>
+        {atingiu ? (
+          "✓ Pedido mínimo atingido! Já pode fechar seu pedido."
+        ) : (
+          <>
+            Falta <strong>{formatarPreco(pedidoMinimo - subtotal)}</strong> para fechar seu pedido
+            {pecasMinimas > 0 && (
+              <span className="text-suave">
+                {" "}
+                (ou mais {faltaPecas} {faltaPecas === 1 ? "peça" : "peças"})
+              </span>
+            )}
+          </>
+        )}
+      </p>
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-linha">
+        <div
+          className={`h-full rounded-full transition-all duration-500 ${atingiu ? "bg-sucesso" : "bg-dourado-escuro"}`}
+          style={{ width: `${Math.round(progresso * 100)}%` }}
+        />
+      </div>
+    </div>
   );
 }

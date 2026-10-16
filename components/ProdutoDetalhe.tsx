@@ -176,6 +176,10 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
         ) : (
           <p className="text-right text-lg text-suave">Preço em breve</p>
         )}
+        {/* Sugestão de revenda (100% sobre o atacado); não aparece no catálogo da revendedora */}
+        {temPreco && !base && (
+          <p className="mt-1 text-right text-sm text-suave">Revenda por {formatarPreco(produto.preco * 2)}</p>
+        )}
         <div className="mt-2 flex items-start gap-3">
           <div className="flex-1">
             <h1 className="text-2xl font-bold uppercase leading-tight">{produto.nome}</h1>
