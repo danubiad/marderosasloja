@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BolinhaCor } from "@/components/BolinhaCor";
+import { BotaoBaixarFoto } from "@/components/BotaoBaixarFoto";
 import { FotoProduto } from "@/components/FotoProduto";
 import { GradeQuantidade } from "@/components/GradeQuantidade";
 import { IconeCarrinho } from "@/components/icones";
@@ -50,6 +51,14 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const [slideAtual, setSlideAtual] = useState(0);
   const galeria = useRef<HTMLDivElement>(null);
 
+  // Nome do arquivo baixado: conjunto-alice-verde.jpg, conjunto-alice-2.jpg...
+  function nomeArquivo(cor: string | undefined, indice: number) {
+    const sufixo = cor
+      ? cor.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+      : String(indice + 1);
+    return `${produto.slug}-${sufixo}`;
+  }
+
   function irPara(indice: number) {
     const el = galeria.current;
     if (el) el.scrollTo({ left: indice * el.clientWidth, behavior: "smooth" });
@@ -93,15 +102,17 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
                 </Link>
               </div>
             ) : (
-              <FotoProduto
-                key={i}
-                src={s.src}
-                alt={s.cor ? `${produto.nome} — ${s.cor}` : produto.nome}
-                cores={produto.cores}
-                priority={i === 0}
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="aspect-[4/5] w-full shrink-0 snap-center"
-              />
+              <div key={i} className="relative aspect-[4/5] w-full shrink-0 snap-center">
+                <FotoProduto
+                  src={s.src}
+                  alt={s.cor ? `${produto.nome} — ${s.cor}` : produto.nome}
+                  cores={produto.cores}
+                  priority={i === 0}
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="h-full w-full"
+                />
+                {s.src && <BotaoBaixarFoto src={s.src} nome={nomeArquivo(s.cor, i)} />}
+              </div>
             ),
           )}
         </div>
