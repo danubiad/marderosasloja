@@ -48,9 +48,9 @@ export const perfil = {
 
 /** Banners do topo: foto + produto para onde o banner leva. */
 export const banners = [
-  { foto: "/banners/1.webp", produto: "conjunto-antonely", alt: "Conjunto Antonely vermelho" },
-  { foto: "/banners/2.webp", produto: "robe-avulso-de-tule-fino", alt: "Robe de tule rosê" },
-  { foto: "/banners/3.webp", produto: "conjunto-rafaele", alt: "Conjunto Rafaele preto" },
+  { foto: "/banners/1.webp", produto: "conjunto-isabela", alt: "Conjunto Isabela branco" },
+  { foto: "/banners/2.webp", produto: "camisola-luxo-carol", alt: "Camisola Luxo Carol marrom" },
+  { foto: "/banners/3.webp", produto: "conjunto-sainha-karine", alt: "Conjunto Sainha Karine preto" },
 ];
 
 export type FormaEntrega = {
