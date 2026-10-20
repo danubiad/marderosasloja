@@ -95,4 +95,6 @@ export type Produto = {
   legendaTamanhos?: Record<string, string>;
   /** Data de cadastro (AAAA-MM-DD), usada na ordenação "Mais recentes" */
   criadoEm: string;
+  /** Combinações "cor|tamanho" esgotadas (vem da aba Produtos do painel, não do cadastro) */
+  esgotados?: string[];
 };

@@ -2,6 +2,8 @@
 
 import { cookies } from "next/headers";
 import { refresh } from "next/cache";
+import { buscarProduto } from "@/data/produtos";
+import { alterarDisponibilidade, salvarCusto } from "@/lib/estoque";
 import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } from "@/lib/painel";
 import { substituirItem } from "@/lib/conferencia";
 import { enviarCompraMeta } from "@/lib/meta-conversoes";
@@ -138,4 +140,49 @@ export async function mudarStatusRevendedora(usuario: string, status: string) {
   if (!r) throw new Error("Revendedora não encontrada");
   await salvarRevendedora({ ...r, status: status as StatusRevendedora });
   refresh();
+}
+
+/** Liga/desliga produto, cor, tamanho ou combinação cor + tamanho (aba Produtos). Vale na hora no catálogo. */
+export type MudancaProduto =
+  | { tipo: "ativo"; valor: boolean }
+  | { tipo: "cor"; cor: string; valor: boolean }
+  | { tipo: "tamanho"; tamanho: string; valor: boolean }
+  | { tipo: "combinacao"; cor: string; tamanho: string; valor: boolean };
+
+function alternar(lista: string[] | undefined, item: string, incluir: boolean) {
+  const sem = (lista ?? []).filter((i) => i !== item);
+  return incluir ? [...sem, item] : sem;
+}
+
+export async function mudarProduto(id: string, m: MudancaProduto) {
+  await exigirLogin();
+  const produto = buscarProduto(id);
+  if (!produto) throw new Error("Produto não encontrado");
+  if ("cor" in m && !produto.cores.some((c) => c.nome === m.cor)) throw new Error("Cor inválida");
+  if ("tamanho" in m && !produto.tamanhos.includes(m.tamanho)) throw new Error("Tamanho inválido");
+  // valor = ativo/disponível; as listas guardam o que está desligado
+  await alterarDisponibilidade(id, (d) => {
+    if (m.tipo === "ativo") d.inativo = !m.valor || undefined;
+    if (m.tipo === "cor") d.coresInativas = alternar(d.coresInativas, m.cor, !m.valor);
+    if (m.tipo === "tamanho") d.tamanhosInativos = alternar(d.tamanhosInativos, m.tamanho, !m.valor);
+    if (m.tipo === "combinacao") d.esgotados = alternar(d.esgotados, `${m.cor}|${m.tamanho}`, !m.valor);
+  });
+  refresh();
+}
+
+/** Preço de custo do produto; vazio apaga. */
+export async function mudarCusto(id: string, valor: string): Promise<string> {
+  await exigirLogin();
+  if (!buscarProduto(id)) return "Produto não encontrado.";
+  const texto = valor.replace(/[R$\s]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".");
+  if (!texto) {
+    await salvarCusto(id, null);
+    refresh();
+    return "";
+  }
+  const n = Number(texto);
+  if (!Number.isFinite(n) || n < 0 || n > 100000) return "Valor inválido.";
+  await salvarCusto(id, Math.round(n * 100) / 100);
+  refresh();
+  return "";
 }

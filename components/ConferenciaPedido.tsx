@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
 import { produtos } from "@/data/produtos";
+import { aplicarDisponibilidade, type Disponibilidade } from "@/lib/disponibilidade";
 import { formatarPreco } from "@/lib/format";
 import { precoComMargem } from "@/lib/margem";
 import {
@@ -24,9 +25,11 @@ type Props = {
   /** Devolve uma mensagem de erro, se a troca não puder ser salva */
   substituir?: (origem: string, produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<string | void>;
   removerSubstituicao?: (subId: string) => Promise<void>;
+  /** O que está inativo/esgotado: não aparece na escolha da substituição */
+  disponibilidade?: Disponibilidade;
 };
 
-export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSubstituicao }: Props) {
+export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSubstituicao, disponibilidade }: Props) {
   const conf = pedido.conferencia ?? {};
   const subs = pedido.substituicoes ?? [];
   const r = resumoConferencia(pedido);
@@ -97,6 +100,7 @@ export function ConferenciaPedido({ pedido, modo, marcar, substituir, removerSub
                         quantidadeMaxima={modo === "cliente" ? quantidadeSemSubstituir(pedido, chave) : 999}
                         produtoInicial={item.produtoId}
                         margem={margem}
+                        disponibilidade={disponibilidade}
                         onSalvar={(p, c, t, qtd) => substituir!(chave, p, c, t, qtd)}
                       />
                     )}
@@ -253,17 +257,20 @@ function FormSubstituicao({
   quantidadeMaxima,
   produtoInicial,
   margem,
+  disponibilidade = {},
   onSalvar,
 }: {
   quantidadeSugerida: number;
   quantidadeMaxima: number;
   produtoInicial: string;
   margem: number;
+  disponibilidade?: Disponibilidade;
   onSalvar: (produtoId: string, cor: string, tamanho: string, quantidade: number) => Promise<string | void>;
 }) {
   const [aberto, setAberto] = useState(false);
   const [produtoId, setProdutoId] = useState(produtoInicial);
-  const produto = produtos.find((p) => p.id === produtoId)!;
+  const lista = aplicarDisponibilidade(produtos, disponibilidade).filter((p) => p.preco > 0);
+  const produto = lista.find((p) => p.id === produtoId) ?? lista[0];
   const [cor, setCor] = useState("");
   const [tamanho, setTamanho] = useState("");
   const [quantidade, setQuantidade] = useState(quantidadeSugerida);
@@ -287,7 +294,7 @@ function FormSubstituicao({
       <label className="grid gap-1 text-sm">
         Produto
         <select
-          value={produtoId}
+          value={produto.id}
           onChange={(e) => {
             setProdutoId(e.target.value);
             setCor("");
@@ -295,13 +302,11 @@ function FormSubstituicao({
           }}
           className="rounded border border-linha bg-white px-2 py-2"
         >
-          {produtos
-            .filter((p) => p.preco > 0)
-            .map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nome} · {formatarPreco(precoComMargem(p.preco, margem))}
-              </option>
-            ))}
+          {lista.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.nome} · {formatarPreco(precoComMargem(p.preco, margem))}
+            </option>
+          ))}
         </select>
       </label>
 
@@ -312,7 +317,10 @@ function FormSubstituicao({
             <button
               key={c.nome}
               type="button"
-              onClick={() => setCor(c.nome)}
+              onClick={() => {
+                setCor(c.nome);
+                if (produto.esgotados?.includes(`${c.nome}|${tamanho}`)) setTamanho("");
+              }}
               className={`flex items-center gap-1.5 rounded-full border bg-white py-1 pl-1 pr-2.5 text-xs ${
                 cor === c.nome ? "border-sky-700 ring-2 ring-sky-700" : "border-linha"
               }`}
@@ -327,16 +335,20 @@ function FormSubstituicao({
       <div className="text-sm">
         Tamanho
         <div className="mt-1 flex flex-wrap gap-2">
-          {produto.tamanhos.map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTamanho(t)}
-              className={`min-w-11 rounded-md border bg-white px-3 py-1.5 ${tamanho === t ? "border-sky-700 ring-2 ring-sky-700" : "border-linha"}`}
-            >
-              {t}
-            </button>
-          ))}
+          {produto.tamanhos.map((t) => {
+            const esgotado = Boolean(cor) && Boolean(produto.esgotados?.includes(`${cor}|${t}`));
+            return (
+              <button
+                key={t}
+                type="button"
+                disabled={esgotado}
+                onClick={() => setTamanho(t)}
+                className={`min-w-11 rounded-md border bg-white px-3 py-1.5 disabled:opacity-40 disabled:line-through ${tamanho === t ? "border-sky-700 ring-2 ring-sky-700" : "border-linha"}`}
+              >
+                {t}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -362,7 +374,7 @@ function FormSubstituicao({
             if (!cor || !tamanho) return setErro("Escolha a cor e o tamanho.");
             setErro("");
             iniciar(async () => {
-              const falha = await onSalvar(produtoId, cor, tamanho, quantidade);
+              const falha = await onSalvar(produto.id, cor, tamanho, quantidade);
               if (falha) return setErro(falha);
               setAberto(false);
             });

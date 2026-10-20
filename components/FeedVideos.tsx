@@ -170,6 +170,7 @@ function PainelAdicionar({ produto, onFechar }: { produto: Produto; onFechar: ()
             tamanhos={produto.tamanhos}
             legendas={legendasDaGrade(produto)}
             grade={grade}
+            esgotados={produto.esgotados}
             onChange={temPreco ? (g) => definirGrade(produto.id, g) : undefined}
           />
         </div>

@@ -118,6 +118,30 @@ export function quantidadeSemSubstituir(p: Pedido, origem: string) {
   return Math.max(0, original - substituidas);
 }
 
+/**
+ * Custo das peças que vão no pedido (sem as em falta, com as substituições), pelo preço de custo
+ * cadastrado na aba Produtos do painel. `semCusto` = peças de produtos que ainda não têm custo.
+ */
+export function custoDoPedido(p: Pedido, custos: Record<string, number>) {
+  const conf = p.conferencia ?? {};
+  let custo = 0;
+  let semCusto = 0;
+  const somar = (produtoId: string, q: number) => {
+    if (custos[produtoId] === undefined) semCusto += q;
+    else custo += q * custos[produtoId];
+  };
+  for (const item of p.itens) {
+    for (const [chave, q] of Object.entries(item.grade)) {
+      const [cor, tam] = chave.split("|");
+      if (conf[chaveConferencia.item(item.produtoId, cor, tam)] !== "falta") somar(item.produtoId, q);
+    }
+  }
+  for (const s of p.substituicoes ?? []) {
+    if (conf[chaveConferencia.substituicao(s.id)] !== "falta") somar(s.produtoId, s.quantidade);
+  }
+  return { custo, semCusto };
+}
+
 /** Totais do pedido considerando os itens em falta e as substituições. */
 export function resumoConferencia(p: Pedido) {
   const conf = p.conferencia ?? {};

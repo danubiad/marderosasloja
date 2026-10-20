@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Cabecalho } from "@/components/Cabecalho";
 import { ProdutoDetalhe } from "@/components/ProdutoDetalhe";
-import { buscarProdutoPorSlug, produtos } from "@/data/produtos";
+import { buscarProdutoPorSlug } from "@/data/produtos";
 import { loja } from "@/lib/config";
-
-export function generateStaticParams() {
-  return produtos.map((p) => ({ slug: p.slug }));
-}
+import { produtosDisponiveis } from "@/lib/estoque";
 
 export async function generateMetadata({ params }: PageProps<"/produto/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -22,7 +19,8 @@ export async function generateMetadata({ params }: PageProps<"/produto/[slug]">)
 
 export default async function PaginaProduto({ params }: PageProps<"/produto/[slug]">) {
   const { slug } = await params;
-  const produto = buscarProdutoPorSlug(slug);
+  // Produto inativo no painel não abre
+  const produto = (await produtosDisponiveis()).find((p) => p.slug === slug);
   if (!produto) notFound();
 
   return (

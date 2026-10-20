@@ -3,9 +3,11 @@ import { BioLoja } from "@/components/BioLoja";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Rodape } from "@/components/Rodape";
 import { Vitrine } from "@/components/Vitrine";
-import { categorias, produtos } from "@/data/produtos";
+import { categorias } from "@/data/produtos";
+import { produtosDisponiveis } from "@/lib/estoque";
 
-export default function Home() {
+export default async function Home() {
+  const produtos = await produtosDisponiveis();
   return (
     <>
       <Cabecalho />

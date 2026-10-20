@@ -219,6 +219,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
             tamanhos={produto.tamanhos}
             legendas={legendasDaGrade(produto)}
             grade={grade}
+            esgotados={produto.esgotados}
             onChange={temPreco ? mudarGrade : undefined}
             permitirDigitar
           />

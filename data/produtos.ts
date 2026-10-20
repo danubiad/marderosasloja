@@ -11,8 +11,8 @@ export * from "./tipos";
 export const produtos = catalogo.map((p) => ({ ...p, videos: p.videos ?? videosPorProduto[p.slug] ?? [] }));
 
 /** Produtos com o preço de venda da revendedora (atacado + margem). */
-export function produtosComMargem(margem: number) {
-  return produtos.map((p) => ({
+export function produtosComMargem(margem: number, lista: Produto[] = produtos) {
+  return lista.map((p) => ({
     ...p,
     preco: precoComMargem(p.preco, margem),
     precoDe: p.precoDe ? precoComMargem(p.precoDe, margem) : undefined,

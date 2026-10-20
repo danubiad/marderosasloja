@@ -5,7 +5,8 @@ import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { ConferenciaPedido } from "@/components/ConferenciaPedido";
 import { Resumo } from "@/components/Resumo";
 import { formatarCep, formatarDocumento, formatarPreco, formatarTelefone } from "@/lib/format";
-import { buscarPedido, statusPedido } from "@/lib/pedidos";
+import { buscarCustos, buscarDisponibilidade } from "@/lib/estoque";
+import { buscarPedido, custoDoPedido, resumoConferencia, statusPedido } from "@/lib/pedidos";
 import { marcarItemLoja, removerSubstituicaoLoja, substituirLoja } from "../../actions";
 import { AbasPainel } from "../../AbasPainel";
 import { bloqueioPainel } from "../../acesso";
@@ -24,6 +25,12 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
   const p = await buscarPedido(id);
   if (!p) notFound();
   const e = p.endereco;
+
+  // Só no painel: custo das peças, venda e lucro do pedido
+  const conf = resumoConferencia(p);
+  const { custo, semCusto } = custoDoPedido(p, await buscarCustos());
+  const venda = p.revendedora ? conf.atacado : conf.subtotal - conf.desconto;
+  const lucro = venda - custo;
 
   return (
     <>
@@ -64,6 +71,7 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
           <ConferenciaPedido
             pedido={p}
             modo="loja"
+            disponibilidade={await buscarDisponibilidade()}
             marcar={marcarItemLoja.bind(null, p.id)}
             substituir={substituirLoja.bind(null, p.id)}
             removerSubstituicao={removerSubstituicaoLoja.bind(null, p.id)}
@@ -83,6 +91,37 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
             <p className="mt-1 text-right text-sm text-suave">Valor original no atacado: {formatarPreco(p.totalAtacado)}</p>
           )}
         </div>
+
+        <section className="mt-4 rounded-md border border-linha bg-creme p-4">
+          <h2 className="font-bold">Custo e lucro</h2>
+          <dl className="mt-2 grid gap-1 text-sm">
+            <div className="flex justify-between">
+              <dt>Custo total das peças</dt>
+              <dd>{formatarPreco(custo)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt>{p.revendedora ? "Venda (atacado, o que a revendedora paga)" : "Venda (sem o frete)"}</dt>
+              <dd>{formatarPreco(venda)}</dd>
+            </div>
+            <div className={`flex justify-between border-t border-linha pt-1 text-base font-bold ${lucro < 0 ? "text-promo" : "text-sucesso"}`}>
+              <dt>Lucro</dt>
+              <dd>
+                {formatarPreco(lucro)}
+                {venda > 0 && <span className="ml-1 text-xs font-normal">({Math.round((lucro / venda) * 100)}%)</span>}
+              </dd>
+            </div>
+          </dl>
+          {semCusto > 0 && (
+            <p className="mt-2 text-xs text-promo">
+              {semCusto} {semCusto === 1 ? "peça é" : "peças são"} de produtos sem preço de custo: cadastre na aba{" "}
+              <Link href="/painel/produtos" className="underline">
+                Produtos
+              </Link>{" "}
+              para o lucro ficar certo.
+            </p>
+          )}
+          <p className="mt-1 text-xs text-suave">Peças em falta não entram; as substituições entram. Usa o custo cadastrado hoje.</p>
+        </section>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <section className="rounded-md border border-linha p-4 text-sm">

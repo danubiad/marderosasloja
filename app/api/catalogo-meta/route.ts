@@ -1,9 +1,10 @@
 import { loja, textoPedidoMinimo } from "@/lib/config";
 import { produtos } from "@/data/produtos";
+import { produtosDisponiveis } from "@/lib/estoque";
 
 // Lista de produtos que o Gerenciador de Comércio da Meta lê todo dia (sacolinha do Instagram/Facebook).
 // O id é a referência (MR-0xx), o mesmo content_id que o Pixel e a API de Conversões mandam.
-// Produto sem preço definido (preco 0) fica de fora, porque não pode ser pedido.
+// Produto sem preço definido (preco 0) ou inativo no painel fica de fora, porque não pode ser pedido.
 
 const site = `https://${loja.dominio}`;
 
@@ -44,8 +45,8 @@ function descricao(p: (typeof produtos)[number]) {
   return partes.join(" ");
 }
 
-export function GET() {
-  const linhas = produtos
+export async function GET() {
+  const linhas = (await produtosDisponiveis())
     .filter((p) => p.preco > 0 && p.fotos.length > 0)
     .map((p) => {
       const emPromocao = p.precoDe && p.precoDe > p.preco;

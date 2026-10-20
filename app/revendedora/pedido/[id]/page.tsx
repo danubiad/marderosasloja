@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { ConferenciaPedido } from "@/components/ConferenciaPedido";
 import { IconeWhatsapp } from "@/components/icones";
+import { buscarDisponibilidade } from "@/lib/estoque";
 import { formatarCep, formatarPreco, formatarTelefone } from "@/lib/format";
 import { buscarPedido, statusPedido } from "@/lib/pedidos";
 import { revendedoraLogada } from "@/lib/revendedoras";
@@ -48,6 +49,7 @@ export default async function PedidoRevendedora({ params }: PageProps<"/revended
           <ConferenciaPedido
             pedido={p}
             modo="revendedora"
+            disponibilidade={await buscarDisponibilidade()}
             substituir={substituirRevendedora.bind(null, p.id)}
             removerSubstituicao={removerSubstituicaoRevendedora.bind(null, p.id)}
           />

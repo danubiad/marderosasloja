@@ -4,13 +4,14 @@ import { BioRevendedora } from "@/components/BioRevendedora";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Vitrine } from "@/components/Vitrine";
 import { categorias, produtosComMargem } from "@/data/produtos";
+import { produtosDisponiveis } from "@/lib/estoque";
 import { buscarRevendedoraAtiva, publica } from "@/lib/revendedoras";
 
 export default async function CatalogoRevendedora({ params }: PageProps<"/r/[usuario]">) {
   const { usuario } = await params;
   const r = await buscarRevendedoraAtiva(usuario);
   if (!r) notFound();
-  const lista = produtosComMargem(r.margem);
+  const lista = produtosComMargem(r.margem, await produtosDisponiveis());
 
   return (
     <>

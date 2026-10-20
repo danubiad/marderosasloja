@@ -1,6 +1,9 @@
 import { randomBytes } from "crypto";
 import { cookies, headers } from "next/headers";
+import { buscarProduto } from "@/data/produtos";
 import { calcularResumo, type Itens } from "@/lib/calculo";
+import { disponivel } from "@/lib/disponibilidade";
+import { buscarDisponibilidade } from "@/lib/estoque";
 import { registrarPedidoDaCliente } from "@/lib/clientes";
 import { atingiuMinimo } from "@/lib/config";
 import { documentoValido, somenteDigitos } from "@/lib/format";
@@ -63,6 +66,18 @@ export async function POST(request: Request) {
 
   // Recalcula tudo no servidor a partir do cadastro de produtos
   const itens = (typeof corpo.itens === "object" && corpo.itens ? corpo.itens : {}) as Itens;
+  // Peças que a loja desligou ou marcou como esgotadas depois que a cliente pôs no carrinho
+  const d = await buscarDisponibilidade();
+  const esgotadas = Object.entries(itens).flatMap(([id, grade]) =>
+    Object.entries(grade ?? {})
+      .filter(([chave, q]) => Number(q) > 0 && !disponivel(d, id, ...(chave.split("|") as [string, string])))
+      .map(([chave]) => `${buscarProduto(id)?.nome ?? "Produto"} ${chave.replace("|", " ")}`),
+  );
+  if (esgotadas.length)
+    return Response.json(
+      { erro: `Esgotou: ${esgotadas.join(", ")}. Tire do carrinho e envie de novo.` },
+      { status: 409 },
+    );
   const resumo = calcularResumo(itens, {
     codigoCupom: texto(corpo.cupom, 40),
     entregaId: texto(corpo.entregaId, 40),

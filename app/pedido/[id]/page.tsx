@@ -11,6 +11,7 @@ import { Resumo } from "@/components/Resumo";
 import { loja } from "@/lib/config";
 import { formatarCep, formatarPreco, formatarTelefone, mascararDocumento } from "@/lib/format";
 import { buscarPedido, chaveConferencia, clientePodeSubstituir, resumoConferencia } from "@/lib/pedidos";
+import { buscarDisponibilidade } from "@/lib/estoque";
 import { LojaProvider } from "@/lib/loja";
 import { buscarRevendedora, publica } from "@/lib/revendedoras";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
@@ -134,6 +135,7 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
             <ConferenciaPedido
               pedido={pedido}
               modo="cliente"
+              disponibilidade={await buscarDisponibilidade()}
               substituir={podeSubstituir ? substituirCliente.bind(null, pedido.id) : undefined}
               removerSubstituicao={podeSubstituir ? removerSubstituicaoCliente.bind(null, pedido.id) : undefined}
             />

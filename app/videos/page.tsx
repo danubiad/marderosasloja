@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FeedVideos } from "@/components/FeedVideos";
-import { montarFeed, produtos } from "@/data/produtos";
+import { montarFeed } from "@/data/produtos";
+import { produtosDisponiveis } from "@/lib/estoque";
 import { loja } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -8,6 +9,6 @@ export const metadata: Metadata = {
   description: "Veja os produtos em vídeo e monte seu pedido.",
 };
 
-export default function PaginaVideos() {
-  return <FeedVideos itens={montarFeed(produtos)} />;
+export default async function PaginaVideos() {
+  return <FeedVideos itens={montarFeed(await produtosDisponiveis())} />;
 }

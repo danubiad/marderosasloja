@@ -15,6 +15,8 @@ type Props = {
   somenteComQuantidade?: boolean;
   /** Mostra o botão de teclado para digitar quantidades */
   permitirDigitar?: boolean;
+  /** Combinações "cor|tamanho" esgotadas: não dá para adicionar */
+  esgotados?: string[];
 };
 
 export function GradeQuantidade({
@@ -25,6 +27,7 @@ export function GradeQuantidade({
   onChange,
   somenteComQuantidade,
   permitirDigitar,
+  esgotados,
 }: Props) {
   const [digitando, setDigitando] = useState(false);
   const editavel = Boolean(onChange);
@@ -86,6 +89,15 @@ export function GradeQuantidade({
                     <td key={t} className={`border-l border-linha p-0 ${somenteComQuantidade ? "bg-fundo" : ""}`}>
                       {!editavel ? (
                         <span className="text-lg">{q > 0 ? q : ""}</span>
+                      ) : esgotados?.includes(chaveGrade(cor.nome, t)) ? (
+                        <div className="flex h-20 flex-col items-center justify-center gap-1 bg-fundo/60">
+                          <span className="text-[11px] uppercase tracking-wide text-suave">Esgotado</span>
+                          {q > 0 && (
+                            <button type="button" onClick={() => alterar(cor.nome, t, 0)} className="text-xs text-promo underline">
+                              tirar {q}
+                            </button>
+                          )}
+                        </div>
                       ) : digitando ? (
                         <input
                           type="number"
