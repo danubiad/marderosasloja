@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { formatarPreco } from "@/lib/format";
 import { listarPedidosDaRevendedora, resumoConferencia, statusPedido } from "@/lib/pedidos";
-import { revendedoraLogada } from "@/lib/revendedoras";
+import { publica, revendedoraLogada } from "@/lib/revendedoras";
 import { sairRevendedora } from "../actions";
 import { CompartilharLink } from "./CompartilharLink";
+import { FormFoto } from "./FormFoto";
 import { FormPerfil } from "./FormPerfil";
 import { loja } from "@/lib/config";
 
@@ -53,6 +54,11 @@ export default async function PainelRevendedora() {
         <section className="mt-4 rounded-lg border border-linha p-4">
           <h2 className="mb-3 text-lg font-semibold">Meu perfil</h2>
           <FormPerfil nome={r.nome} margem={r.margem} />
+        </section>
+
+        <section className="mt-4 rounded-lg border border-linha p-4">
+          <h2 className="mb-3 text-lg font-semibold">Sua foto ou logo</h2>
+          <FormFoto revendedora={publica(r)} />
         </section>
 
         <section className="mt-6">

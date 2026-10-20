@@ -10,7 +10,7 @@ export function CompartilharLink({ caminho, nome }: { caminho: string; nome: str
     const url = `https://${loja.dominio}${caminho}`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: `Catálogo de ${nome}`, text: "Confira meu catálogo de moda íntima Mar de Rosas!", url });
+        await navigator.share({ title: `Catálogo de ${nome}`, text: "Confira meu catálogo de moda íntima!", url });
       } else {
         await navigator.clipboard.writeText(url);
         setCopiado(true);

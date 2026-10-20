@@ -18,7 +18,7 @@ import { registrarEvento } from "@/lib/rastreio";
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { itens, definirGrade } = useCarrinho();
-  const { base } = useLoja();
+  const { base, revendedora } = useLoja();
   const grade = itens[produto.id] ?? {};
   const pecas = totalPecas(grade);
   const temPreco = produto.preco > 0;
@@ -200,7 +200,7 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
         {!temPreco && (
           <div className="mt-6 rounded border border-linha bg-creme px-4 py-3 text-center">
             Este produto estará disponível para pedido em breve. Dúvidas?{" "}
-            <a href={`https://wa.me/${loja.whatsapp}`} target="_blank" rel="noopener noreferrer" className="font-semibold underline">
+            <a href={`https://wa.me/${revendedora ? `55${revendedora.whatsapp}` : loja.whatsapp}`} target="_blank" rel="noopener noreferrer" className="font-semibold underline">
               Fale com a vendedora
             </a>
             .

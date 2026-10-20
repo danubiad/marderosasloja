@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import sharp from "sharp";
 import { substituirItem } from "@/lib/conferencia";
 import { somenteDigitos } from "@/lib/format";
 import { kv } from "@/lib/kv";
@@ -13,6 +14,7 @@ import {
   encerrarSessaoRevendedora,
   iniciarSessaoRevendedora,
   revendedoraLogada,
+  salvarImagemFoto,
   salvarRevendedora,
   usuarioValido,
 } from "@/lib/revendedoras";
@@ -85,6 +87,42 @@ export async function salvarPerfil(_estado: string, formData: FormData): Promise
   await salvarRevendedora({ ...r, nome, margem });
   refresh();
   return "Salvo!";
+}
+
+/** Foto ou logo da revendedora, que aparece no catálogo dela no lugar da marca da loja. */
+export async function salvarFoto(formData: FormData): Promise<string> {
+  const r = await revendedoraLogada();
+  if (!r) return "Sessão expirada. Entre novamente.";
+  const arquivo = formData.get("foto");
+  const tipo = formData.get("tipo") === "logo" ? "logo" : "foto";
+  if (!(arquivo instanceof File) || arquivo.size === 0) return "Escolha uma imagem.";
+  if (arquivo.size > 900_000) return "Imagem muito grande. Tente outra.";
+
+  let jpg: Buffer;
+  try {
+    const imagem = sharp(Buffer.from(await arquivo.arrayBuffer())).rotate().flatten({ background: "#ffffff" });
+    jpg = await (tipo === "foto"
+      ? imagem.resize({ width: 400, height: 400, fit: "cover" })
+      : imagem.resize({ width: 600, height: 600, fit: "inside", withoutEnlargement: true })
+    )
+      .jpeg({ quality: 85 })
+      .toBuffer();
+  } catch {
+    return "Não consegui abrir essa imagem. Tente outra (JPG ou PNG).";
+  }
+
+  await salvarImagemFoto(r.usuario, jpg.toString("base64"));
+  await salvarRevendedora({ ...r, foto: { versao: Date.now(), tipo } });
+  refresh();
+  return "Salvo!";
+}
+
+export async function removerFoto() {
+  const r = await revendedoraLogada();
+  if (!r) return;
+  await salvarImagemFoto(r.usuario, null);
+  await salvarRevendedora({ ...r, foto: undefined });
+  refresh();
 }
 
 async function pedidoDaRevendedora(id: string) {

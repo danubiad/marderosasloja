@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaixaAviso } from "@/components/FaixaAviso";
+import { MarcaRevendedora } from "@/components/MarcaRevendedora";
 import { useCarrinho } from "@/lib/carrinho";
 import { useLoja } from "@/lib/loja";
 import { totalPecas } from "@/lib/calculo";
@@ -19,7 +20,7 @@ type Props = {
 
 export function Cabecalho({ voltar, titulo, semCarrinho, children }: Props) {
   const router = useRouter();
-  const { base } = useLoja();
+  const { base, revendedora } = useLoja();
   const { itens } = useCarrinho();
   const pecas = Object.values(itens).reduce((acc, g) => acc + totalPecas(g), 0);
 
@@ -40,8 +41,13 @@ export function Cabecalho({ voltar, titulo, semCarrinho, children }: Props) {
             <IconeVoltar />
           </button>
         ) : (
-          <Link href={base || "/"} className="flex items-center" aria-label="Início">
-            <Image src="/logo/logo.jpg" alt="Mar de Rosas Lingerie" width={96} height={64} className="h-12 w-auto" priority />
+          <Link href={base || "/"} className="flex min-w-0 items-center" aria-label="Início">
+            {/* No catálogo da revendedora a marca da loja não aparece */}
+            {revendedora ? (
+              <MarcaRevendedora r={revendedora} />
+            ) : (
+              <Image src="/logo/logo.jpg" alt="Mar de Rosas Lingerie" width={96} height={64} className="h-12 w-auto" priority />
+            )}
           </Link>
         )}
 

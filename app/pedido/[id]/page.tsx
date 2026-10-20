@@ -12,14 +12,19 @@ import { loja } from "@/lib/config";
 import { formatarCep, formatarPreco, formatarTelefone, mascararDocumento } from "@/lib/format";
 import { buscarPedido, chaveConferencia, clientePodeSubstituir, resumoConferencia } from "@/lib/pedidos";
 import { LojaProvider } from "@/lib/loja";
+import { buscarRevendedora, publica } from "@/lib/revendedoras";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { ConferenciaPedido } from "@/components/ConferenciaPedido";
 import { removerSubstituicaoCliente, substituirCliente } from "./actions";
 
-export const metadata: Metadata = {
-  title: `Pedido — ${loja.nome}`,
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({ params }: PageProps<"/pedido/[id]">): Promise<Metadata> {
+  const pedido = await buscarPedido((await params).id);
+  return {
+    // Pedido do catálogo de revendedora: sem a marca da loja
+    title: pedido?.revendedora ? `Pedido ${pedido.numero} — ${pedido.revendedora.nome}` : `Pedido — ${loja.nome}`,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function PaginaPedido({ params, searchParams }: PageProps<"/pedido/[id]">) {
   const { id } = await params;
@@ -81,9 +86,11 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
 
   const data = new Date(pedido.criadoEm).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
   const e = pedido.endereco;
+  // Foto/logo atual da revendedora para o topo da página
+  const revendedora = pedido.revendedora && (await buscarRevendedora(pedido.revendedora.usuario));
 
   return (
-    <LojaProvider revendedora={pedido.revendedora}>
+    <LojaProvider revendedora={pedido.revendedora && { ...pedido.revendedora, ...(revendedora && publica(revendedora)) }}>
       <AtualizarSozinho segundos={30} />
       <Cabecalho titulo={`Pedido ${pedido.numero}`} semCarrinho />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-16 pt-6">

@@ -4,7 +4,7 @@ import { BioRevendedora } from "@/components/BioRevendedora";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Vitrine } from "@/components/Vitrine";
 import { categorias, produtosComMargem } from "@/data/produtos";
-import { buscarRevendedoraAtiva } from "@/lib/revendedoras";
+import { buscarRevendedoraAtiva, publica } from "@/lib/revendedoras";
 
 export default async function CatalogoRevendedora({ params }: PageProps<"/r/[usuario]">) {
   const { usuario } = await params;
@@ -17,7 +17,7 @@ export default async function CatalogoRevendedora({ params }: PageProps<"/r/[usu
       <Cabecalho />
       <main className="flex-1 pb-10">
         <Banners />
-        <BioRevendedora nome={r.nome} whatsapp={r.whatsapp} totalProdutos={lista.length} />
+        <BioRevendedora r={publica(r)} totalProdutos={lista.length} />
         <Vitrine produtos={lista} categorias={categorias} />
       </main>
     </>

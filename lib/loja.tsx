@@ -2,7 +2,15 @@
 
 import { createContext, useContext } from "react";
 
-export type RevendedoraNoSite = { usuario: string; nome: string; whatsapp: string; margem: number };
+export type RevendedoraNoSite = {
+  usuario: string;
+  nome: string;
+  whatsapp: string;
+  margem: number;
+  /** Foto ou logo da revendedora: no catálogo dela aparece no lugar da marca da loja */
+  foto?: string;
+  tipoFoto?: "foto" | "logo";
+};
 
 type Loja = {
   /** Prefixo dos links: "" na loja, "/r/<usuario>" no catálogo da revendedora */
