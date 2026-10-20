@@ -1,5 +1,6 @@
 import "server-only";
 import { connection } from "next/server";
+import { custosPorProduto } from "@/data/custos";
 import { produtos } from "@/data/produtos";
 import { aplicarDisponibilidade, type Disponibilidade, type DisponibilidadeProduto } from "@/lib/disponibilidade";
 import { kv } from "@/lib/kv";
@@ -28,14 +29,25 @@ export async function produtosDisponiveis() {
   return aplicarDisponibilidade(produtos, await buscarDisponibilidade());
 }
 
-/** produtoId -> preço de custo */
+// No banco, null = a dona apagou o custo (para não voltar o de data/custos.ts)
+async function custosDoPainel() {
+  return (await kv.get<Record<string, number | null>>(CHAVE_CUSTOS)) ?? {};
+}
+
+/** produtoId -> preço de custo (o do painel vale mais que o de data/custos.ts) */
 export async function buscarCustos(): Promise<Record<string, number>> {
-  return (await kv.get<Record<string, number>>(CHAVE_CUSTOS)) ?? {};
+  const custos: Record<string, number> = { ...custosPorProduto };
+  for (const [id, custo] of Object.entries(await custosDoPainel())) {
+    if (custo === null) delete custos[id];
+    else custos[id] = custo;
+  }
+  return custos;
 }
 
 export async function salvarCusto(produtoId: string, custo: number | null) {
-  const custos = await buscarCustos();
-  if (custo === null) delete custos[produtoId];
-  else custos[produtoId] = custo;
+  const custos = await custosDoPainel();
+  if (custo !== null) custos[produtoId] = custo;
+  else if (produtoId in custosPorProduto) custos[produtoId] = null;
+  else delete custos[produtoId];
   await kv.set(CHAVE_CUSTOS, custos);
 }
