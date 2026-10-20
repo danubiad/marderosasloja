@@ -12,10 +12,11 @@ import { Resumo } from "@/components/Resumo";
 import { calcularResumo, legendasDaGrade } from "@/lib/calculo";
 import { useCarrinho } from "@/lib/carrinho";
 import { atingiuMinimo, buscarCupom, loja, pecasMinimas, pedidoMinimo, textoPedidoMinimo } from "@/lib/config";
+import type { Disponibilidade } from "@/lib/disponibilidade";
 import { formatarPreco, formatarTelefone } from "@/lib/format";
 import { useLoja } from "@/lib/loja";
 
-export function TelaCarrinho() {
+export function TelaCarrinho({ disponibilidade }: { disponibilidade: Disponibilidade }) {
   const router = useRouter();
   const { base, revendedora } = useLoja();
   const { itens, carregado, cupom, observacao, definirGrade, remover, setCupom, setObservacao } = useCarrinho();
@@ -24,6 +25,7 @@ export function TelaCarrinho() {
   const resumo = calcularResumo(itens, {
     codigoCupom: cupom,
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
+    disponibilidade,
   });
   // O pedido mínimo vale para o atacado; no catálogo da revendedora não há mínimo
   const liberado = revendedora ? true : atingiuMinimo(resumo.subtotal, resumo.pecas);

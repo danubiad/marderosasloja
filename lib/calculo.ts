@@ -1,5 +1,6 @@
 import { buscarProduto, precoDoTamanho, valorDaGrade, type Produto } from "@/data/produtos";
 import { buscarCupom, formasEntrega, formasEntregaRevendedora } from "@/lib/config";
+import { aplicarPreco, type Disponibilidade } from "@/lib/disponibilidade";
 import { formatarPreco } from "@/lib/format";
 import { precoComMargem } from "@/lib/margem";
 
@@ -44,6 +45,8 @@ export type OpcoesResumo = {
   entregaId?: string;
   /** Catálogo de revendedora: aplica a margem, sem cupom e com entrega combinada */
   revendedora?: { margem: number };
+  /** Aba Produtos do painel: usa o preço editado lá */
+  disponibilidade?: Disponibilidade;
 };
 
 export function entregasDisponiveis(revendedora?: boolean) {
@@ -54,7 +57,8 @@ export function calcularResumo(itens: Itens, opcoes: OpcoesResumo = {}) {
   const margem = opcoes.revendedora?.margem ?? 0;
   const linhas: LinhaResumo[] = [];
   for (const [id, grade] of Object.entries(itens)) {
-    const produto = buscarProduto(id);
+    const cadastro = buscarProduto(id);
+    const produto = cadastro && aplicarPreco(cadastro, opcoes.disponibilidade?.[id]);
     // Produtos sem preço definido ainda não podem ser pedidos
     if (!produto || produto.preco <= 0) continue;
     // Ignora combinações que não existem mais no cadastro

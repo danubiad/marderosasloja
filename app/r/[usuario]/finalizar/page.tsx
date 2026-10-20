@@ -1,1 +1,6 @@
-export { TelaFinalizar as default } from "@/components/telas/TelaFinalizar";
+import { TelaFinalizar } from "@/components/telas/TelaFinalizar";
+import { disponibilidadeAtual } from "@/lib/estoque";
+
+export default async function Finalizar() {
+  return <TelaFinalizar disponibilidade={await disponibilidadeAtual()} />;
+}

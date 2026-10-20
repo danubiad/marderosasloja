@@ -1,7 +1,7 @@
 import "server-only";
 import { randomBytes } from "crypto";
 import { buscarProduto, precoDoTamanho } from "@/data/produtos";
-import { disponivel } from "@/lib/disponibilidade";
+import { aplicarPreco, disponivel } from "@/lib/disponibilidade";
 import { buscarDisponibilidade } from "@/lib/estoque";
 import { precoComMargem } from "@/lib/margem";
 import { adicionarSubstituicao, clientePodeSubstituir, quantidadeSemSubstituir, type Pedido } from "@/lib/pedidos";
@@ -17,10 +17,12 @@ export async function substituirItem(
   por: "loja" | "revendedora" | "cliente",
 ) {
   if (pedido.conferencia?.[origem] !== "falta") throw new Error("Só é possível substituir itens em falta.");
-  const produto = buscarProduto(produtoId);
+  const d = await buscarDisponibilidade();
+  const cadastro = buscarProduto(produtoId);
+  const produto = cadastro && aplicarPreco(cadastro, d[produtoId]);
   const corInfo = produto?.cores.find((c) => c.nome === cor);
   if (!produto || produto.preco <= 0 || !corInfo || !produto.tamanhos.includes(tamanho)) throw new Error("Produto inválido.");
-  if (!disponivel(await buscarDisponibilidade(), produtoId, cor, tamanho)) throw new Error("Essa cor e tamanho estão esgotados.");
+  if (!disponivel(d, produtoId, cor, tamanho)) throw new Error("Essa cor e tamanho estão esgotados.");
   const qtd = Math.floor(quantidade);
   if (!(qtd >= 1 && qtd <= 999)) throw new Error("Quantidade inválida.");
   if (por === "cliente") {

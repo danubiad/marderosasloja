@@ -5,7 +5,7 @@ import { produtos } from "@/data/produtos";
 import { aplicarDisponibilidade, type Disponibilidade, type DisponibilidadeProduto } from "@/lib/disponibilidade";
 import { kv } from "@/lib/kv";
 
-// Ativo/inativo/esgotado e preço de custo de cada produto, editados na aba Produtos do painel.
+// Ativo/inativo/esgotado, preço de venda e preço de custo de cada produto, editados na aba Produtos do painel.
 // O custo fica numa chave separada e nunca vai para as páginas das clientes.
 
 const CHAVE_DISPONIBILIDADE = "produtos:disponibilidade";
@@ -27,6 +27,12 @@ export async function alterarDisponibilidade(produtoId: string, fn: (p: Disponib
 export async function produtosDisponiveis() {
   await connection();
   return aplicarDisponibilidade(produtos, await buscarDisponibilidade());
+}
+
+/** Para o carrinho calcular com o preço editado no painel (lido a cada acesso). */
+export async function disponibilidadeAtual() {
+  await connection();
+  return buscarDisponibilidade();
 }
 
 // No banco, null = a dona apagou o custo (para não voltar o de data/custos.ts)

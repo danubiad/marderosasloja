@@ -82,6 +82,7 @@ export async function POST(request: Request) {
     codigoCupom: texto(corpo.cupom, 40),
     entregaId: texto(corpo.entregaId, 40),
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
+    disponibilidade: d,
   });
   if (resumo.linhas.length === 0) return Response.json({ erro: "Carrinho vazio." }, { status: 400 });
   // O pedido mínimo vale para o atacado; no catálogo da revendedora a cliente final compra qualquer quantidade

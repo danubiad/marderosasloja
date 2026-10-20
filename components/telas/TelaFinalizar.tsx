@@ -8,6 +8,7 @@ import { Resumo } from "@/components/Resumo";
 import { calcularResumo, entregasDisponiveis } from "@/lib/calculo";
 import { CHAVE_CLIENTE, useCarrinho } from "@/lib/carrinho";
 import { atingiuMinimo } from "@/lib/config";
+import type { Disponibilidade } from "@/lib/disponibilidade";
 import {
   documentoValido,
   formatarCep,
@@ -51,7 +52,7 @@ const CHAVE_DADOS = CHAVE_CLIENTE;
 
 const campo = "w-full rounded-md border border-linha px-4 py-3.5 text-lg outline-none focus:border-dourado";
 
-export function TelaFinalizar() {
+export function TelaFinalizar({ disponibilidade }: { disponibilidade: Disponibilidade }) {
   const router = useRouter();
   const { base, revendedora } = useLoja();
   const formasEntrega = entregasDisponiveis(Boolean(revendedora));
@@ -67,6 +68,7 @@ export function TelaFinalizar() {
     codigoCupom: cupom,
     entregaId,
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
+    disponibilidade,
   });
   const liberado = revendedora ? true : atingiuMinimo(resumo.subtotal, resumo.pecas);
 

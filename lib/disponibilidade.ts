@@ -1,4 +1,4 @@
-// O que está ativo ou esgotado em cada produto, marcado pela dona na aba Produtos do painel.
+// O que está ativo ou esgotado em cada produto e o preço editado, marcados pela dona na aba Produtos do painel.
 // Pode ser usado no servidor e no navegador (não tem custo nem nada privado).
 import type { Produto } from "@/data/tipos";
 
@@ -11,6 +11,10 @@ export type DisponibilidadeProduto = {
   tamanhosInativos?: string[];
   /** Combinações "cor|tamanho" esgotadas: aparecem na grade, mas não podem ser pedidas */
   esgotados?: string[];
+  /** Preço cheio editado no painel (vale no lugar do de data/catalogo.ts) */
+  preco?: number;
+  /** Preço promocional: o cheio aparece riscado e o produto vai para Promoções */
+  precoPromocional?: number;
 };
 
 /** produtoId -> o que está desligado nele */
@@ -28,12 +32,28 @@ export function disponivel(d: Disponibilidade, produtoId: string, cor: string, t
   );
 }
 
-/** Tira os produtos, cores e tamanhos desligados e marca as combinações esgotadas. */
+/** Preço cheio e promocional do produto, do jeito que a dona edita no painel. */
+export function precosDoProduto(p: Pick<Produto, "preco" | "precoDe">) {
+  const promocao = p.precoDe !== undefined && p.precoDe > p.preco;
+  return { preco: promocao ? p.precoDe! : p.preco, precoPromocional: promocao ? p.preco : undefined };
+}
+
+/** Usa o preço editado no painel; com promocional, o cheio vira o preço riscado (precoDe).
+ *  Produto com preço por tamanho continua com o preço do cadastro. */
+export function aplicarPreco<P extends Produto>(produto: P, p: DisponibilidadeProduto | undefined): P {
+  if (p?.preco === undefined || produto.precosTamanho) return produto;
+  return p.precoPromocional
+    ? { ...produto, preco: p.precoPromocional, precoDe: p.preco }
+    : { ...produto, preco: p.preco, precoDe: undefined };
+}
+
+/** Tira os produtos, cores e tamanhos desligados, marca as combinações esgotadas e aplica o preço do painel. */
 export function aplicarDisponibilidade<P extends Produto>(lista: P[], d: Disponibilidade): P[] {
-  return lista.flatMap((produto) => {
-    const p = d[produto.id];
-    if (!p) return [produto];
+  return lista.flatMap((original) => {
+    const p = d[original.id];
+    if (!p) return [original];
     if (p.inativo) return [];
+    const produto = aplicarPreco(original, p);
     const cores = produto.cores.filter((c) => !p.coresInativas?.includes(c.nome));
     const tamanhos = produto.tamanhos.filter((t) => !p.tamanhosInativos?.includes(t));
     if (cores.length === 0 || tamanhos.length === 0) return [];

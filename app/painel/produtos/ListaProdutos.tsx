@@ -3,9 +3,9 @@
 import { useOptimistic, useState, useTransition } from "react";
 import { BolinhaCor } from "@/components/BolinhaCor";
 import { FotoProduto } from "@/components/FotoProduto";
-import type { DisponibilidadeProduto } from "@/lib/disponibilidade";
+import { precosDoProduto, type DisponibilidadeProduto } from "@/lib/disponibilidade";
 import { formatarPreco } from "@/lib/format";
-import { mudarCusto, mudarProduto, type MudancaProduto } from "../actions";
+import { mudarCusto, mudarPreco, mudarProduto, type MudancaProduto } from "../actions";
 
 export type ProdutoPainel = {
   id: string;
@@ -111,10 +111,14 @@ function LinhaProduto({ produto: p }: { produto: ProdutoPainel }) {
         <div className="min-w-0 flex-1">
           <p className="font-semibold leading-tight">{p.nome}</p>
           <p className="text-xs text-suave">{p.referencia}</p>
-          <p className="mt-1 text-sm">
-            Venda: <strong>{textoPreco(p)}</strong>
-            {p.precoDe && p.precoDe > p.preco && <span className="ml-1 text-xs text-suave line-through">{formatarPreco(p.precoDe)}</span>}
-          </p>
+          {p.precosTamanho ? (
+            <p className="mt-1 text-sm">
+              Venda: <strong>{textoPreco(p)}</strong>
+              <span className="block text-xs text-suave">Preço por tamanho: muda pelo cadastro do produto.</span>
+            </p>
+          ) : (
+            <CampoPreco produto={p} />
+          )}
           <CampoCusto produto={p} />
         </div>
         <button
@@ -153,8 +157,51 @@ function LinhaProduto({ produto: p }: { produto: ProdutoPainel }) {
   );
 }
 
+const paraCampo = (n: number | undefined) => (n !== undefined ? n.toFixed(2).replace(".", ",") : "");
+
+/** Preço de venda e promocional: com promoção, o de venda fica riscado na loja e o produto vai para Promoções. */
+function CampoPreco({ produto: p }: { produto: ProdutoPainel }) {
+  const inicial = precosDoProduto(p);
+  const [venda, setVenda] = useState(paraCampo(inicial.preco));
+  const [promo, setPromo] = useState(paraCampo(inicial.precoPromocional));
+  const [erro, setErro] = useState("");
+  const [salvando, iniciar] = useTransition();
+
+  function salvar() {
+    if (venda === paraCampo(inicial.preco) && promo === paraCampo(inicial.precoPromocional)) return;
+    iniciar(async () => setErro(await mudarPreco(p.id, venda, promo)));
+  }
+
+  const campo = (valor: string, mudar: (v: string) => void, placeholder: string) => (
+    <input
+      value={valor}
+      onChange={(e) => mudar(e.target.value)}
+      onBlur={salvar}
+      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+      inputMode="decimal"
+      placeholder={placeholder}
+      className="w-24 rounded border border-linha px-2 py-1"
+    />
+  );
+
+  return (
+    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+      <label className="flex items-center gap-1.5">
+        Venda R$
+        {campo(venda, setVenda, "0,00")}
+      </label>
+      <label className="flex items-center gap-1.5">
+        Promoção R$
+        {campo(promo, setPromo, "sem")}
+      </label>
+      {salvando && <span className="text-xs text-suave">salvando...</span>}
+      {erro && <span className="text-xs text-promo">{erro}</span>}
+    </div>
+  );
+}
+
 function CampoCusto({ produto: p }: { produto: ProdutoPainel }) {
-  const inicial = p.custo !== undefined ? p.custo.toFixed(2).replace(".", ",") : "";
+  const inicial = paraCampo(p.custo);
   const [valor, setValor] = useState(inicial);
   const [erro, setErro] = useState("");
   const [salvando, iniciar] = useTransition();

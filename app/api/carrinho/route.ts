@@ -1,5 +1,6 @@
 import { calcularResumo, type Itens } from "@/lib/calculo";
 import { registrarAtividade } from "@/lib/clientes";
+import { buscarDisponibilidade } from "@/lib/estoque";
 import { somenteDigitos } from "@/lib/format";
 import { dentroDoLimite } from "@/lib/limite";
 import { buscarRevendedoraAtiva } from "@/lib/revendedoras";
@@ -28,7 +29,10 @@ export async function POST(request: Request) {
 
   // Recalcula a partir do cadastro: só guarda produtos/cores/tamanhos que existem
   const itens = (typeof corpo.itens === "object" && corpo.itens ? corpo.itens : {}) as Itens;
-  const resumo = calcularResumo(itens, { revendedora: revendedora ? { margem: revendedora.margem } : undefined });
+  const resumo = calcularResumo(itens, {
+    revendedora: revendedora ? { margem: revendedora.margem } : undefined,
+    disponibilidade: await buscarDisponibilidade(),
+  });
   const itensValidos: Itens = Object.fromEntries(resumo.linhas.map((l) => [l.produto.id, l.grade]));
 
   try {

@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { buscarProduto } from "@/data/produtos";
+import { precosDoProduto } from "@/lib/disponibilidade";
 import { alterarDisponibilidade, salvarCusto } from "@/lib/estoque";
 import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } from "@/lib/painel";
 import { substituirItem } from "@/lib/conferencia";
@@ -170,19 +171,44 @@ export async function mudarProduto(id: string, m: MudancaProduto) {
   refresh();
 }
 
+/** Valor em reais digitado no painel ("1.234,50"): undefined = vazio, null = inválido. */
+function lerValor(valor: string) {
+  const texto = valor.replace(/[R$\s]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".");
+  if (!texto) return undefined;
+  const n = Number(texto);
+  if (!Number.isFinite(n) || n < 0 || n > 100000) return null;
+  return Math.round(n * 100) / 100;
+}
+
 /** Preço de custo do produto; vazio apaga. */
 export async function mudarCusto(id: string, valor: string): Promise<string> {
   await exigirLogin();
   if (!buscarProduto(id)) return "Produto não encontrado.";
-  const texto = valor.replace(/[R$\s]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".");
-  if (!texto) {
-    await salvarCusto(id, null);
-    refresh();
-    return "";
-  }
-  const n = Number(texto);
-  if (!Number.isFinite(n) || n < 0 || n > 100000) return "Valor inválido.";
-  await salvarCusto(id, Math.round(n * 100) / 100);
+  const n = lerValor(valor);
+  if (n === null) return "Valor inválido.";
+  await salvarCusto(id, n ?? null);
+  refresh();
+  return "";
+}
+
+/** Preço de venda e promocional (promocional vazio = sem promoção). Vale na hora na loja, revendedoras e Instagram.
+ *  Se ficar igual ao de data/catalogo.ts, volta a seguir o cadastro. */
+export async function mudarPreco(id: string, venda: string, promocional: string): Promise<string> {
+  await exigirLogin();
+  const produto = buscarProduto(id);
+  if (!produto) return "Produto não encontrado.";
+  if (produto.precosTamanho) return "Este produto tem preço por tamanho.";
+  const preco = lerValor(venda);
+  const promo = lerValor(promocional);
+  if (preco === undefined) return "Digite o preço de venda.";
+  if (preco === null || promo === null) return "Valor inválido.";
+  if (promo !== undefined && (promo <= 0 || promo >= preco)) return "A promoção tem que ser menor que o preço de venda.";
+  const cadastro = precosDoProduto(produto);
+  const igual = preco === cadastro.preco && promo === cadastro.precoPromocional;
+  await alterarDisponibilidade(id, (d) => {
+    d.preco = igual ? undefined : preco;
+    d.precoPromocional = igual ? undefined : promo;
+  });
   refresh();
   return "";
 }
