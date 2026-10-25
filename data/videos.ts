@@ -213,5 +213,11 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/conjunto-sexy-trabalhado/4.mp4",
       "capa": "/videos/conjunto-sexy-trabalhado/4.webp"
     }
+  ],
+  "kit-fantasias-sexy-completo": [
+    {
+      "src": "/videos/kit-fantasias-sexy-completo/1.mp4",
+      "capa": "/videos/kit-fantasias-sexy-completo/1.webp"
+    }
   ]
 };
