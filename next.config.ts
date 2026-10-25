@@ -14,6 +14,8 @@ const naoEmbutir = [
 ];
 
 const nextConfig: NextConfig = {
+  // Fotos vão direto, sem o otimizador da Vercel: a cota grátis dele acabou e as fotos davam erro 402
+  images: { unoptimized: true },
   async headers() {
     return [
       { source: "/(.*)", headers: cabecalhosSeguranca },
