@@ -189,5 +189,29 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/conjunto-andressa/2.mp4",
       "capa": "/videos/conjunto-andressa/2.webp"
     }
+  ],
+  "conjunto-cropped-de-renda": [
+    {
+      "src": "/videos/conjunto-cropped-de-renda/1.mp4",
+      "capa": "/videos/conjunto-cropped-de-renda/1.webp"
+    }
+  ],
+  "conjunto-sexy-trabalhado": [
+    {
+      "src": "/videos/conjunto-sexy-trabalhado/1.mp4",
+      "capa": "/videos/conjunto-sexy-trabalhado/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-sexy-trabalhado/2.mp4",
+      "capa": "/videos/conjunto-sexy-trabalhado/2.webp"
+    },
+    {
+      "src": "/videos/conjunto-sexy-trabalhado/3.mp4",
+      "capa": "/videos/conjunto-sexy-trabalhado/3.webp"
+    },
+    {
+      "src": "/videos/conjunto-sexy-trabalhado/4.mp4",
+      "capa": "/videos/conjunto-sexy-trabalhado/4.webp"
+    }
   ]
 };
