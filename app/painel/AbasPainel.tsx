@@ -9,6 +9,7 @@ const abas = [
   { href: "/painel/carrinhos", nome: "Carrinhos" },
   { href: "/painel/clientes", nome: "Clientes" },
   { href: "/painel/revendedoras", nome: "Revendedoras" },
+  { href: "/painel/concorrentes", nome: "Concorrentes" },
 ];
 
 export function AbasPainel({ atual }: { atual: string }) {
