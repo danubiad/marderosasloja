@@ -35,4 +35,5 @@ export const custosPorProduto: Record<string, number> = {
   "111": 28.00, // Conjunto Sem Bojo Marília
   "112": 35.00, // Conjunto Cropet Bianca
   "45": 32.00, // Pijama Americano Alça (nota da pasta "Pijama americano Lais", 27/10)
+  "114": 90.00, // Kit Robe e Camisola com Bojo
 };
