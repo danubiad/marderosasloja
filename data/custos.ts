@@ -27,4 +27,5 @@ export const custosPorProduto: Record<string, number> = {
   "85": 38.00, // Baby Doll Algodão Bordado
   "15": 34.00, // Camisola Vivian
   "105": 100.00, // Kit de Calcinha Mag
+  "106": 30.00, // Short Doll Estampado (XG: custo não informado)
 };
