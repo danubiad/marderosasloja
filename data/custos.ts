@@ -28,4 +28,10 @@ export const custosPorProduto: Record<string, number> = {
   "15": 34.00, // Camisola Vivian
   "105": 100.00, // Kit de Calcinha Mag
   "106": 30.00, // Short Doll Estampado (XG: custo não informado)
+  "107": 33.30, // Conjunto Belle
+  "108": 30.00, // Conjunto Bia (EXG: 36,00)
+  "109": 35.10, // Conjunto com Bojo Removível
+  "110": 30.00, // Conjunto Mab (EXG: 36,00)
+  "111": 28.00, // Conjunto Sem Bojo Marília
+  "112": 35.00, // Conjunto Cropet Bianca
 };

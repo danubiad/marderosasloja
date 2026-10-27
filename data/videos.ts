@@ -219,5 +219,31 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/kit-fantasias-sexy-completo/1.mp4",
       "capa": "/videos/kit-fantasias-sexy-completo/1.webp"
     }
+  ],
+  "conjunto-belle": [
+    {
+      "src": "/videos/conjunto-belle/1.mp4",
+      "capa": "/videos/conjunto-belle/1.webp"
+    }
+  ],
+  "conjunto-bojo-removivel": [
+    {
+      "src": "/videos/conjunto-bojo-removivel/1.mp4",
+      "capa": "/videos/conjunto-bojo-removivel/1.webp"
+    }
+  ],
+  "conjunto-cropet-bianca": [
+    {
+      "src": "/videos/conjunto-cropet-bianca/1.mp4",
+      "capa": "/videos/conjunto-cropet-bianca/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-cropet-bianca/2.mp4",
+      "capa": "/videos/conjunto-cropet-bianca/2.webp"
+    },
+    {
+      "src": "/videos/conjunto-cropet-bianca/3.mp4",
+      "capa": "/videos/conjunto-cropet-bianca/3.webp"
+    }
   ]
 };
