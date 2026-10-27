@@ -34,4 +34,5 @@ export const custosPorProduto: Record<string, number> = {
   "110": 30.00, // Conjunto Mab (EXG: 36,00)
   "111": 28.00, // Conjunto Sem Bojo Marília
   "112": 35.00, // Conjunto Cropet Bianca
+  "45": 32.00, // Pijama Americano Alça (nota da pasta "Pijama americano Lais", 27/10)
 };
