@@ -18,6 +18,8 @@ export type Concorrente = {
   id: string;
   instagram: string;
   site: string | null;
+  /** Link da Biblioteca de Anúncios do Meta (só os ativos no Brasil) */
+  anuncios?: string | null;
   perfil: { name?: string; profile_picture_url?: string; followers_count?: number; media_count?: number } | null;
   ig_erro: string | null;
   ig_atualizado: string | null;

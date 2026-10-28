@@ -70,7 +70,7 @@ function Cartao({ c }: { c: Concorrente }) {
         ) : (
           <div className="h-10 w-10 rounded-full bg-fundo" />
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="truncate font-semibold">{p?.name || "@" + c.instagram}</p>
           <p className="truncate text-xs text-suave">
             <a href={`https://instagram.com/${c.instagram}`} target="_blank" rel="noopener noreferrer" className="underline">
@@ -86,6 +86,17 @@ function Cartao({ c }: { c: Concorrente }) {
             )}
           </p>
         </div>
+        {/* Abre a Biblioteca de Anúncios do Meta (o link é guardado no DonaSystem) */}
+        {c.anuncios && (
+          <a
+            href={c.anuncios}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-md bg-texto px-3 py-1.5 text-xs font-semibold text-white"
+          >
+            Anúncios ativos ↗
+          </a>
+        )}
       </div>
 
       <div className="space-y-4 p-4">
