@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
+import { BolinhaCor } from "@/components/BolinhaCor";
+import { FotoProduto } from "@/components/FotoProduto";
 import { IconeWhatsapp } from "@/components/icones";
+import { calcularResumo, type LinhaResumo } from "@/lib/calculo";
 import { listarCarrinhos, situacaoCarrinho, type SituacaoCarrinho } from "@/lib/clientes";
+import { loja } from "@/lib/config";
+import { buscarDisponibilidade } from "@/lib/estoque";
 import { formatarPreco, formatarTelefone } from "@/lib/format";
 import { listarRevendedoras } from "@/lib/revendedoras";
 import { AbasPainel } from "../AbasPainel";
@@ -27,8 +32,13 @@ export default async function Carrinhos({ searchParams }: PageProps<"/painel/car
 
   const { situacao } = await searchParams;
   const agora = momentoAtual();
-  const [todos, revendedoras] = await Promise.all([listarCarrinhos(), listarRevendedoras()]);
+  const [todos, revendedoras, disponibilidade] = await Promise.all([
+    listarCarrinhos(),
+    listarRevendedoras(),
+    buscarDisponibilidade(),
+  ]);
   const nomeRevendedora = Object.fromEntries(revendedoras.map((r) => [r.usuario, r.nome]));
+  const margemRevendedora = Object.fromEntries(revendedoras.map((r) => [r.usuario, r.margem]));
   const comSituacao = todos.map((c) => ({ ...c, situacao: situacaoCarrinho(c, agora) }));
   const filtro = typeof situacao === "string" && situacao in situacoes ? (situacao as SituacaoCarrinho) : null;
   // Por padrão mostra só os carrinhos com peças (os que ainda podem virar pedido)
@@ -70,10 +80,18 @@ export default async function Carrinhos({ searchParams }: PageProps<"/painel/car
           <ul className="mt-4 grid gap-3">
             {lista.map((c) => {
               const primeiroNome = c.nome.split(" ")[0];
+              const margem = c.revendedora ? margemRevendedora[c.revendedora] : undefined;
+              const { linhas, pecas, subtotal } = calcularResumo(c.itens ?? {}, {
+                revendedora: margem !== undefined ? { margem } : undefined,
+                disponibilidade,
+              });
+              const catalogo = `https://${loja.dominio}${c.revendedora ? `/r/${c.revendedora}` : ""}`;
               const mensagem =
                 c.situacao === "finalizado"
-                  ? `Olá, ${primeiroNome}! Obrigada pelo pedido ${c.pedidoNumero ?? ""} na Mar de Rosas.`
-                  : `Olá, ${primeiroNome}! Vi que você separou peças no nosso catálogo. Posso te ajudar a finalizar o pedido?`;
+                  ? `Olá, ${primeiroNome}! Obrigada pelo pedido ${c.pedidoNumero ?? ""} na ${loja.vendedora}.`
+                  : linhas.length > 0
+                    ? mensagemCarrinho(primeiroNome, linhas, pecas, subtotal, catalogo)
+                    : `Olá, ${primeiroNome}! Vi que você separou peças no nosso catálogo. Posso te ajudar a finalizar o pedido?`;
               return (
                 <li key={c.id} className="rounded-lg border border-linha p-4">
                   <div className="flex flex-wrap items-start justify-between gap-2">
@@ -98,7 +116,16 @@ export default async function Carrinhos({ searchParams }: PageProps<"/painel/car
                       · mexeu no carrinho {tempoAtras(c.atualizadoEm, agora)} · visto {tempoAtras(c.vistoEm, agora)}
                     </span>
                   </p>
-                  {c.resumo.length > 0 && <p className="mt-1 text-sm text-suave">{c.resumo.join(" · ")}</p>}
+                  {linhas.length > 0 ? (
+                    <details className="mt-2 rounded-md border border-linha">
+                      <summary className="cursor-pointer px-3 py-2 text-sm font-semibold">
+                        Ver peças do carrinho ({linhas.length} {linhas.length === 1 ? "produto" : "produtos"})
+                      </summary>
+                      <ListaCarrinho linhas={linhas} />
+                    </details>
+                  ) : (
+                    c.resumo.length > 0 && <p className="mt-1 text-sm text-suave">{c.resumo.join(" · ")}</p>
+                  )}
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     <a
@@ -123,4 +150,67 @@ export default async function Carrinhos({ searchParams }: PageProps<"/painel/car
       </main>
     </>
   );
+}
+
+/** Peças do carrinho no mesmo jeito da conferência do pedido: foto, nome e cada cor/tamanho com a quantidade. */
+function ListaCarrinho({ linhas }: { linhas: LinhaResumo[] }) {
+  return (
+    <ul className="divide-y divide-linha px-3">
+      {linhas.map((l) => (
+        <li key={l.produto.id} className="py-4">
+          <div className="mb-2 flex items-center gap-3">
+            <FotoProduto
+              src={l.produto.fotos[0]}
+              alt={l.produto.nome}
+              cores={l.produto.cores}
+              sizes="64px"
+              className="h-20 w-16 shrink-0 rounded"
+            />
+            <div className="min-w-0">
+              <h3 className="font-bold uppercase leading-tight">{l.produto.nome}</h3>
+              <p className="text-sm text-suave">
+                {l.produto.referencia} · {formatarPreco(l.preco)} · {l.pecas} peças · {formatarPreco(l.subtotal)}
+              </p>
+            </div>
+          </div>
+          <ul className="grid gap-1">
+            {Object.entries(l.grade).map(([cg, q]) => {
+              const [cor, tamanho] = cg.split("|");
+              const corInfo = l.produto.cores.find((c) => c.nome === cor);
+              return (
+                <li key={cg} className="flex items-center gap-3 px-2 py-1">
+                  <BolinhaCor hex={corInfo?.hex ?? "#ccc"} amostra={corInfo?.amostra} className="size-7" />
+                  <span className="min-w-0 flex-1 text-sm">
+                    {cor} · {tamanho}
+                    {l.produto.legendaTamanhos?.[tamanho] ? ` (${l.produto.legendaTamanhos[tamanho]})` : ""}
+                  </span>
+                  <span className="w-10 text-right font-semibold">×{q}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Texto do WhatsApp com a lista do carrinho, para a cliente ver o que separou. */
+function mensagemCarrinho(primeiroNome: string, linhas: LinhaResumo[], pecas: number, subtotal: number, catalogo: string) {
+  return [
+    `Olá, ${primeiroNome}! Vi que você separou estas peças no catálogo da ${loja.vendedora}:`,
+    "",
+    ...linhas.flatMap((l) => [
+      `*${l.produto.nome}* (${l.produto.referencia})`,
+      ...Object.entries(l.grade).map(([cg, q]) => {
+        const [cor, tamanho] = cg.split("|");
+        return `• ${cor} · ${tamanho} ×${q}`;
+      }),
+      "",
+    ]),
+    `Total: ${pecas} peças · ${formatarPreco(subtotal)}`,
+    "",
+    "Posso te ajudar a finalizar o pedido?",
+    `Catálogo: ${catalogo}`,
+  ].join("\n");
 }
