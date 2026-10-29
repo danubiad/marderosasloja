@@ -255,5 +255,29 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/kit-fio-renda-regulavel/2.mp4",
       "capa": "/videos/kit-fio-renda-regulavel/2.webp"
     }
+  ],
+  "conjunto-karol": [
+    {
+      "src": "/videos/conjunto-karol/1.mp4",
+      "capa": "/videos/conjunto-karol/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-karol/2.mp4",
+      "capa": "/videos/conjunto-karol/2.webp"
+    }
+  ],
+  "kit-sexy-completo": [
+    {
+      "src": "/videos/kit-sexy-completo/1.mp4",
+      "capa": "/videos/kit-sexy-completo/1.webp"
+    },
+    {
+      "src": "/videos/kit-sexy-completo/2.mp4",
+      "capa": "/videos/kit-sexy-completo/2.webp"
+    },
+    {
+      "src": "/videos/kit-sexy-completo/3.mp4",
+      "capa": "/videos/kit-sexy-completo/3.webp"
+    }
   ]
 };
