@@ -2864,4 +2864,21 @@ export const catalogo: Produto[] = [
     tamanhos: ["M", "G", "GG"],
     criadoEm: "2026-10-29",
   },
+  {
+    id: "132",
+    slug: "cropet-fabiana",
+    referencia: "MR-132",
+    nome: "Cropet Fabiana",
+    descricao: "Cropped com bojo e bordado de flores + calcinha fio + liga de tule. As letras das fotos são vendidas separadamente e não acompanham o conjunto.",
+    categorias: ["Conjuntos"],
+    preco: 55.00,
+    novidade: true,
+    fotos: ["/produtos/cropet-fabiana/1.webp","/produtos/cropet-fabiana/2.webp","/produtos/cropet-fabiana/3.webp","/produtos/cropet-fabiana/4.webp","/produtos/cropet-fabiana/5.webp","/produtos/cropet-fabiana/6.webp","/produtos/cropet-fabiana/7.webp"],
+    cores: [
+      { nome: "Preto Floral", hex: "#906971", foto: "/produtos/cropet-fabiana/5.webp", amostra: "/produtos/amostras/cropet-fabiana-preto-floral.webp" },
+      { nome: "Branco com Dourado", hex: "#c4b5aa", foto: "/produtos/cropet-fabiana/7.webp", amostra: "/produtos/amostras/cropet-fabiana-branco-com-dourado.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-10-29",
+  },
 ];

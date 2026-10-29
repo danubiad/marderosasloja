@@ -279,5 +279,11 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/kit-sexy-completo/3.mp4",
       "capa": "/videos/kit-sexy-completo/3.webp"
     }
+  ],
+  "cropet-fabiana": [
+    {
+      "src": "/videos/cropet-fabiana/1.mp4",
+      "capa": "/videos/cropet-fabiana/1.webp"
+    }
   ]
 };
