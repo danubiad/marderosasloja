@@ -245,5 +245,15 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/conjunto-cropet-bianca/3.mp4",
       "capa": "/videos/conjunto-cropet-bianca/3.webp"
     }
+  ],
+  "kit-fio-renda-regulavel": [
+    {
+      "src": "/videos/kit-fio-renda-regulavel/1.mp4",
+      "capa": "/videos/kit-fio-renda-regulavel/1.webp"
+    },
+    {
+      "src": "/videos/kit-fio-renda-regulavel/2.mp4",
+      "capa": "/videos/kit-fio-renda-regulavel/2.webp"
+    }
   ]
 };

@@ -57,6 +57,7 @@ export function aplicarDisponibilidade<P extends Produto>(lista: P[], d: Disponi
     const cores = produto.cores.filter((c) => !p.coresInativas?.includes(c.nome));
     const tamanhos = produto.tamanhos.filter((t) => !p.tamanhosInativos?.includes(t));
     if (cores.length === 0 || tamanhos.length === 0) return [];
-    return [{ ...produto, cores, tamanhos, esgotados: p.esgotados?.length ? p.esgotados : undefined }];
+    const esgotados = [...(original.esgotados ?? []), ...(p.esgotados ?? [])];
+    return [{ ...produto, cores, tamanhos, esgotados: esgotados.length ? esgotados : undefined }];
   });
 }

@@ -70,7 +70,11 @@ export async function POST(request: Request) {
   const d = await buscarDisponibilidade();
   const esgotadas = Object.entries(itens).flatMap(([id, grade]) =>
     Object.entries(grade ?? {})
-      .filter(([chave, q]) => Number(q) > 0 && !disponivel(d, id, ...(chave.split("|") as [string, string])))
+      .filter(
+        ([chave, q]) =>
+          Number(q) > 0 &&
+          (!disponivel(d, id, ...(chave.split("|") as [string, string])) || buscarProduto(id)?.esgotados?.includes(chave)),
+      )
       .map(([chave]) => `${buscarProduto(id)?.nome ?? "Produto"} ${chave.replace("|", " ")}`),
   );
   if (esgotadas.length)

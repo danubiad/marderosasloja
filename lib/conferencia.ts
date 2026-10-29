@@ -22,7 +22,7 @@ export async function substituirItem(
   const produto = cadastro && aplicarPreco(cadastro, d[produtoId]);
   const corInfo = produto?.cores.find((c) => c.nome === cor);
   if (!produto || produto.preco <= 0 || !corInfo || !produto.tamanhos.includes(tamanho)) throw new Error("Produto inválido.");
-  if (!disponivel(d, produtoId, cor, tamanho)) throw new Error("Essa cor e tamanho estão esgotados.");
+  if (!disponivel(d, produtoId, cor, tamanho) || cadastro?.esgotados?.includes(`${cor}|${tamanho}`)) throw new Error("Essa cor e tamanho estão esgotados.");
   const qtd = Math.floor(quantidade);
   if (!(qtd >= 1 && qtd <= 999)) throw new Error("Quantidade inválida.");
   if (por === "cliente") {
