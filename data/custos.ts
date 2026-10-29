@@ -41,4 +41,5 @@ export const custosPorProduto: Record<string, number> = {
   "116": 28.00, // Pijama Mãe e Filha Novas Estampas (mãe; filha: 26,00)
   "117": 36.00, // Conjunto de Tule Sem Bojo
   "118": 35.00, // Conjunto Tomara que Caia
+  "126": 38.00, // Pijama Masculino
 };

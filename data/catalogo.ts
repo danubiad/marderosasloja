@@ -2740,4 +2740,23 @@ export const catalogo: Produto[] = [
     tamanhos: ["Único"],
     criadoEm: "2026-10-29",
   },
+  {
+    id: "126",
+    slug: "pijama-masculino",
+    referencia: "MR-126",
+    nome: "Pijama Masculino",
+    descricao: "Camiseta com bolso + bermuda estampada.",
+    categorias: ["Pijama", "Cueca"],
+    preco: 69.90,
+    novidade: true,
+    fotos: ["/produtos/pijama-masculino/1.webp","/produtos/pijama-masculino/2.webp","/produtos/pijama-masculino/3.webp","/produtos/pijama-masculino/4.webp"],
+    cores: [
+      { nome: "Bege Xadrez", hex: "#c2a99d", foto: "/produtos/pijama-masculino/1.webp", amostra: "/produtos/amostras/pijama-masculino-bege-xadrez.webp" },
+      { nome: "Preto com Short Estampado", hex: "#353134", foto: "/produtos/pijama-masculino/2.webp", amostra: "/produtos/amostras/pijama-masculino-preto-com-short-estampado.webp" },
+      { nome: "Azul Xadrez", hex: "#98a9d5", foto: "/produtos/pijama-masculino/3.webp", amostra: "/produtos/amostras/pijama-masculino-azul-xadrez.webp" },
+      { nome: "Marinho Xadrez", hex: "#516179", foto: "/produtos/pijama-masculino/4.webp", amostra: "/produtos/amostras/pijama-masculino-marinho-xadrez.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-10-29",
+  },
 ];
