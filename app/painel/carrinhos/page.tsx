@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
 import { BolinhaCor } from "@/components/BolinhaCor";
+import { BotaoCompartilhar } from "@/components/BotaoCompartilhar";
 import { FotoProduto } from "@/components/FotoProduto";
 import { IconeWhatsapp } from "@/components/icones";
 import { calcularResumo, type LinhaResumo } from "@/lib/calculo";
@@ -136,6 +137,7 @@ export default async function Carrinhos({ searchParams }: PageProps<"/painel/car
                     >
                       <IconeWhatsapp className="size-4" /> Chamar no WhatsApp
                     </a>
+                    <BotaoCompartilhar titulo={`Carrinho de ${primeiroNome}`} texto={mensagem} />
                     {c.pedidoId && (
                       <Link href={`/painel/pedido/${c.pedidoId}`} className="rounded-md border border-linha px-3 py-2 text-sm font-semibold">
                         Ver pedido {c.pedidoNumero}

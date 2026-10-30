@@ -112,3 +112,14 @@ export function IconeEscudo({ className = "size-5" }: Props) {
     </svg>
   );
 }
+
+export function IconeCompartilhar({ className = "size-5" }: Props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className} aria-hidden>
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="m8.2 10.8 7.6-4.4m-7.6 6.8 7.6 4.4" strokeLinecap="round" />
+    </svg>
+  );
+}

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AtualizarSozinho } from "@/components/AtualizarSozinho";
+import { BotaoCompartilhar } from "@/components/BotaoCompartilhar";
 import { IconeWhatsapp } from "@/components/icones";
+import { loja } from "@/lib/config";
 import { formatarDocumento, formatarPreco, formatarTelefone } from "@/lib/format";
 import { listarPedidos, resumoConferencia, statusPedido, type StatusPedido } from "@/lib/pedidos";
 import { AbasPainel } from "./AbasPainel";
@@ -199,6 +201,10 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
                         <IconeWhatsapp className="size-4" /> Revendedora
                       </a>
                     )}
+                    <BotaoCompartilhar
+                      titulo={`Pedido ${p.numero}`}
+                      texto={`Olá, ${p.cliente.nome.split(" ")[0]}! Este é o seu pedido ${p.numero}:\nhttps://${loja.dominio}/pedido/${p.id}`}
+                    />
                   </div>
                 </li>
               );
