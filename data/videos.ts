@@ -2,6 +2,36 @@
 import type { Video } from "./tipos";
 
 export const videosPorProduto: Record<string, Video[]> = {
+  "kit-robe-e-camisola-gleicy": [
+    {
+      "src": "/videos/kit-robe-e-camisola-gleicy/1.mp4",
+      "capa": "/videos/kit-robe-e-camisola-gleicy/1.webp"
+    },
+    {
+      "src": "/videos/kit-robe-e-camisola-gleicy/2.mp4",
+      "capa": "/videos/kit-robe-e-camisola-gleicy/2.webp"
+    },
+    {
+      "src": "/videos/kit-robe-e-camisola-gleicy/3.mp4",
+      "capa": "/videos/kit-robe-e-camisola-gleicy/3.webp"
+    }
+  ],
+  "camisola-diamante": [
+    {
+      "src": "/videos/camisola-diamante/1.mp4",
+      "capa": "/videos/camisola-diamante/1.webp"
+    }
+  ],
+  "baby-doll-shakira": [
+    {
+      "src": "/videos/baby-doll-shakira/1.mp4",
+      "capa": "/videos/baby-doll-shakira/1.webp"
+    },
+    {
+      "src": "/videos/baby-doll-shakira/2.mp4",
+      "capa": "/videos/baby-doll-shakira/2.webp"
+    }
+  ],
   "baby-doll-babadinho-diamante": [
     {
       "src": "/videos/baby-doll-babadinho-diamante/1.mp4",
