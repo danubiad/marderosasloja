@@ -1,9 +1,9 @@
-import { estaLogado, painelConfigurado } from "@/lib/painel";
+import { authenticatorLigado, buscarConta, estaLogado, painelConfigurado } from "@/lib/painel";
 import { FormLogin } from "./FormLogin";
 
 /** Tela de bloqueio do painel: devolve o que mostrar se não estiver logada, ou null se pode entrar. */
 export async function bloqueioPainel() {
-  if (!painelConfigurado()) {
+  if (!(await painelConfigurado())) {
     return (
       <main className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="font-serif text-3xl font-semibold">Painel de pedidos</h1>
@@ -14,7 +14,7 @@ export async function bloqueioPainel() {
       </main>
     );
   }
-  if (!(await estaLogado())) return <FormLogin />;
+  if (!(await estaLogado())) return <FormLogin pedeCodigo={authenticatorLigado(await buscarConta())} />;
   return null;
 }
 

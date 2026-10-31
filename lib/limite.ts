@@ -11,6 +11,7 @@ export const limites = {
   loginRevendedora: { maximo: 10, segundos: 15 * 60 },
   cadastroRevendedora: { maximo: 5, segundos: 60 * 60 },
   senhaRevendedora: { maximo: 5, segundos: 60 * 60 },
+  senhaPainel: { maximo: 5, segundos: 60 * 60 },
   pedido: { maximo: 15, segundos: 10 * 60 },
   carrinho: { maximo: 120, segundos: 60 },
   evento: { maximo: 300, segundos: 60 },

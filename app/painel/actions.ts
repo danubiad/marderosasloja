@@ -1,11 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { buscarProduto } from "@/data/produtos";
 import { precosDoProduto } from "@/lib/disponibilidade";
 import { alterarDisponibilidade, salvarCusto } from "@/lib/estoque";
-import { COOKIE_PAINEL, DURACAO_SESSAO, estaLogado, senhaCorreta, tokenSessao } from "@/lib/painel";
+import { conferirLogin, encerrarSessao, estaLogado, iniciarSessao } from "@/lib/painel";
 import { substituirItem } from "@/lib/conferencia";
 import { enviarCompraMeta } from "@/lib/meta-conversoes";
 import { salvarMetaDiaria } from "@/lib/metas";
@@ -28,25 +27,20 @@ import { loja } from "@/lib/config";
 
 export async function entrar(_estado: string, formData: FormData): Promise<string> {
   if (!(await dentroDoLimite("loginPainel"))) return "Muitas tentativas. Aguarde 15 minutos e tente de novo.";
-  const senha = String(formData.get("senha") ?? "");
-  if (!senhaCorreta(senha)) {
+  const r = await conferirLogin(String(formData.get("senha") ?? ""), String(formData.get("codigo") ?? ""));
+  if ("erro" in r) {
     // Atraso para dificultar tentativas em sequência
-    await new Promise((r) => setTimeout(r, 1500));
-    return "Senha incorreta.";
+    await new Promise((ok) => setTimeout(ok, 1500));
+    return r.erro;
   }
-  (await cookies()).set(COOKIE_PAINEL, tokenSessao(), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/painel",
-    maxAge: DURACAO_SESSAO,
-  });
+  await iniciarSessao(r.conta);
   refresh();
   return "";
 }
 
+/** Sai só deste aparelho (para sair de todos: aba Segurança). */
 export async function sair() {
-  (await cookies()).delete({ name: COOKIE_PAINEL, path: "/painel" });
+  await encerrarSessao();
   refresh();
 }
 
