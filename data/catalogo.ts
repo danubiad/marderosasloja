@@ -2199,7 +2199,7 @@ export const catalogo: Produto[] = [
     id: "101",
     slug: "pijama-suede-fofinho",
     referencia: "MR-101",
-    nome: "Pijama Suede Fofinho",
+    nome: "Pijama Garden",
     descricao: "Short doll de suede com babado na blusinha.",
     categorias: ["Pijama"],
     preco: 48.00,
