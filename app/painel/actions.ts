@@ -23,7 +23,8 @@ import {
   type Conferencia,
   type StatusPedido,
 } from "@/lib/pedidos";
-import { buscarRevendedora, salvarRevendedora, type StatusRevendedora } from "@/lib/revendedoras";
+import { buscarRevendedora, criarLinkNovaSenha, salvarRevendedora, type StatusRevendedora } from "@/lib/revendedoras";
+import { loja } from "@/lib/config";
 
 export async function entrar(_estado: string, formData: FormData): Promise<string> {
   if (!(await dentroDoLimite("loginPainel"))) return "Muitas tentativas. Aguarde 15 minutos e tente de novo.";
@@ -140,6 +141,24 @@ export async function mudarStatusRevendedora(usuario: string, status: string) {
   const r = await buscarRevendedora(usuario);
   if (!r) throw new Error("Revendedora não encontrada");
   await salvarRevendedora({ ...r, status: status as StatusRevendedora });
+  refresh();
+}
+
+/** Link de nova senha da revendedora, já na mensagem do WhatsApp para o número do cadastro dela. */
+export async function linkNovaSenhaRevendedora(usuario: string): Promise<string> {
+  await exigirLogin();
+  const r = await buscarRevendedora(usuario);
+  if (!r) throw new Error("Revendedora não encontrada");
+  const link = `https://${loja.dominio}/revendedora/nova-senha?t=${await criarLinkNovaSenha(r.usuario)}`;
+  const texto = `Olá, ${r.nome.split(" ")[0]}! Aqui é da ${loja.vendedora}. Para criar sua senha nova, abra este link (vale por 1 hora e funciona uma vez só):\n${link}`;
+  return `https://wa.me/55${r.whatsapp}?text=${encodeURIComponent(texto)}`;
+}
+
+/** Tira o aviso de "pediu senha nova" sem mandar link. */
+export async function dispensarPedidoSenha(usuario: string) {
+  await exigirLogin();
+  const r = await buscarRevendedora(usuario);
+  if (r?.pedidoSenha) await salvarRevendedora({ ...r, pedidoSenha: undefined });
   refresh();
 }
 

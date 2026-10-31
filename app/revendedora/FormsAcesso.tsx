@@ -1,15 +1,16 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { loja } from "@/lib/config";
 import { formatarTelefone } from "@/lib/format";
 import { precoComMargem } from "@/lib/margem";
 import { formatarPreco } from "@/lib/format";
-import { cadastrar, entrar } from "./actions";
+import { cadastrar, entrar, pedirNovaSenha } from "./actions";
 
-const campo = "w-full rounded-md border border-linha px-4 py-3 text-lg outline-none focus:border-dourado";
+export const campo = "w-full rounded-md border border-linha px-4 py-3 text-lg outline-none focus:border-dourado";
 
 export function FormsAcesso() {
-  const [aba, setAba] = useState<"entrar" | "cadastro">("cadastro");
+  const [aba, setAba] = useState<"entrar" | "cadastro" | "esqueci">("cadastro");
 
   return (
     <div className="mx-auto w-full max-w-md px-4 pb-16 pt-8">
@@ -24,14 +25,14 @@ export function FormsAcesso() {
             key={a}
             type="button"
             onClick={() => setAba(a)}
-            className={`rounded-md py-2 font-semibold ${aba === a ? "bg-white shadow-sm" : "text-suave"}`}
+            className={`rounded-md py-2 font-semibold ${aba === a || (a === "entrar" && aba === "esqueci") ? "bg-white shadow-sm" : "text-suave"}`}
           >
             {a === "cadastro" ? "Criar cadastro" : "Entrar"}
           </button>
         ))}
       </div>
 
-      {aba === "cadastro" ? <Cadastro /> : <Entrar />}
+      {aba === "cadastro" ? <Cadastro /> : aba === "entrar" ? <Entrar esqueci={() => setAba("esqueci")} /> : <EsqueciSenha voltar={() => setAba("entrar")} />}
     </div>
   );
 }
@@ -100,7 +101,7 @@ function Cadastro() {
           catálogo.
         </span>
       </label>
-      <input name="senha" type="password" placeholder="Crie uma senha (mín. 6 caracteres)" autoComplete="new-password" required className={campo} />
+      <input name="senha" type="password" placeholder="Crie uma senha (mín. 8 caracteres)" autoComplete="new-password" minLength={8} required className={campo} />
       {erro && <p className="text-center text-promo">{erro}</p>}
       <button type="submit" disabled={enviando} className="rounded-md bg-dourado-escuro py-3.5 text-lg font-bold text-white disabled:opacity-50">
         {enviando ? "Criando..." : "Criar meu catálogo"}
@@ -110,7 +111,7 @@ function Cadastro() {
   );
 }
 
-function Entrar() {
+function Entrar({ esqueci }: { esqueci: () => void }) {
   const [erro, acao, enviando] = useActionState(entrar, "");
   return (
     <form action={acao} className="mt-5 grid gap-3">
@@ -119,6 +120,39 @@ function Entrar() {
       {erro && <p className="text-center text-promo">{erro}</p>}
       <button type="submit" disabled={enviando} className="rounded-md bg-texto py-3.5 text-lg font-bold text-white disabled:opacity-50">
         {enviando ? "Entrando..." : "Entrar"}
+      </button>
+      <button type="button" onClick={esqueci} className="text-center text-sm text-suave underline">
+        Esqueci minha senha
+      </button>
+    </form>
+  );
+}
+
+/** Pede senha nova: a loja recebe o aviso no painel e manda o link pelo WhatsApp. */
+function EsqueciSenha({ voltar }: { voltar: () => void }) {
+  const [resposta, acao, enviando] = useActionState(pedirNovaSenha, "");
+  if (resposta === "ok") {
+    return (
+      <div className="mt-5 grid gap-3 text-center">
+        <p className="rounded-md bg-creme px-4 py-3">
+          Pronto! Se esse WhatsApp tiver cadastro, a {loja.vendedora} vai te mandar por lá um link para criar uma senha nova.
+        </p>
+        <button type="button" onClick={voltar} className="text-sm text-suave underline">
+          Voltar para Entrar
+        </button>
+      </div>
+    );
+  }
+  return (
+    <form action={acao} className="mt-5 grid gap-3">
+      <p className="text-center text-suave">Digite o WhatsApp do seu cadastro. A {loja.vendedora} vai te mandar um link para criar uma senha nova.</p>
+      <Telefone name="whatsapp" />
+      {resposta && <p className="text-center text-promo">{resposta}</p>}
+      <button type="submit" disabled={enviando} className="rounded-md bg-texto py-3.5 text-lg font-bold text-white disabled:opacity-50">
+        {enviando ? "Enviando..." : "Pedir senha nova"}
+      </button>
+      <button type="button" onClick={voltar} className="text-center text-sm text-suave underline">
+        Voltar
       </button>
     </form>
   );

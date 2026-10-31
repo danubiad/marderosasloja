@@ -3,13 +3,14 @@ import { IconeWhatsapp } from "@/components/icones";
 import { formatarPreco, formatarTelefone } from "@/lib/format";
 import { listarPedidos } from "@/lib/pedidos";
 import { listarRevendedoras } from "@/lib/revendedoras";
-import { mudarStatusRevendedora } from "../actions";
+import { dispensarPedidoSenha, mudarStatusRevendedora } from "../actions";
 import { AbasPainel } from "../AbasPainel";
 import { bloqueioPainel, linkWhatsapp, momentoAtual, tempoAtras } from "../acesso";
 import { loja } from "@/lib/config";
+import { BotaoLinkSenha } from "./BotaoLinkSenha";
 
 export const metadata: Metadata = {
-  title: "Revendedoras — Painel Mar de Rosas",
+  title: `Revendedoras — Painel ${loja.vendedora}`,
   robots: { index: false, follow: false },
 };
 
@@ -23,8 +24,11 @@ export default async function Revendedoras() {
   const bloqueio = await bloqueioPainel();
   if (bloqueio) return bloqueio;
 
-  const [lista, pedidos] = await Promise.all([listarRevendedoras(), listarPedidos()]);
+  const [todas, pedidos] = await Promise.all([listarRevendedoras(), listarPedidos()]);
   const agora = momentoAtual();
+  // Quem pediu senha nova aparece primeiro
+  const lista = [...todas.filter((r) => r.pedidoSenha), ...todas.filter((r) => !r.pedidoSenha)];
+  const pediramSenha = lista.filter((r) => r.pedidoSenha).length;
 
   return (
     <>
@@ -35,6 +39,13 @@ export default async function Revendedoras() {
           . Envie este link para quem quiser revender: <code className="font-semibold">{loja.dominio}/revendedora</code>
         </p>
 
+        {pediramSenha > 0 && (
+          <p className="mt-3 rounded-md bg-amber-100 px-4 py-3 text-sm font-semibold text-amber-900">
+            {pediramSenha === 1 ? "1 revendedora pediu" : `${pediramSenha} revendedoras pediram`} senha nova. Toque em &quot;Mandar
+            link de senha nova&quot;: o seu WhatsApp abre com a mensagem pronta para o número do cadastro dela.
+          </p>
+        )}
+
         {lista.length === 0 ? (
           <p className="py-20 text-center text-suave">Nenhuma revendedora cadastrada ainda.</p>
         ) : (
@@ -43,7 +54,7 @@ export default async function Revendedoras() {
               const dela = pedidos.filter((p) => p.revendedora?.usuario === r.usuario && p.status !== "cancelado");
               const atacado = dela.reduce((a, p) => a + (p.totalAtacado ?? p.total), 0);
               return (
-                <li key={r.usuario} className="rounded-lg border border-linha p-4">
+                <li key={r.usuario} className={`rounded-lg border p-4 ${r.pedidoSenha ? "border-amber-400" : "border-linha"}`}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-lg font-semibold">{r.nome}</p>
@@ -58,6 +69,16 @@ export default async function Revendedoras() {
                   <p className="mt-2 text-sm">
                     {dela.length} {dela.length === 1 ? "pedido" : "pedidos"} · {formatarPreco(atacado)} no atacado
                   </p>
+                  {r.pedidoSenha && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2 rounded-md bg-amber-100 px-3 py-2 text-sm text-amber-900">
+                      <span className="font-semibold">Pediu senha nova {tempoAtras(r.pedidoSenha, agora)}</span>
+                      <form action={dispensarPedidoSenha.bind(null, r.usuario)}>
+                        <button type="submit" className="underline">
+                          dispensar
+                        </button>
+                      </form>
+                    </div>
+                  )}
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     {r.status === "bloqueada" && (
@@ -85,13 +106,14 @@ export default async function Revendedoras() {
                       </form>
                     )}
                     <a
-                      href={linkWhatsapp(r.whatsapp, `Olá, ${r.nome.split(" ")[0]}! Aqui é da Mar de Rosas.`)}
+                      href={linkWhatsapp(r.whatsapp, `Olá, ${r.nome.split(" ")[0]}! Aqui é da ${loja.vendedora}.`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 rounded-md bg-fundo px-3 py-2 text-sm font-semibold"
                     >
                       <IconeWhatsapp className="size-4 text-sucesso" /> {formatarTelefone(r.whatsapp)}
                     </a>
+                    {r.status !== "bloqueada" && <BotaoLinkSenha usuario={r.usuario} destaque={Boolean(r.pedidoSenha)} />}
                   </div>
                 </li>
               );

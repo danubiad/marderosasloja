@@ -119,4 +119,10 @@ export const kv = {
     if (redis) return await redis.smembers(chave);
     return ((await ler())[chave] as string[]) ?? [];
   },
+
+  /** Valor que se apaga sozinho depois de `segundos` (link de nova senha). Local: não expira. */
+  async setExpira(chave: string, valor: unknown, segundos: number) {
+    if (redis) return void (await redis.set(chave, valor, { ex: segundos }));
+    await alterar((db) => void (db[chave] = valor));
+  },
 };

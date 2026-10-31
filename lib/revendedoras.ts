@@ -1,7 +1,10 @@
 import "server-only";
+import { createHash, randomBytes } from "crypto";
 import { cookies } from "next/headers";
 import { kv } from "@/lib/kv";
 import { assinar, verificar } from "@/lib/sessao";
+
+export const SENHA_MINIMA = 8;
 
 export type StatusRevendedora = "pendente" | "ativa" | "bloqueada";
 
@@ -16,6 +19,10 @@ export type Revendedora = {
   criadoEm: string;
   /** Foto ou logo enviada pela revendedora (a imagem fica em `revendedora-foto:<usuario>`) */
   foto?: { versao: number; tipo: TipoFoto };
+  /** Versão da sessão: sobe ao trocar a senha ou sair, e desconecta todos os aparelhos */
+  sessao?: number;
+  /** Quando ela pediu senha nova em "Esqueci minha senha" (aparece no painel da loja) */
+  pedidoSenha?: string;
 };
 
 /** "foto": rosto, recortada em círculo; "logo": aparece inteira, sem cortar. */
@@ -77,16 +84,17 @@ export async function salvarRevendedora(r: Revendedora) {
   await kv.sadd("revendedoras", r.usuario);
 }
 
-/** Revendedora logada (pelo cookie), ou null. */
+/** Revendedora logada (pelo cookie), ou null. O cookie vale só na versão de sessão atual dela. */
 export async function revendedoraLogada() {
-  const usuario = verificar((await cookies()).get(COOKIE_REVENDEDORA)?.value);
-  if (!usuario) return null;
+  const valor = verificar((await cookies()).get(COOKIE_REVENDEDORA)?.value);
+  if (!valor) return null;
+  const [usuario, versao = "0"] = valor.split(":"); // cookies antigos: só o usuário (versão 0)
   const r = await buscarRevendedora(usuario);
-  return r && r.status !== "bloqueada" ? r : null;
+  return r && r.status !== "bloqueada" && String(r.sessao ?? 0) === versao ? r : null;
 }
 
-export async function iniciarSessaoRevendedora(usuario: string) {
-  (await cookies()).set(COOKIE_REVENDEDORA, assinar(usuario), {
+export async function iniciarSessaoRevendedora(r: Pick<Revendedora, "usuario" | "sessao">) {
+  (await cookies()).set(COOKIE_REVENDEDORA, assinar(`${r.usuario}:${r.sessao ?? 0}`), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -95,6 +103,30 @@ export async function iniciarSessaoRevendedora(usuario: string) {
   });
 }
 
+/** Sai e desconecta todos os aparelhos dela. */
 export async function encerrarSessaoRevendedora() {
+  const r = await revendedoraLogada();
+  if (r) await salvarRevendedora({ ...r, sessao: (r.sessao ?? 0) + 1 });
   (await cookies()).delete({ name: COOKIE_REVENDEDORA, path: "/" });
+}
+
+// Link de nova senha: a loja manda pelo WhatsApp; vale 1 hora e uma vez só.
+// No banco fica só o resumo (hash) do código, nunca o código do link.
+const DURACAO_LINK_SENHA = 60 * 60;
+const chaveLinkSenha = (codigo: string) => `revendedora-senha:${createHash("sha256").update(codigo).digest("hex")}`;
+
+export async function criarLinkNovaSenha(usuario: string) {
+  const codigo = randomBytes(24).toString("base64url");
+  await kv.setExpira(chaveLinkSenha(codigo), usuario, DURACAO_LINK_SENHA);
+  return codigo;
+}
+
+export function usuarioDoLinkSenha(codigo: string) {
+  return codigo ? kv.get<string>(chaveLinkSenha(codigo)) : Promise.resolve(null);
+}
+
+export async function usarLinkSenha(codigo: string) {
+  const usuario = await usuarioDoLinkSenha(codigo);
+  if (usuario) await kv.del(chaveLinkSenha(codigo));
+  return usuario;
 }

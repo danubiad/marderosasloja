@@ -4,6 +4,7 @@ import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
 import { substituirItem } from "@/lib/conferencia";
+import { loja } from "@/lib/config";
 import { somenteDigitos } from "@/lib/format";
 import { kv } from "@/lib/kv";
 import { dentroDoLimite } from "@/lib/limite";
@@ -16,6 +17,8 @@ import {
   revendedoraLogada,
   salvarImagemFoto,
   salvarRevendedora,
+  SENHA_MINIMA,
+  usarLinkSenha,
   usuarioValido,
 } from "@/lib/revendedoras";
 import { conferirSenha, gerarHashSenha } from "@/lib/sessao";
@@ -37,7 +40,7 @@ export async function cadastrar(_estado: string, formData: FormData): Promise<st
   if (nome.length < 3) return "Informe seu nome.";
   if (whatsapp.length < 10) return "Informe seu WhatsApp com DDD.";
   if (!usuarioValido(usuario)) return "Endereço do catálogo inválido: use de 3 a 30 letras minúsculas, números ou hífen.";
-  if (senha.length < 6) return "A senha precisa ter pelo menos 6 caracteres.";
+  if (senha.length < SENHA_MINIMA) return `A senha precisa ter pelo menos ${SENHA_MINIMA} caracteres.`;
   if (margem === null) return `A margem precisa ser entre 0% e ${MARGEM_MAXIMA}%.`;
   if (!(await dentroDoLimite("cadastroRevendedora"))) return "Muitos cadastros seguidos. Aguarde uma hora e tente de novo.";
   if (await buscarRevendedora(usuario)) return "Esse endereço de catálogo já está em uso. Escolha outro.";
@@ -53,7 +56,7 @@ export async function cadastrar(_estado: string, formData: FormData): Promise<st
     criadoEm: new Date().toISOString(),
   });
   await kv.set(`revendedora-whatsapp:${whatsapp}`, usuario);
-  await iniciarSessaoRevendedora(usuario);
+  await iniciarSessaoRevendedora({ usuario });
   redirect("/revendedora/painel");
 }
 
@@ -67,14 +70,43 @@ export async function entrar(_estado: string, formData: FormData): Promise<strin
     await esperar(1200);
     return "WhatsApp ou senha incorretos.";
   }
-  if (r.status === "bloqueada") return "Seu cadastro está bloqueado. Fale com a Mar de Rosas.";
-  await iniciarSessaoRevendedora(r.usuario);
+  if (r.status === "bloqueada") return `Seu cadastro está bloqueado. Fale com a ${loja.vendedora}.`;
+  await iniciarSessaoRevendedora(r);
   redirect("/revendedora/painel");
 }
 
 export async function sairRevendedora() {
   await encerrarSessaoRevendedora();
   redirect("/revendedora");
+}
+
+/** "Esqueci minha senha": avisa a loja, que manda o link de nova senha pelo WhatsApp. */
+export async function pedirNovaSenha(_estado: string, formData: FormData): Promise<string> {
+  const whatsapp = somenteDigitos(String(formData.get("whatsapp") ?? ""));
+  if (whatsapp.length < 10) return "Informe seu WhatsApp com DDD.";
+  if (!(await dentroDoLimite("senhaRevendedora"))) return "Muitos pedidos seguidos. Aguarde uma hora e tente de novo.";
+  const usuario = await kv.get<string>(`revendedora-whatsapp:${whatsapp}`);
+  const r = usuario ? await buscarRevendedora(usuario) : null;
+  if (r && r.status !== "bloqueada") await salvarRevendedora({ ...r, pedidoSenha: new Date().toISOString() });
+  // Mesma resposta com ou sem cadastro: assim ninguém descobre quais números são de revendedoras
+  return "ok";
+}
+
+/** Nova senha pelo link que a loja mandou: troca a senha, desconecta os outros aparelhos e já entra. */
+export async function definirNovaSenha(_estado: string, formData: FormData): Promise<string> {
+  const codigo = String(formData.get("codigo") ?? "");
+  const senha = String(formData.get("senha") ?? "");
+  if (senha.length < SENHA_MINIMA) return `A senha precisa ter pelo menos ${SENHA_MINIMA} caracteres.`;
+  if (senha !== String(formData.get("confirmar") ?? "")) return "As duas senhas não estão iguais.";
+  if (!(await dentroDoLimite("senhaRevendedora"))) return "Muitas tentativas. Aguarde uma hora e tente de novo.";
+  const usuario = await usarLinkSenha(codigo);
+  const r = usuario ? await buscarRevendedora(usuario) : null;
+  if (!r) return `Este link venceu ou já foi usado. Peça outro à ${loja.vendedora}.`;
+  if (r.status === "bloqueada") return `Seu cadastro está bloqueado. Fale com a ${loja.vendedora}.`;
+  const nova = { ...r, senhaHash: await gerarHashSenha(senha), sessao: (r.sessao ?? 0) + 1, pedidoSenha: undefined };
+  await salvarRevendedora(nova);
+  await iniciarSessaoRevendedora(nova);
+  redirect("/revendedora/painel");
 }
 
 export async function salvarPerfil(_estado: string, formData: FormData): Promise<string> {
