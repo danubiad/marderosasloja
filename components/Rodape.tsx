@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { IconeWhatsapp } from "@/components/icones";
 import { loja, pedidoMinimo, textoPedidoMinimo } from "@/lib/config";
 
@@ -27,6 +28,11 @@ export function Rodape() {
       <div className="mx-auto mt-6 max-w-md space-y-1 text-xs">
         <p>{loja.endereco}</p>
         <p>CNPJ {loja.cnpj}</p>
+        <p className="pt-2">
+          <Link href="/privacidade" className="underline">
+            Política de Privacidade
+          </Link>
+        </p>
         <p className="pt-2">
           © {new Date().getFullYear()} {loja.nome}. Todos os direitos reservados.
         </p>
