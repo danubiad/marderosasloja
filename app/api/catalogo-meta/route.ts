@@ -6,7 +6,9 @@ import { produtosDisponiveis } from "@/lib/estoque";
 // O id é a referência (MR-0xx), o mesmo content_id que o Pixel e a API de Conversões mandam.
 // Produto sem preço definido (preco 0) ou inativo no painel fica de fora, porque não pode ser pedido.
 
-const site = `https://${loja.dominio}`;
+// Desde 01/11/2026 os links vão pelo endereço da Vercel: lojamarderosas.com.br está verificado no Meta por
+// outra empresa, e a sacolinha exige domínio verificado pela Mar de Rosas. É o mesmo site.
+const site = "https://marderosasloja.vercel.app";
 
 const colunas = [
   "id",
