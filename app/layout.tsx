@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     type: "website",
   },
+  // Verificação do domínio marderosasloja.vercel.app no Meta (sacolinha do Instagram)
+  verification: {
+    other: { "facebook-domain-verification": "ligrcm5jfod7t6mx6fpb3q84unkqzy" },
+  },
 };
 
 export const viewport: Viewport = {
