@@ -3163,4 +3163,21 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-04",
   },
+  {
+    id: "148",
+    slug: "kit-calcinha-de-senhora",
+    referencia: "MR-148",
+    nome: "Kit de Calcinha de Senhora",
+    descricao: "Kit com 10 calcinhas de senhora (modelo tradicional, cós alto) em cores variadas. Não é possível escolher as cores, somente o tamanho.",
+    categorias: ["Calcinhas", "Kits"],
+    preco: 150.00,
+    precoDe: 180.00,
+    novidade: true,
+    fotos: ["/produtos/kit-calcinha-de-senhora/1.webp","/produtos/kit-calcinha-de-senhora/2.webp"],
+    cores: [
+      { nome: "Cores Variadas", hex: "#7f4d53", foto: "/produtos/kit-calcinha-de-senhora/1.webp", amostra: "/produtos/amostras/kit-calcinha-de-senhora-cores-variadas.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-04",
+  },
 ];
