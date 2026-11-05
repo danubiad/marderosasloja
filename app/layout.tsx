@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.VERCEL ? `https://${loja.dominio}` : "http://localhost:3000",
+    process.env.VERCEL || process.env.PRODUCAO ? `https://${loja.dominio}` : "http://localhost:3000",
   ),
   title: `${loja.nome} — Catálogo Atacado`,
   description: loja.slogan,

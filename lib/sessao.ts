@@ -8,7 +8,7 @@ const scryptAsync = promisify(scrypt) as (senha: string, salt: string, tamanho: 
 // Não pode ser a senha do painel: quem tem um cookie poderia testar senhas no próprio computador.
 export function segredo() {
   if (process.env.SESSAO_SEGREDO) return process.env.SESSAO_SEGREDO;
-  if (process.env.VERCEL) throw new Error("Falta a variável de ambiente SESSAO_SEGREDO");
+  if (process.env.VERCEL || process.env.PRODUCAO) throw new Error("Falta a variável de ambiente SESSAO_SEGREDO");
   return "somente-para-testes-locais";
 }
 

@@ -28,7 +28,7 @@ async function ler(): Promise<Banco> {
 let fila: Promise<unknown> = Promise.resolve();
 function alterar<T>(fn: (db: Banco) => T): Promise<T> {
   const tarefa = fila.then(async () => {
-    if (process.env.VERCEL) throw new Error("Banco de dados não configurado");
+    if (process.env.VERCEL || process.env.PRODUCAO) throw new Error("Banco de dados não configurado");
     const db = await ler();
     const r = fn(db);
     await fs.mkdir(path.dirname(ARQUIVO), { recursive: true });
