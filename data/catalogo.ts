@@ -3227,8 +3227,8 @@ export const catalogo: Produto[] = [
     cores: [
       { nome: "Cores Variadas", hex: "#7ea3a5", foto: "/produtos/kit-cueca-ze-rucci/2.webp", amostra: "/produtos/amostras/kit-cueca-ze-rucci-cores-variadas.webp" },
     ],
-    tamanhos: [...TAMANHOS_KIT_CALCINHAS.slice(0, -1), "10 EXG", "Outro"],
-    legendaTamanhos: { ...LEGENDAS_KIT_CALCINHAS, "10 EXG": "todas EXG" },
+    tamanhos: TAMANHOS_KIT_CALCINHAS,
+    legendaTamanhos: LEGENDAS_KIT_CALCINHAS,
     criadoEm: "2026-11-04",
   },
   {
