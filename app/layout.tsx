@@ -33,7 +33,10 @@ export const metadata: Metadata = {
   },
   // Verificação do domínio da sacolinha no Meta (srv2083377.hstgr.cloud; antes marderosasloja.vercel.app). Nunca tirar
   verification: {
-    other: { "facebook-domain-verification": "ligrcm5jfod7t6mx6fpb3q84unkqzy" },
+    other: {
+      // vercel.app (antigo) e srv2083377.hstgr.cloud (sacolinha desde 08/11/2026): cada domínio tem o seu código
+      "facebook-domain-verification": ["ligrcm5jfod7t6mx6fpb3q84unkqzy", "53luuiwx0eztn12ymuumylbiqjhje9"],
+    },
   },
 };
 
