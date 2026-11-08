@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     type: "website",
   },
-  // Verificação do domínio marderosasloja.vercel.app no Meta (sacolinha do Instagram)
+  // Verificação do domínio da sacolinha no Meta (srv2083377.hstgr.cloud; antes marderosasloja.vercel.app). Nunca tirar
   verification: {
     other: { "facebook-domain-verification": "ligrcm5jfod7t6mx6fpb3q84unkqzy" },
   },

@@ -6,9 +6,10 @@ import { produtosDisponiveis } from "@/lib/estoque";
 // O id é a referência (MR-0xx), o mesmo content_id que o Pixel e a API de Conversões mandam.
 // Produto sem preço definido (preco 0) ou inativo no painel fica de fora, porque não pode ser pedido.
 
-// Desde 01/11/2026 os links vão pelo endereço da Vercel: lojamarderosas.com.br está verificado no Meta por
-// outra empresa, e a sacolinha exige domínio verificado pela Mar de Rosas. É o mesmo site.
-const site = "https://marderosasloja.vercel.app";
+// Desde 08/11/2026 os links vão pelo endereço grátis da Hostinger (a VPS onde o site roda): lojamarderosas.com.br está
+// verificado no Meta por outra empresa, e a sacolinha exige domínio verificado pela Mar de Rosas. hstgr.cloud é sufixo
+// público (como vercel.app era), então srv2083377.hstgr.cloud conta como domínio próprio. É o mesmo site.
+const site = "https://srv2083377.hstgr.cloud";
 
 const colunas = [
   "id",
