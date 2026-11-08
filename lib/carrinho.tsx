@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import type { Grade, Itens } from "@/lib/calculo";
+import { juntarItens, type Grade, type Itens } from "@/lib/calculo";
 import { formatarTelefone, somenteDigitos } from "@/lib/format";
 
 type Identidade = { nome: string; telefone: string };
@@ -69,20 +69,40 @@ export function CarrinhoProvider({ children, revendedora }: Props) {
     } catch {}
   }, [chave, itens, cupom, observacao, carregado]);
 
-  // Envia o carrinho para o servidor (para a loja ver carrinhos e clientes no painel)
+  // Envia o carrinho para o servidor (para a loja ver carrinhos e clientes no painel).
+  // A 1ª vez depois de abrir o site (ou de a cliente se identificar) pede "juntar": o servidor soma o carrinho
+  // guardado com o do aparelho e devolve tudo, então quem troca de aparelho ou perde o carrinho continua de onde parou.
+  const juntou = useRef(false);
+  useEffect(() => {
+    juntou.current = false;
+  }, [identidade, revendedora]);
+
   const sincronizar = useCallback(() => {
     if (!identidade) return;
+    const juntar = !juntou.current;
+    juntou.current = true;
     fetch("/api/carrinho", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...identidade, itens: itensRef.current, revendedora }),
+      body: JSON.stringify({ ...identidade, itens: itensRef.current, revendedora, versao: 2, juntar }),
       keepalive: true,
-    }).catch(() => {});
+    })
+      .then((r) => (juntar && r.ok ? r.json() : null))
+      .then((d: { itens?: Itens } | null) => {
+        if (!d?.itens) return;
+        setItens((atual) => {
+          const junto = juntarItens(atual, d.itens!);
+          return JSON.stringify(junto) === JSON.stringify(atual) ? atual : junto;
+        });
+      })
+      .catch(() => {
+        if (juntar) juntou.current = false;
+      });
   }, [identidade, revendedora]);
 
   useEffect(() => {
     if (!carregado || !identidade) return;
-    const t = setTimeout(sincronizar, 1200);
+    const t = setTimeout(sincronizar, juntou.current ? 1200 : 300);
     return () => clearTimeout(t);
   }, [itens, carregado, identidade, sincronizar]);
 

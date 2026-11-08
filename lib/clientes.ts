@@ -164,3 +164,10 @@ export function situacaoCarrinho(c: CarrinhoSalvo, agora = Date.now()): Situacao
   if (minutosVisto <= 60) return "parado";
   return "abandonado";
 }
+
+/** Carrinho guardado da cliente (para juntar com o do aparelho). null se não tem ou se já virou pedido. */
+export async function buscarCarrinhoAberto(telefone: string, revendedora?: string) {
+  const carrinho = await kv.get<CarrinhoSalvo>(`carrinho:${idDe(telefone, revendedora)}`);
+  if (!carrinho || carrinho.pedidoId) return null;
+  return carrinho;
+}

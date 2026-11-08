@@ -111,3 +111,20 @@ export function calcularResumo(itens: Itens, opcoes: OpcoesResumo = {}) {
     total: subtotal - desconto + frete,
   };
 }
+
+/** Junta dois carrinhos sem perder nada: em cada produto/cor/tamanho fica a maior quantidade. */
+export function juntarItens(a: Itens, b: Itens): Itens {
+  const junto: Itens = {};
+  for (const fonte of [a, b]) {
+    for (const [produtoId, grade] of Object.entries(fonte ?? {})) {
+      if (!grade || typeof grade !== "object") continue;
+      const destino = (junto[produtoId] ??= {});
+      for (const [variacao, q] of Object.entries(grade)) {
+        const n = Number(q);
+        if (Number.isFinite(n) && n > 0) destino[variacao] = Math.max(destino[variacao] ?? 0, n);
+      }
+      if (Object.keys(destino).length === 0) delete junto[produtoId];
+    }
+  }
+  return junto;
+}

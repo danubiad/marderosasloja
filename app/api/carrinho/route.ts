@@ -1,5 +1,5 @@
-import { calcularResumo, type Itens } from "@/lib/calculo";
-import { registrarAtividade } from "@/lib/clientes";
+import { calcularResumo, juntarItens, type Itens } from "@/lib/calculo";
+import { buscarCarrinhoAberto, registrarAtividade } from "@/lib/clientes";
 import { buscarDisponibilidade } from "@/lib/estoque";
 import { somenteDigitos } from "@/lib/format";
 import { dentroDoLimite } from "@/lib/limite";
@@ -27,8 +27,17 @@ export async function POST(request: Request) {
     if (!revendedora) return Response.json({ erro: "Catálogo não encontrado." }, { status: 404 });
   }
 
+  // Juntar com o carrinho guardado (desde 08/11/2026): o site novo pede "juntar" quando abre (aparelho novo,
+  // navegador do Instagram, celular que perdeu o carrinho) e recebe tudo de volta. Página antiga (sem "versao")
+  // sempre junta, para um carrinho vazio ou menor nunca apagar o que a cliente já tinha montado.
+  let itens = (typeof corpo.itens === "object" && corpo.itens ? corpo.itens : {}) as Itens;
+  const juntar = corpo.versao !== 2 || corpo.juntar === true;
+  if (juntar) {
+    const guardado = await buscarCarrinhoAberto(telefone, revendedora?.usuario);
+    if (guardado) itens = juntarItens(guardado.itens, itens);
+  }
+
   // Recalcula a partir do cadastro: só guarda produtos/cores/tamanhos que existem
-  const itens = (typeof corpo.itens === "object" && corpo.itens ? corpo.itens : {}) as Itens;
   const resumo = calcularResumo(itens, {
     revendedora: revendedora ? { margem: revendedora.margem } : undefined,
     disponibilidade: await buscarDisponibilidade(),
@@ -49,5 +58,5 @@ export async function POST(request: Request) {
     console.error(err);
     return Response.json({ erro: "Não foi possível salvar." }, { status: 500 });
   }
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, itens: itensValidos });
 }
