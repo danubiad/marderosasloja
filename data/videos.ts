@@ -315,5 +315,39 @@ export const videosPorProduto: Record<string, Video[]> = {
       "src": "/videos/cropet-fabiana/1.mp4",
       "capa": "/videos/cropet-fabiana/1.webp"
     }
+  ],
+  "conjunto-mia": [
+    {
+      "src": "/videos/conjunto-mia/1.mp4",
+      "capa": "/videos/conjunto-mia/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/2.mp4",
+      "capa": "/videos/conjunto-mia/2.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/3.mp4",
+      "capa": "/videos/conjunto-mia/3.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/4.mp4",
+      "capa": "/videos/conjunto-mia/4.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/5.mp4",
+      "capa": "/videos/conjunto-mia/5.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/6.mp4",
+      "capa": "/videos/conjunto-mia/6.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/7.mp4",
+      "capa": "/videos/conjunto-mia/7.webp"
+    },
+    {
+      "src": "/videos/conjunto-mia/8.mp4",
+      "capa": "/videos/conjunto-mia/8.webp"
+    }
   ]
 };
