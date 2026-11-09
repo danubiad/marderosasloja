@@ -3390,4 +3390,21 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-09",
   },
+  {
+    id: "159",
+    slug: "kit-fio-bombom",
+    referencia: "MR-159",
+    nome: "Kit de Fio Bombom",
+    descricao: "Kit com 10 calcinhas fio bombom com renda na frente, em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
+    categorias: ["Calcinhas", "Kits"],
+    preco: 160.00,
+    novidade: true,
+    fotos: ["/produtos/kit-fio-bombom/2.webp","/produtos/kit-fio-bombom/1.webp","/produtos/kit-fio-bombom/3.webp","/produtos/kit-fio-bombom/4.webp","/produtos/kit-fio-bombom/5.webp"],
+    cores: [
+      { nome: "Cores Variadas", hex: "#844b3c", foto: "/produtos/kit-fio-bombom/2.webp", amostra: "/produtos/amostras/kit-fio-bombom-cores-variadas.webp" },
+    ],
+    tamanhos: TAMANHOS_KIT_CALCINHAS,
+    legendaTamanhos: LEGENDAS_KIT_CALCINHAS,
+    criadoEm: "2026-11-09",
+  },
 ];
