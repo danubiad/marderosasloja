@@ -3618,4 +3618,23 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-09",
   },
+  {
+    id: "171",
+    slug: "conjunto-renda-plus-size",
+    referencia: "MR-171",
+    nome: "Conjunto Renda Plus Size",
+    descricao: "Conjunto plus size: sutiã com bojo e renda + calcinha com renda. Tamanhos 48, 50 e 52.",
+    categorias: ["Conjuntos", "Plus Size"],
+    preco: 55.00,
+    novidade: true,
+    fotos: ["/produtos/conjunto-renda-plus-size/1.webp","/produtos/conjunto-renda-plus-size/2.webp","/produtos/conjunto-renda-plus-size/3.webp","/produtos/conjunto-renda-plus-size/4.webp","/produtos/conjunto-renda-plus-size/5.webp","/produtos/conjunto-renda-plus-size/6.webp","/produtos/conjunto-renda-plus-size/7.webp","/produtos/conjunto-renda-plus-size/8.webp"],
+    cores: [
+      { nome: "Branco", hex: "#ece6ee", foto: "/produtos/conjunto-renda-plus-size/1.webp", amostra: "/produtos/amostras/conjunto-renda-plus-size-branco.webp" },
+      { nome: "Preto", hex: "#24252d", foto: "/produtos/conjunto-renda-plus-size/2.webp", amostra: "/produtos/amostras/conjunto-renda-plus-size-preto.webp" },
+      { nome: "Rosê", hex: "#d39886", foto: "/produtos/conjunto-renda-plus-size/3.webp", amostra: "/produtos/amostras/conjunto-renda-plus-size-rose.webp" },
+      { nome: "Vermelho", hex: "#d0242a", foto: "/produtos/conjunto-renda-plus-size/4.webp", amostra: "/produtos/amostras/conjunto-renda-plus-size-vermelho.webp" },
+    ],
+    tamanhos: ["48", "50", "52"],
+    criadoEm: "2026-11-09",
+  },
 ];
