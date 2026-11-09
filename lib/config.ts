@@ -4,8 +4,8 @@ export const loja = {
   nome: "Mar de Rosas Lingerie",
   slogan: "Moda íntima com elegância e qualidade. Catálogo exclusivo para revendedoras.",
   // Somente números, com DDI 55 + DDD
-  whatsapp: "5562995249197",
-  whatsappExibicao: "(62) 99524-9197",
+  whatsapp: "5562985315031",
+  whatsappExibicao: "(62) 98531-5031",
   vendedora: "Mar de Rosas",
   /** Endereço do site, usado nos links que as revendedoras divulgam */
   dominio: "lojamarderosas.com.br",
