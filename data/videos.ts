@@ -330,6 +330,16 @@ export const videosPorProduto: Record<string, Video[]> = {
       "capa": "/videos/baby-doll-karen/3.webp"
     }
   ],
+  "conjunto-alca-larga": [
+    {
+      "src": "/videos/conjunto-alca-larga/1.mp4",
+      "capa": "/videos/conjunto-alca-larga/1.webp"
+    },
+    {
+      "src": "/videos/conjunto-alca-larga/2.mp4",
+      "capa": "/videos/conjunto-alca-larga/2.webp"
+    }
+  ],
   "conjunto-mia": [
     {
       "src": "/videos/conjunto-mia/1.mp4",

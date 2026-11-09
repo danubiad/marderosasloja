@@ -3577,4 +3577,23 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-09",
   },
+  {
+    id: "169",
+    slug: "conjunto-alca-larga",
+    referencia: "MR-169",
+    nome: "Conjunto Alça Larga",
+    descricao: "Sutiã com bojo e alças largas cruzadas nas costas + calcinha de cós largo.",
+    categorias: ["Conjuntos"],
+    preco: 48.00,
+    novidade: true,
+    fotos: ["/produtos/conjunto-alca-larga/3.webp","/produtos/conjunto-alca-larga/1.webp","/produtos/conjunto-alca-larga/2.webp"],
+    cores: [
+      { nome: "Nude", hex: "#e3c2ae", foto: "/produtos/conjunto-alca-larga/1.webp", amostra: "/produtos/amostras/conjunto-alca-larga-nude.webp" },
+      { nome: "Pink", hex: "#e84b86", foto: "/produtos/conjunto-alca-larga/3.webp", amostra: "/produtos/amostras/conjunto-alca-larga-pink.webp" },
+      { nome: "Preto", hex: "#1f1c22", foto: "/produtos/conjunto-alca-larga/1.webp", amostra: "/produtos/amostras/conjunto-alca-larga-preto.webp" },
+      { nome: "Terracota", hex: "#a4483a", foto: "/produtos/conjunto-alca-larga/2.webp", amostra: "/produtos/amostras/conjunto-alca-larga-terracota.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-09",
+  },
 ];
