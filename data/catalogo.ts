@@ -86,6 +86,7 @@ export const catalogo: Produto[] = [
     descricao: "Blusinha com bojo de renda e estampa + short com bolsinhos e barra de renda.",
     categorias: ["Baby Doll"],
     preco: 45.00,
+    novidade: true,
     fotos: ["/produtos/baby-doll-bolsinho/1.webp","/produtos/baby-doll-bolsinho/2.webp","/produtos/baby-doll-bolsinho/3.webp","/produtos/baby-doll-bolsinho/4.webp","/produtos/baby-doll-bolsinho/5.webp","/produtos/baby-doll-bolsinho/6.webp","/produtos/baby-doll-bolsinho/7.webp","/produtos/baby-doll-bolsinho/8.webp"],
     cores: [
       { nome: "Cerejinha com Vermelho", hex: "#e9c9bb", foto: "/produtos/baby-doll-bolsinho/1.webp", amostra: "/produtos/amostras/baby-doll-bolsinho-cerejinha-com-vermelho.webp" },
@@ -2495,6 +2496,7 @@ export const catalogo: Produto[] = [
     descricao: "Blusinha de alça + short estampado com laço.",
     categorias: ["Pijama"],
     preco: 45.00,
+    novidade: true,
     fotos: ["/produtos/pijama-americano-simples/1.webp","/produtos/pijama-americano-simples/2.webp","/produtos/pijama-americano-simples/3.webp","/produtos/pijama-americano-simples/4.webp","/produtos/pijama-americano-simples/5.webp","/produtos/pijama-americano-simples/6.webp","/produtos/pijama-americano-simples/7.webp","/produtos/pijama-americano-simples/8.webp"],
     cores: [
       { nome: "Azul Laços e Tulipas", hex: "#5ab4e6", foto: "/produtos/pijama-americano-simples/1.webp", amostra: "/produtos/amostras/pijama-americano-simples-azul-lacos-e-tulipas.webp" },
@@ -2907,7 +2909,6 @@ export const catalogo: Produto[] = [
     descricao: "Pijama americano de algodão: camisa de manga curta com gola, botões e bolso + short com laço.",
     categorias: ["Pijama"],
     preco: 65.00,
-    novidade: true,
     fotos: ["/produtos/pijama-americano-manga-algodao/2.webp","/produtos/pijama-americano-manga-algodao/1.webp","/produtos/pijama-americano-manga-algodao/3.webp","/produtos/pijama-americano-manga-algodao/4.webp","/produtos/pijama-americano-manga-algodao/5.webp","/produtos/pijama-americano-manga-algodao/6.webp","/produtos/pijama-americano-manga-algodao/7.webp"],
     cores: [
       { nome: "Grafite com Pink", hex: "#3a3b40", foto: "/produtos/pijama-americano-manga-algodao/1.webp", amostra: "/produtos/amostras/pijama-americano-manga-algodao-grafite-com-pink.webp" },
@@ -2929,7 +2930,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: sutiã com bojo e base de elástico + calcinha de cós largo.",
     categorias: ["Conjuntos"],
     preco: 45.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-liso-base-elastico/2.webp","/produtos/conjunto-liso-base-elastico/1.webp","/produtos/conjunto-liso-base-elastico/3.webp","/produtos/conjunto-liso-base-elastico/4.webp","/produtos/conjunto-liso-base-elastico/5.webp","/produtos/conjunto-liso-base-elastico/6.webp","/produtos/conjunto-liso-base-elastico/7.webp","/produtos/conjunto-liso-base-elastico/8.webp","/produtos/conjunto-liso-base-elastico/9.webp","/produtos/conjunto-liso-base-elastico/10.webp"],
     cores: [
       { nome: "Preto", hex: "#1d1d28", foto: "/produtos/conjunto-liso-base-elastico/1.webp", amostra: "/produtos/amostras/conjunto-liso-base-elastico-preto.webp" },
@@ -2953,7 +2953,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: sutiã com bojo e base de manta + calcinha de cós largo.",
     categorias: ["Conjuntos"],
     preco: 45.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-liso-base-manta/2.webp","/produtos/conjunto-liso-base-manta/1.webp","/produtos/conjunto-liso-base-manta/3.webp","/produtos/conjunto-liso-base-manta/4.webp","/produtos/conjunto-liso-base-manta/5.webp","/produtos/conjunto-liso-base-manta/6.webp","/produtos/conjunto-liso-base-manta/7.webp","/produtos/conjunto-liso-base-manta/8.webp","/produtos/conjunto-liso-base-manta/9.webp","/produtos/conjunto-liso-base-manta/10.webp"],
     cores: [
       { nome: "Off White", hex: "#e0dcd8", foto: "/produtos/conjunto-liso-base-manta/1.webp", amostra: "/produtos/amostras/conjunto-liso-base-manta-off-white.webp" },
@@ -2977,7 +2976,6 @@ export const catalogo: Produto[] = [
     categorias: ["Camisolas"],
     preco: 28.00,
     precoDe: 35.00,
-    novidade: true,
     fotos: ["/produtos/camisolinha-fluity/2.webp","/produtos/camisolinha-fluity/1.webp","/produtos/camisolinha-fluity/3.webp","/produtos/camisolinha-fluity/4.webp","/produtos/camisolinha-fluity/5.webp","/produtos/camisolinha-fluity/6.webp","/produtos/camisolinha-fluity/7.webp","/produtos/camisolinha-fluity/8.webp","/produtos/camisolinha-fluity/9.webp","/produtos/camisolinha-fluity/10.webp","/produtos/camisolinha-fluity/11.webp"],
     cores: [
       { nome: "Azul Lilo e Stitch", hex: "#246fbb", foto: "/produtos/camisolinha-fluity/1.webp", amostra: "/produtos/amostras/camisolinha-fluity-azul-lilo-e-stitch.webp" },
@@ -3005,7 +3003,6 @@ export const catalogo: Produto[] = [
     categorias: ["Pijama"],
     preco: 28.00,
     precoDe: 35.00,
-    novidade: true,
     fotos: ["/produtos/macaquito-fluity/2.webp","/produtos/macaquito-fluity/1.webp","/produtos/macaquito-fluity/3.webp","/produtos/macaquito-fluity/4.webp","/produtos/macaquito-fluity/5.webp","/produtos/macaquito-fluity/6.webp","/produtos/macaquito-fluity/7.webp","/produtos/macaquito-fluity/8.webp","/produtos/macaquito-fluity/9.webp","/produtos/macaquito-fluity/10.webp","/produtos/macaquito-fluity/11.webp","/produtos/macaquito-fluity/12.webp","/produtos/macaquito-fluity/13.webp","/produtos/macaquito-fluity/14.webp","/produtos/macaquito-fluity/15.webp"],
     cores: [
       { nome: "Marinho Natal", hex: "#533a3c", foto: "/produtos/macaquito-fluity/1.webp", amostra: "/produtos/amostras/macaquito-fluity-marinho-natal.webp" },
@@ -3036,7 +3033,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: sutiã tomara que caia com bojo e alças removíveis + calcinha de cós largo.",
     categorias: ["Conjuntos"],
     preco: 48.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-tomara-que-caia-antonelly/3.webp","/produtos/conjunto-tomara-que-caia-antonelly/2.webp","/produtos/conjunto-tomara-que-caia-antonelly/5.webp","/produtos/conjunto-tomara-que-caia-antonelly/7.webp","/produtos/conjunto-tomara-que-caia-antonelly/9.webp","/produtos/conjunto-tomara-que-caia-antonelly/13.webp","/produtos/conjunto-tomara-que-caia-antonelly/15.webp","/produtos/conjunto-tomara-que-caia-antonelly/17.webp","/produtos/conjunto-tomara-que-caia-antonelly/1.webp","/produtos/conjunto-tomara-que-caia-antonelly/4.webp","/produtos/conjunto-tomara-que-caia-antonelly/6.webp","/produtos/conjunto-tomara-que-caia-antonelly/8.webp","/produtos/conjunto-tomara-que-caia-antonelly/10.webp","/produtos/conjunto-tomara-que-caia-antonelly/11.webp","/produtos/conjunto-tomara-que-caia-antonelly/12.webp","/produtos/conjunto-tomara-que-caia-antonelly/14.webp","/produtos/conjunto-tomara-que-caia-antonelly/16.webp"],
     cores: [
       { nome: "Preto", hex: "#242226", foto: "/produtos/conjunto-tomara-que-caia-antonelly/2.webp", amostra: "/produtos/amostras/conjunto-tomara-que-caia-antonelly-preto.webp" },
@@ -3059,7 +3055,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: sutiã com bojo sem aro + calcinha de cós largo.",
     categorias: ["Conjuntos"],
     preco: 48.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-confort-antonia/2.webp","/produtos/conjunto-confort-antonia/1.webp","/produtos/conjunto-confort-antonia/3.webp","/produtos/conjunto-confort-antonia/4.webp","/produtos/conjunto-confort-antonia/5.webp","/produtos/conjunto-confort-antonia/6.webp","/produtos/conjunto-confort-antonia/7.webp","/produtos/conjunto-confort-antonia/8.webp"],
     cores: [
       { nome: "Rosa", hex: "#d9a09c", foto: "/produtos/conjunto-confort-antonia/1.webp", amostra: "/produtos/amostras/conjunto-confort-antonia-rosa.webp" },
@@ -3083,7 +3078,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: sutiã com bojo + calcinha de cós alto.",
     categorias: ["Conjuntos"],
     preco: 48.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-confort-cos-alto/2.webp","/produtos/conjunto-confort-cos-alto/1.webp","/produtos/conjunto-confort-cos-alto/3.webp","/produtos/conjunto-confort-cos-alto/4.webp","/produtos/conjunto-confort-cos-alto/5.webp","/produtos/conjunto-confort-cos-alto/6.webp","/produtos/conjunto-confort-cos-alto/7.webp","/produtos/conjunto-confort-cos-alto/8.webp","/produtos/conjunto-confort-cos-alto/9.webp"],
     cores: [
       { nome: "Nude", hex: "#c3b0a2", foto: "/produtos/conjunto-confort-cos-alto/1.webp", amostra: "/produtos/amostras/conjunto-confort-cos-alto-nude.webp" },
@@ -3103,7 +3097,6 @@ export const catalogo: Produto[] = [
     descricao: "Conjunto liso: top com bojo e costas nadador + calcinha de cós alto.",
     categorias: ["Conjuntos"],
     preco: 49.90,
-    novidade: true,
     fotos: ["/produtos/conjunto-nadador/3.webp","/produtos/conjunto-nadador/4.webp","/produtos/conjunto-nadador/6.webp","/produtos/conjunto-nadador/7.webp","/produtos/conjunto-nadador/2.webp","/produtos/conjunto-nadador/1.webp","/produtos/conjunto-nadador/5.webp","/produtos/conjunto-nadador/8.webp"],
     cores: [
       { nome: "Nude", hex: "#bf8e7b", foto: "/produtos/conjunto-nadador/4.webp", amostra: "/produtos/amostras/conjunto-nadador-nude.webp" },
@@ -3123,7 +3116,6 @@ export const catalogo: Produto[] = [
     descricao: "Kit com 10 calcinhas de cotton e renda, cós alto, em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Calcinhas", "Kits"],
     preco: 180.00,
-    novidade: true,
     fotos: ["/produtos/kit-calcinha-cotton-e-renda-cos-alto/2.webp","/produtos/kit-calcinha-cotton-e-renda-cos-alto/1.webp"],
     cores: [
       { nome: "Cores Variadas", hex: "#a8807a", foto: "/produtos/kit-calcinha-cotton-e-renda-cos-alto/1.webp", amostra: "/produtos/amostras/kit-calcinha-cotton-e-renda-cos-alto-cores-variadas.webp" },
@@ -3141,7 +3133,6 @@ export const catalogo: Produto[] = [
     descricao: "Kit com 10 cuecas boxer em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Cueca", "Kits"],
     preco: 180.00,
-    novidade: true,
     fotos: ["/produtos/kit-cueca-adulto/2.webp","/produtos/kit-cueca-adulto/1.webp","/produtos/kit-cueca-adulto/3.webp"],
     cores: [
       { nome: "Cores Variadas", hex: "#a85d4c", foto: "/produtos/kit-cueca-adulto/1.webp", amostra: "/produtos/amostras/kit-cueca-adulto-cores-variadas.webp" },
@@ -3159,7 +3150,6 @@ export const catalogo: Produto[] = [
     descricao: "Kit com 10 cuecas boxer infantis em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Cueca", "Kits"],
     preco: 125.00,
-    novidade: true,
     fotos: ["/produtos/kit-cueca-infantil/2.webp","/produtos/kit-cueca-infantil/1.webp","/produtos/kit-cueca-infantil/3.webp"],
     cores: [
       { nome: "Cores Variadas", hex: "#5a6377", foto: "/produtos/kit-cueca-infantil/1.webp", amostra: "/produtos/amostras/kit-cueca-infantil-cores-variadas.webp" },
@@ -3177,7 +3167,6 @@ export const catalogo: Produto[] = [
     categorias: ["Calcinhas", "Kits"],
     preco: 150.00,
     precoDe: 180.00,
-    novidade: true,
     fotos: ["/produtos/kit-calcinha-de-senhora/2.webp","/produtos/kit-calcinha-de-senhora/1.webp"],
     cores: [
       { nome: "Cores Variadas", hex: "#7f4d53", foto: "/produtos/kit-calcinha-de-senhora/1.webp", amostra: "/produtos/amostras/kit-calcinha-de-senhora-cores-variadas.webp" },
@@ -3194,7 +3183,6 @@ export const catalogo: Produto[] = [
     descricao: "Pijama americano de algodão: blusinha de alça com botões e coraçãozinho bordado + short com laço.",
     categorias: ["Pijama"],
     preco: 49.90,
-    novidade: true,
     fotos: ["/produtos/pijama-americano-alca-algodao/2.webp","/produtos/pijama-americano-alca-algodao/1.webp","/produtos/pijama-americano-alca-algodao/3.webp","/produtos/pijama-americano-alca-algodao/4.webp","/produtos/pijama-americano-alca-algodao/5.webp"],
     cores: [
       { nome: "Preto", hex: "#20283e", foto: "/produtos/pijama-americano-alca-algodao/1.webp", amostra: "/produtos/amostras/pijama-americano-alca-algodao-preto.webp" },
@@ -3214,7 +3202,6 @@ export const catalogo: Produto[] = [
     descricao: "Kit com 10 cuecas boxer sem costura Zee Rucci em cores variadas. Não é possível escolher as cores, somente os tamanhos.",
     categorias: ["Cueca", "Kits"],
     preco: 250.00,
-    novidade: true,
     fotos: ["/produtos/kit-cueca-ze-rucci/2.webp","/produtos/kit-cueca-ze-rucci/1.webp","/produtos/kit-cueca-ze-rucci/3.webp"],
     cores: [
       { nome: "Cores Variadas", hex: "#7ea3a5", foto: "/produtos/kit-cueca-ze-rucci/2.webp", amostra: "/produtos/amostras/kit-cueca-ze-rucci-cores-variadas.webp" },
@@ -3231,7 +3218,6 @@ export const catalogo: Produto[] = [
     descricao: "Sutiã sem bojo com aro, renda com fio de lurex + calcinha de renda.",
     categorias: ["Conjuntos"],
     preco: 42.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-sem-bojo-lurex/1.webp","/produtos/conjunto-sem-bojo-lurex/2.webp","/produtos/conjunto-sem-bojo-lurex/3.webp","/produtos/conjunto-sem-bojo-lurex/4.webp","/produtos/conjunto-sem-bojo-lurex/5.webp","/produtos/conjunto-sem-bojo-lurex/6.webp","/produtos/conjunto-sem-bojo-lurex/7.webp"],
     cores: [
       { nome: "Vermelho", hex: "#a51533", foto: "/produtos/conjunto-sem-bojo-lurex/1.webp", amostra: "/produtos/amostras/conjunto-sem-bojo-lurex-vermelho.webp" },
@@ -3251,7 +3237,6 @@ export const catalogo: Produto[] = [
     descricao: "Kit robe de manga flare com renda + camisola com renda na barra.",
     categorias: ["Kits", "Robes", "Camisolas"],
     preco: 130.00,
-    novidade: true,
     fotos: ["/produtos/kit-robe-e-camisola-fabia/5.webp","/produtos/kit-robe-e-camisola-fabia/1.webp","/produtos/kit-robe-e-camisola-fabia/2.webp","/produtos/kit-robe-e-camisola-fabia/3.webp","/produtos/kit-robe-e-camisola-fabia/4.webp","/produtos/kit-robe-e-camisola-fabia/6.webp","/produtos/kit-robe-e-camisola-fabia/7.webp","/produtos/kit-robe-e-camisola-fabia/8.webp","/produtos/kit-robe-e-camisola-fabia/9.webp","/produtos/kit-robe-e-camisola-fabia/10.webp","/produtos/kit-robe-e-camisola-fabia/11.webp","/produtos/kit-robe-e-camisola-fabia/12.webp"],
     cores: [
       { nome: "Preto", hex: "#1e1d1d", foto: "/produtos/kit-robe-e-camisola-fabia/1.webp", amostra: "/produtos/amostras/kit-robe-e-camisola-fabia-preto.webp" },
@@ -3271,7 +3256,6 @@ export const catalogo: Produto[] = [
     descricao: "Sutiã com bojo e renda bordada + calcinha + liga de tule para personalizar com frase. As letras, emojis e números das fotos são vendidos separadamente e não acompanham o conjunto.",
     categorias: ["Conjuntos"],
     preco: 55.00,
-    novidade: true,
     fotos: ["/produtos/conjunto-3-pecas-frases-personalizadas/2.webp","/produtos/conjunto-3-pecas-frases-personalizadas/1.webp","/produtos/conjunto-3-pecas-frases-personalizadas/3.webp","/produtos/conjunto-3-pecas-frases-personalizadas/4.webp"],
     cores: [
       { nome: "Branco", hex: "#e2deec", foto: "/produtos/conjunto-3-pecas-frases-personalizadas/1.webp", amostra: "/produtos/amostras/conjunto-3-pecas-frases-personalizadas-branco.webp" },
@@ -3290,7 +3274,6 @@ export const catalogo: Produto[] = [
     descricao: "Baby doll de viscolycra estampado: blusinha de alça + short com laço.",
     categorias: ["Baby Doll"],
     preco: 39.90,
-    novidade: true,
     fotos: ["/produtos/baby-doll-viscolycra/7.webp","/produtos/baby-doll-viscolycra/1.webp","/produtos/baby-doll-viscolycra/2.webp","/produtos/baby-doll-viscolycra/3.webp","/produtos/baby-doll-viscolycra/4.webp","/produtos/baby-doll-viscolycra/5.webp","/produtos/baby-doll-viscolycra/6.webp","/produtos/baby-doll-viscolycra/8.webp"],
     cores: [
       { nome: "Vinho Corações", hex: "#a00c3d", foto: "/produtos/baby-doll-viscolycra/1.webp", amostra: "/produtos/amostras/baby-doll-viscolycra-vinho-coracoes.webp" },
