@@ -316,6 +316,20 @@ export const videosPorProduto: Record<string, Video[]> = {
       "capa": "/videos/cropet-fabiana/1.webp"
     }
   ],
+  "baby-doll-karen": [
+    {
+      "src": "/videos/baby-doll-karen/1.mp4",
+      "capa": "/videos/baby-doll-karen/1.webp"
+    },
+    {
+      "src": "/videos/baby-doll-karen/2.mp4",
+      "capa": "/videos/baby-doll-karen/2.webp"
+    },
+    {
+      "src": "/videos/baby-doll-karen/3.mp4",
+      "capa": "/videos/baby-doll-karen/3.webp"
+    }
+  ],
   "conjunto-mia": [
     {
       "src": "/videos/conjunto-mia/1.mp4",
