@@ -29,7 +29,7 @@ export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
   const [busca, setBusca] = useState("");
   const [menu, setMenu] = useState<"categorias" | "preco" | null>(null);
 
-  // Top 10 mais pedidos da semana (só os que estão no catálogo): aparecem primeiro em "Mais recentes"
+  // Ordem de "Mais recentes": 1º o top 10 mais pedidos da semana (só os que estão no catálogo), 2º as novidades, depois o resto
   const top = useMemo(() => {
     const ativos = new Set(produtos.map((p) => p.id));
     return new Map(maisPedidos.filter((id) => ativos.has(id)).slice(0, 10).map((id, i) => [id, i]));
@@ -51,6 +51,7 @@ export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
       const ta = top.get(a.id) ?? 99;
       const tb = top.get(b.id) ?? 99;
       if (ta !== tb) return ta - tb;
+      if (!!a.novidade !== !!b.novidade) return a.novidade ? -1 : 1;
       return b.criadoEm.localeCompare(a.criadoEm);
     });
   }, [produtos, categoria, ordem, novidades, promocoes, busca, top]);
@@ -150,11 +151,6 @@ export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
                   {p.precoDe && (
                     <span className="absolute left-2 top-2 rounded bg-promo px-2 py-0.5 text-xs font-bold text-white">
                       -{Math.round((1 - p.preco / p.precoDe) * 100)}%
-                    </span>
-                  )}
-                  {top.has(p.id) && (
-                    <span className="absolute bottom-2 left-2 rounded bg-texto/85 px-2 py-0.5 text-xs font-semibold text-white">
-                      Mais pedido
                     </span>
                   )}
                   {p.novidade && (
