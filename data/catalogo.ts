@@ -3703,4 +3703,22 @@ export const catalogo: Produto[] = [
     tamanhos: ["M", "G", "GG"],
     criadoEm: "2026-11-11",
   },
+  {
+    id: "175",
+    slug: "pijama-lara",
+    referencia: "MR-175",
+    nome: "Pijama Lara",
+    descricao: "Pijama de camiseta branca estampada + short estampado.",
+    categorias: ["Pijama"],
+    preco: 49.90,
+    novidade: true,
+    fotos: ["/produtos/pijama-lara/1.webp","/produtos/pijama-lara/2.webp","/produtos/pijama-lara/3.webp"],
+    cores: [
+      { nome: "Urso Girl com Poá", hex: "#1c2234", foto: "/produtos/pijama-lara/1.webp", amostra: "/produtos/amostras/pijama-lara-urso-girl-poa.webp" },
+      { nome: "Urso com Xadrez", hex: "#d8c0a0", foto: "/produtos/pijama-lara/2.webp", amostra: "/produtos/amostras/pijama-lara-urso-xadrez.webp" },
+      { nome: "Cereja com Listras", hex: "#3a4a8a", foto: "/produtos/pijama-lara/3.webp", amostra: "/produtos/amostras/pijama-lara-cereja-listras.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-11",
+  },
 ];
