@@ -18,9 +18,9 @@ const ordens: { id: Ordem; nome: string }[] = [
   { id: "nome", nome: "Nome A-Z" },
 ];
 
-type Props = { produtos: Produto[]; categorias: readonly Categoria[] };
+type Props = { produtos: Produto[]; categorias: readonly Categoria[]; maisPedidos?: string[] };
 
-export function Vitrine({ produtos, categorias }: Props) {
+export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
   const { base } = useLoja();
   const [categoria, setCategoria] = useState<Categoria | null>(null);
   const [ordem, setOrdem] = useState<Ordem>("recentes");
@@ -28,6 +28,12 @@ export function Vitrine({ produtos, categorias }: Props) {
   const [promocoes, setPromocoes] = useState(false);
   const [busca, setBusca] = useState("");
   const [menu, setMenu] = useState<"categorias" | "preco" | null>(null);
+
+  // Top 10 mais pedidos da semana (só os que estão no catálogo): aparecem primeiro em "Mais recentes"
+  const top = useMemo(() => {
+    const ativos = new Set(produtos.map((p) => p.id));
+    return new Map(maisPedidos.filter((id) => ativos.has(id)).slice(0, 10).map((id, i) => [id, i]));
+  }, [produtos, maisPedidos]);
 
   const lista = useMemo(() => {
     const termo = busca.trim().toLowerCase();
@@ -42,9 +48,12 @@ export function Vitrine({ produtos, categorias }: Props) {
       if (ordem === "menor") return a.preco - b.preco;
       if (ordem === "maior") return b.preco - a.preco;
       if (ordem === "nome") return a.nome.localeCompare(b.nome, "pt-BR");
+      const ta = top.get(a.id) ?? 99;
+      const tb = top.get(b.id) ?? 99;
+      if (ta !== tb) return ta - tb;
       return b.criadoEm.localeCompare(a.criadoEm);
     });
-  }, [produtos, categoria, ordem, novidades, promocoes, busca]);
+  }, [produtos, categoria, ordem, novidades, promocoes, busca, top]);
 
   const chip = (ativo: boolean) =>
     `flex shrink-0 items-center gap-2 rounded-md px-4 py-2 text-sm transition ${
@@ -141,6 +150,11 @@ export function Vitrine({ produtos, categorias }: Props) {
                   {p.precoDe && (
                     <span className="absolute left-2 top-2 rounded bg-promo px-2 py-0.5 text-xs font-bold text-white">
                       -{Math.round((1 - p.preco / p.precoDe) * 100)}%
+                    </span>
+                  )}
+                  {top.has(p.id) && (
+                    <span className="absolute bottom-2 left-2 rounded bg-texto/85 px-2 py-0.5 text-xs font-semibold text-white">
+                      Mais pedido
                     </span>
                   )}
                   {p.novidade && (

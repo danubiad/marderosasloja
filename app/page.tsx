@@ -5,16 +5,17 @@ import { Rodape } from "@/components/Rodape";
 import { Vitrine } from "@/components/Vitrine";
 import { categorias } from "@/data/produtos";
 import { produtosDisponiveis } from "@/lib/estoque";
+import { maisPedidosDaSemana } from "@/lib/mais-pedidos";
 
 export default async function Home() {
-  const produtos = await produtosDisponiveis();
+  const [produtos, maisPedidos] = await Promise.all([produtosDisponiveis(), maisPedidosDaSemana()]);
   return (
     <>
       <Cabecalho />
       <main className="flex-1">
         <Banners />
         <BioLoja totalProdutos={produtos.length} />
-        <Vitrine produtos={produtos} categorias={categorias} />
+        <Vitrine produtos={produtos} categorias={categorias} maisPedidos={maisPedidos} />
       </main>
       <Rodape />
     </>
