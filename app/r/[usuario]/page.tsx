@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import { Banners } from "@/components/Banners";
 import { BioRevendedora } from "@/components/BioRevendedora";
 import { Cabecalho } from "@/components/Cabecalho";
+import { VideosEmDestaque } from "@/components/VideosEmDestaque";
 import { Vitrine } from "@/components/Vitrine";
-import { categorias, produtosComMargem } from "@/data/produtos";
+import { categorias, montarFeed, produtosComMargem } from "@/data/produtos";
 import { produtosDisponiveis } from "@/lib/estoque";
 import { maisPedidosDaSemana } from "@/lib/mais-pedidos";
 import { buscarRevendedoraAtiva, publica } from "@/lib/revendedoras";
@@ -22,6 +23,7 @@ export default async function CatalogoRevendedora({ params }: PageProps<"/r/[usu
         <Banners />
         <BioRevendedora r={publica(r)} totalProdutos={lista.length} />
         <Vitrine produtos={lista} categorias={categorias} maisPedidos={maisPedidos} />
+        <VideosEmDestaque itens={montarFeed(lista)} />
       </main>
     </>
   );
