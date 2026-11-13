@@ -46,12 +46,16 @@ export const perfil = {
   visitas: 1170493,
 };
 
-/** Banners do topo: foto + produto para onde o banner leva. */
+/** Banners do topo em vídeo (desde 13/11/2026): vídeo + capa + produto para onde o banner leva. */
 export const banners = [
-  { foto: "/banners/conjunto-decote-profundo-vermelho.webp", produto: "conjunto-decote-profundo", alt: "Conjunto Decote Profundo vermelho" },
-  { foto: "/banners/kit-3-pecas-fim-de-ano-amarelo.webp", produto: "kit-3-pecas-fim-de-ano", alt: "Kit 3 Peças Fim de Ano amarelo" },
-  { foto: "/banners/conjunto-correntes-branco.webp", produto: "conjunto-correntes", alt: "Conjunto Correntes branco" },
+  { video: "/banners/conjunto-decote-profundo-preto.mp4", capa: "/banners/conjunto-decote-profundo-preto.webp", produto: "conjunto-decote-profundo", alt: "Conjunto Decote Profundo preto" },
+  { video: "/banners/kit-3-pecas-fim-de-ano-amarelo.mp4", capa: "/banners/kit-3-pecas-fim-de-ano-amarelo.webp", produto: "kit-3-pecas-fim-de-ano", alt: "Kit 3 Peças Fim de Ano amarelo" },
+  { video: "/banners/conjunto-correntes-chocolate.mp4", capa: "/banners/conjunto-correntes-chocolate.webp", produto: "conjunto-correntes", alt: "Conjunto Correntes chocolate" },
+  { video: "/banners/conjunto-melinda-roxo.mp4", capa: "/banners/conjunto-melinda-roxo.webp", produto: "conjunto-melinda", alt: "Conjunto Melinda roxo" },
 ];
+
+/** Grupo de clientes no WhatsApp: convite embaixo dos banners (só no catálogo da loja). */
+export const grupoClientes = "https://chat.whatsapp.com/HjhpqOjSEZR8GWoYonFSea";
 
 export type FormaEntrega = {
   id: string;
