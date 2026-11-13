@@ -14,8 +14,19 @@ import { formatarPreco } from "@/lib/format";
 export function VideosEmDestaque({ itens }: { itens: ItemFeed[] }) {
   const { base } = useLoja();
   const trilho = useRef<HTMLUListElement>(null);
-  const [ativo, setAtivo] = useState(0);
+  // Começa no 2º vídeo, para aparecer um pedacinho dos vídeos dos dois lados
+  const inicial = itens.length > 1 ? 1 : 0;
+  const [ativo, setAtivo] = useState(inicial);
   const [visivel, setVisivel] = useState(false);
+
+  // Abre a fileira já com o 2º vídeo no meio (sem animação)
+  useEffect(() => {
+    const el = trilho.current;
+    const card = el?.children[inicial] as HTMLElement | undefined;
+    if (!el || !card) return;
+    el.scrollLeft = card.offsetLeft + card.offsetWidth / 2 - el.clientWidth / 2;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Só toca quando a fileira aparece na tela
   useEffect(() => {
