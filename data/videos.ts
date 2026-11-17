@@ -2,6 +2,32 @@
 import type { Video } from "./tipos";
 
 export const videosPorProduto: Record<string, Video[]> = {
+  "cropet-isa": [
+    {
+      "src": "/videos/cropet-isa/1.mp4",
+      "capa": "/videos/cropet-isa/1.webp"
+    },
+    {
+      "src": "/videos/cropet-isa/2.mp4",
+      "capa": "/videos/cropet-isa/2.webp"
+    },
+    {
+      "src": "/videos/cropet-isa/3.mp4",
+      "capa": "/videos/cropet-isa/3.webp"
+    },
+    {
+      "src": "/videos/cropet-isa/4.mp4",
+      "capa": "/videos/cropet-isa/4.webp"
+    },
+    {
+      "src": "/videos/cropet-isa/5.mp4",
+      "capa": "/videos/cropet-isa/5.webp"
+    },
+    {
+      "src": "/videos/cropet-isa/6.mp4",
+      "capa": "/videos/cropet-isa/6.webp"
+    }
+  ],
   "kit-robe-e-camisola-gleicy": [
     {
       "src": "/videos/kit-robe-e-camisola-gleicy/1.mp4",
@@ -20,16 +46,6 @@ export const videosPorProduto: Record<string, Video[]> = {
     {
       "src": "/videos/camisola-diamante/1.mp4",
       "capa": "/videos/camisola-diamante/1.webp"
-    }
-  ],
-  "baby-doll-shakira": [
-    {
-      "src": "/videos/baby-doll-shakira/1.mp4",
-      "capa": "/videos/baby-doll-shakira/1.webp"
-    },
-    {
-      "src": "/videos/baby-doll-shakira/2.mp4",
-      "capa": "/videos/baby-doll-shakira/2.webp"
     }
   ],
   "baby-doll-babadinho-diamante": [
