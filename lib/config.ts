@@ -48,8 +48,8 @@ export const perfil = {
 
 /** Banners do topo em vídeo (desde 13/11/2026): vídeo + capa + produto para onde o banner leva. */
 export const banners = [
-  { video: "/banners/conjunto-decote-profundo-preto.mp4", capa: "/banners/conjunto-decote-profundo-preto.webp", produto: "conjunto-decote-profundo", alt: "Conjunto Decote Profundo preto" },
   { video: "/banners/kit-3-pecas-fim-de-ano-amarelo.mp4", capa: "/banners/kit-3-pecas-fim-de-ano-amarelo.webp", produto: "kit-3-pecas-fim-de-ano", alt: "Kit 3 Peças Fim de Ano amarelo" },
+  { video: "/banners/conjunto-decote-profundo-preto.mp4", capa: "/banners/conjunto-decote-profundo-preto.webp", produto: "conjunto-decote-profundo", alt: "Conjunto Decote Profundo preto" },
   { video: "/banners/conjunto-correntes-chocolate.mp4", capa: "/banners/conjunto-correntes-chocolate.webp", produto: "conjunto-correntes", alt: "Conjunto Correntes chocolate" },
   { video: "/banners/conjunto-melinda-roxo.mp4", capa: "/banners/conjunto-melinda-roxo.webp", produto: "conjunto-melinda", alt: "Conjunto Melinda roxo" },
 ];
