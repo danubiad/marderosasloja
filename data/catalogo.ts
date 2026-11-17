@@ -3817,4 +3817,22 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-17",
   },
+  {
+    id: "180",
+    slug: "cropet-divina",
+    referencia: "MR-180",
+    nome: "Cropet Divina",
+    descricao: "Cropet com bojo bordado em pétalas com contorno dourado + calcinha com o mesmo bordado e renda.",
+    categorias: ["Conjuntos"],
+    preco: 55.00,
+    novidade: true,
+    fotos: ["/produtos/cropet-divina/1.webp","/produtos/cropet-divina/2.webp","/produtos/cropet-divina/4.webp","/produtos/cropet-divina/3.webp"],
+    cores: [
+      { nome: "Vermelho", hex: "#b01232", foto: "/produtos/cropet-divina/1.webp", amostra: "/produtos/amostras/cropet-divina-vermelho.webp" },
+      { nome: "Branco", hex: "#e7e8f7", foto: "/produtos/cropet-divina/2.webp", amostra: "/produtos/amostras/cropet-divina-branco.webp" },
+      { nome: "Preto", hex: "#13111e", foto: "/produtos/cropet-divina/4.webp", amostra: "/produtos/amostras/cropet-divina-preto.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-17",
+  },
 ];
