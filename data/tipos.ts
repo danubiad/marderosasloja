@@ -57,6 +57,7 @@ export const categorias = [
   "Cueca",
   "Sutiã Avulso",
   "Amamentação",
+  "Fitness",
   "Plus Size",
 ] as const;
 
