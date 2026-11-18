@@ -2,6 +2,16 @@
 import type { Video } from "./tipos";
 
 export const videosPorProduto: Record<string, Video[]> = {
+  "cropet-e-calcinha-de-tule": [
+    {
+      "src": "/videos/cropet-e-calcinha-de-tule/1.mp4",
+      "capa": "/videos/cropet-e-calcinha-de-tule/1.webp"
+    },
+    {
+      "src": "/videos/cropet-e-calcinha-de-tule/2.mp4",
+      "capa": "/videos/cropet-e-calcinha-de-tule/2.webp"
+    }
+  ],
   "cropet-isa": [
     {
       "src": "/videos/cropet-isa/1.mp4",
