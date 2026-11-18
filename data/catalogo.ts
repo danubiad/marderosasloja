@@ -3831,4 +3831,23 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-18",
   },
+  {
+    id: "182",
+    slug: "pijama-masculino-longo",
+    referencia: "MR-182",
+    nome: "Pijama Masculino Longo",
+    descricao: "Camiseta manga curta com bolsinho + calça longa estampada.",
+    categorias: ["Pijama", "Cueca"],
+    preco: 70.00,
+    novidade: true,
+    fotos: ["/produtos/pijama-masculino-longo/3.webp","/produtos/pijama-masculino-longo/1.webp","/produtos/pijama-masculino-longo/2.webp","/produtos/pijama-masculino-longo/4.webp"],
+    cores: [
+      { nome: "Marinho Xadrez", hex: "#1c2340", foto: "/produtos/pijama-masculino-longo/3.webp", amostra: "/produtos/amostras/pijama-masculino-longo-marinho-xadrez.webp" },
+      { nome: "Marrom Xadrez", hex: "#5e3c2c", foto: "/produtos/pijama-masculino-longo/1.webp", amostra: "/produtos/amostras/pijama-masculino-longo-marrom-xadrez.webp" },
+      { nome: "Vermelho Estampado", hex: "#9e1b2a", foto: "/produtos/pijama-masculino-longo/2.webp", amostra: "/produtos/amostras/pijama-masculino-longo-vermelho-estampado.webp" },
+      { nome: "Azul Xadrez", hex: "#6f95d6", foto: "/produtos/pijama-masculino-longo/4.webp", amostra: "/produtos/amostras/pijama-masculino-longo-azul-xadrez.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-18",
+  },
 ];
