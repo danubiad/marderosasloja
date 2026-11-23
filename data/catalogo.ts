@@ -426,14 +426,14 @@ export const catalogo: Produto[] = [
     descricao: "",
     categorias: ["Conjuntos"],
     preco: 54.90,
-    precosTamanho: { XG: 60.00 },
+    precosTamanho: { "XG 48": 60.00, "XG 50": 60.00 },
     fotos: ["/produtos/conjunto-cropet-daniela/8.webp","/produtos/conjunto-cropet-daniela/7.webp","/produtos/conjunto-cropet-daniela/2.webp","/produtos/conjunto-cropet-daniela/1.webp"],
     cores: [
       { nome: "Vermelho", hex: "#e0564e", foto: "/produtos/conjunto-cropet-daniela/2.webp", amostra: "/produtos/amostras/conjunto-cropet-daniela-vermelho.webp" },
       { nome: "Preto", hex: "#5c3827", foto: "/produtos/conjunto-cropet-daniela/8.webp", amostra: "/produtos/amostras/conjunto-cropet-daniela-preto.webp" },
       { nome: "Branco", hex: "#ecd4dc", foto: "/produtos/conjunto-cropet-daniela/11.webp", amostra: "/produtos/amostras/conjunto-cropet-daniela-branco.webp" },
     ],
-    tamanhos: ["P", "M", "G", "GG", "XG"],
+    tamanhos: ["P", "M", "G", "GG", "XG 48", "XG 50"],
     criadoEm: "2026-10-04",
   },
   {
