@@ -5,7 +5,7 @@ import { buscarProduto } from "@/data/produtos";
 import { precosDoProduto } from "@/lib/disponibilidade";
 import { alterarDisponibilidade, salvarCusto } from "@/lib/estoque";
 import { conferirLogin, encerrarSessao, estaLogado, iniciarSessao } from "@/lib/painel";
-import { substituirItem } from "@/lib/conferencia";
+import { acrescentarItem, alterarQuantidade, substituirItem } from "@/lib/conferencia";
 import { enviarCompraMeta } from "@/lib/meta-conversoes";
 import { salvarMetaDiaria } from "@/lib/metas";
 import { conectarMeta, desconectarMeta } from "@/lib/meta-ads";
@@ -126,6 +126,32 @@ export async function substituirLoja(id: string, origem: string, produtoId: stri
 export async function removerSubstituicaoLoja(id: string, subId: string) {
   await exigirLogin();
   await removerSubstituicao(id, subId);
+  refresh();
+}
+
+/** Acrescenta uma peça ao pedido. Devolve a mensagem de erro, se houver. */
+export async function acrescentarLoja(id: string, produtoId: string, cor: string, tamanho: string, quantidade: number): Promise<string | void> {
+  await exigirLogin();
+  const pedido = await buscarPedido(id);
+  if (!pedido) return "Pedido não encontrado.";
+  try {
+    await acrescentarItem(pedido, produtoId, cor, tamanho, quantidade, "loja");
+  } catch (e) {
+    return e instanceof Error ? e.message : "Não foi possível acrescentar.";
+  }
+  refresh();
+}
+
+/** Muda a quantidade de uma linha do pedido (0 = remove). Devolve a mensagem de erro, se houver. */
+export async function quantidadeLoja(id: string, chave: string, quantidade: number): Promise<string | void> {
+  await exigirLogin();
+  const pedido = await buscarPedido(id);
+  if (!pedido) return "Pedido não encontrado.";
+  try {
+    await alterarQuantidade(pedido, chave, quantidade, "loja");
+  } catch (e) {
+    return e instanceof Error ? e.message : "Não foi possível mudar a quantidade.";
+  }
   refresh();
 }
 

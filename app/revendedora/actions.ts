@@ -3,7 +3,7 @@
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
-import { substituirItem } from "@/lib/conferencia";
+import { acrescentarItem, alterarQuantidade, substituirItem } from "@/lib/conferencia";
 import { loja } from "@/lib/config";
 import { somenteDigitos } from "@/lib/format";
 import { kv } from "@/lib/kv";
@@ -182,5 +182,25 @@ export async function removerSubstituicaoRevendedora(id: string, subId: string) 
   // Depois que a loja conferiu a substituição, só a loja pode desfazer
   if (pedido.conferencia?.[`sub:${subId}`]) throw new Error("Substituição já conferida pela loja.");
   await removerSubstituicao(id, subId);
+  refresh();
+}
+
+/** A revendedora acrescenta uma peça ao pedido da cliente dela. Devolve a mensagem de erro, se houver. */
+export async function acrescentarRevendedora(id: string, produtoId: string, cor: string, tamanho: string, quantidade: number): Promise<string | void> {
+  try {
+    await acrescentarItem(await pedidoDaRevendedora(id), produtoId, cor, tamanho, quantidade, "revendedora");
+  } catch (e) {
+    return e instanceof Error ? e.message : "Não foi possível acrescentar.";
+  }
+  refresh();
+}
+
+/** A revendedora muda a quantidade de uma linha (0 = remove). Devolve a mensagem de erro, se houver. */
+export async function quantidadeRevendedora(id: string, chave: string, quantidade: number): Promise<string | void> {
+  try {
+    await alterarQuantidade(await pedidoDaRevendedora(id), chave, quantidade, "revendedora");
+  } catch (e) {
+    return e instanceof Error ? e.message : "Não foi possível mudar a quantidade.";
+  }
   refresh();
 }

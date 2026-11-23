@@ -9,7 +9,7 @@ import { loja } from "@/lib/config";
 import { formatarCep, formatarDocumento, formatarPreco, formatarTelefone } from "@/lib/format";
 import { buscarCustos, buscarDisponibilidade } from "@/lib/estoque";
 import { buscarPedido, custoDoPedido, resumoConferencia, statusPedido } from "@/lib/pedidos";
-import { marcarItemLoja, removerSubstituicaoLoja, substituirLoja } from "../../actions";
+import { acrescentarLoja, marcarItemLoja, quantidadeLoja, removerSubstituicaoLoja, substituirLoja } from "../../actions";
 import { AbasPainel } from "../../AbasPainel";
 import { bloqueioPainel } from "../../acesso";
 import { SeletorStatus } from "../../SeletorStatus";
@@ -66,7 +66,7 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
           {p.revendedora
             ? " A revendedora vê as marcas em tempo real no cadastro dela e pode escolher a substituição."
             : " Nas peças em falta, você pode registrar a substituição combinada com a cliente."}{" "}
-          A cliente também pode escolher a troca pelo link do pedido (até o pedido ser enviado).
+          Toque na quantidade (✎) para mudar ou remover uma peça, e em <strong>+ Acrescentar peça</strong> para incluir outra. A cliente também pode escolher a troca pelo link do pedido (até o pedido ser enviado).
         </p>
 
         <section className="mt-4">
@@ -77,6 +77,8 @@ export default async function ConferirPedido({ params }: PageProps<"/painel/pedi
             marcar={marcarItemLoja.bind(null, p.id)}
             substituir={substituirLoja.bind(null, p.id)}
             removerSubstituicao={removerSubstituicaoLoja.bind(null, p.id)}
+            acrescentar={acrescentarLoja.bind(null, p.id)}
+            mudarQuantidade={quantidadeLoja.bind(null, p.id)}
           />
         </section>
 

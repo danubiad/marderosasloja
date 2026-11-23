@@ -26,7 +26,7 @@ export type Conferencia = "ok" | "falta";
 
 export type Substituicao = {
   id: string;
-  /** Chave do item em falta que está sendo substituído */
+  /** Chave do item em falta que está sendo substituído, ou ORIGEM_ACRESCIMO (peça acrescentada pela vendedora) */
   origem: string;
   produtoId: string;
   nome: string;
@@ -81,6 +81,8 @@ export type Pedido = {
   /** Marcas de conferência por item: chave -> ok/falta */
   conferencia?: Record<string, Conferencia>;
   substituicoes?: Substituicao[];
+  /** Quantidade mudada pela vendedora nos itens do pedido: chave do item -> nova quantidade (0 = removido) */
+  quantidades?: Record<string, number>;
   /** Dados do navegador da cliente no envio, para o Meta ligar a venda ao anúncio que ela clicou */
   meta?: { fbp?: string; fbc?: string; ip?: string; navegador?: string; url?: string };
   /** Quando a venda confirmada foi enviada ao Meta como compra (Purchase) */
@@ -103,6 +105,16 @@ export const chaveConferencia = {
   substituicao: (subId: string) => `sub:${subId}`,
 };
 
+/** Origem das peças acrescentadas ao pedido pela vendedora (não substituem nada). */
+export const ORIGEM_ACRESCIMO = "acrescimo";
+
+export const ehAcrescimo = (s: Pick<Substituicao, "origem">) => s.origem === ORIGEM_ACRESCIMO;
+
+/** Quantidade de uma linha do pedido, já com a mudança da vendedora (0 = removida). */
+export function quantidadeDaLinha(p: Pick<Pedido, "quantidades">, produtoId: string, cor: string, tamanho: string, original: number) {
+  return p.quantidades?.[chaveConferencia.item(produtoId, cor, tamanho)] ?? original;
+}
+
 /** A cliente pode trocar as peças em falta enquanto o pedido não foi enviado. */
 export function clientePodeSubstituir(p: Pedido) {
   const status = p.status ?? "novo";
@@ -113,7 +125,7 @@ export function clientePodeSubstituir(p: Pedido) {
 export function quantidadeSemSubstituir(p: Pedido, origem: string) {
   const [produtoId, cor, tamanho] = origem.split("|");
   const item = p.itens.find((i) => i.produtoId === produtoId);
-  const original = item?.grade[`${cor}|${tamanho}`] ?? 0;
+  const original = item ? quantidadeDaLinha(p, produtoId, cor, tamanho, item.grade[`${cor}|${tamanho}`] ?? 0) : 0;
   const substituidas = (p.substituicoes ?? []).filter((s) => s.origem === origem).reduce((t, s) => t + s.quantidade, 0);
   return Math.max(0, original - substituidas);
 }
@@ -131,9 +143,10 @@ export function custoDoPedido(p: Pedido, custos: Record<string, number>) {
     else custo += q * custos[produtoId];
   };
   for (const item of p.itens) {
-    for (const [chave, q] of Object.entries(item.grade)) {
+    for (const [chave, original] of Object.entries(item.grade)) {
       const [cor, tam] = chave.split("|");
-      if (conf[chaveConferencia.item(item.produtoId, cor, tam)] !== "falta") somar(item.produtoId, q);
+      const q = quantidadeDaLinha(p, item.produtoId, cor, tam, original);
+      if (q > 0 && conf[chaveConferencia.item(item.produtoId, cor, tam)] !== "falta") somar(item.produtoId, q);
     }
   }
   for (const s of p.substituicoes ?? []) {
@@ -153,8 +166,10 @@ export function resumoConferencia(p: Pedido) {
   let totalLinhas = 0;
 
   for (const item of p.itens) {
-    for (const [chave, q] of Object.entries(item.grade)) {
+    for (const [chave, original] of Object.entries(item.grade)) {
       const [cor, tam] = chave.split("|");
+      const q = quantidadeDaLinha(p, item.produtoId, cor, tam, original);
+      if (q === 0) continue; // removido pela vendedora
       const marca = conf[chaveConferencia.item(item.produtoId, cor, tam)];
       totalLinhas++;
       if (marca) conferidos++;
@@ -181,7 +196,8 @@ export function resumoConferencia(p: Pedido) {
   }
 
   const desconto = p.subtotal > 0 ? Math.round(subtotal * (p.desconto / p.subtotal) * 100) / 100 : 0;
-  const alterado = Boolean(p.substituicoes?.length) || Object.values(conf).includes("falta");
+  const alterado =
+    Boolean(p.substituicoes?.length) || Object.values(conf).includes("falta") || Object.keys(p.quantidades ?? {}).length > 0;
   return {
     pecas,
     subtotal,

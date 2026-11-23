@@ -8,7 +8,7 @@ import { buscarDisponibilidade } from "@/lib/estoque";
 import { formatarCep, formatarPreco, formatarTelefone } from "@/lib/format";
 import { buscarPedido, statusPedido } from "@/lib/pedidos";
 import { revendedoraLogada } from "@/lib/revendedoras";
-import { removerSubstituicaoRevendedora, substituirRevendedora } from "../../actions";
+import { acrescentarRevendedora, quantidadeRevendedora, removerSubstituicaoRevendedora, substituirRevendedora } from "../../actions";
 
 export const metadata: Metadata = {
   title: "Pedido — Revendedora Mar de Rosas",
@@ -42,7 +42,7 @@ export default async function PedidoRevendedora({ params }: PageProps<"/revended
           A loja marca cada peça na separação: <strong className="text-sucesso">✓</strong> separada,{" "}
           <strong className="text-promo">✕</strong> em falta. Esta página atualiza sozinha. Nas peças em falta, combine com sua
           cliente e toque em <strong>Substituir esta peça</strong>. Sua cliente também pode escolher a troca pelo link do
-          pedido e reenviar para você no WhatsApp.
+          pedido e reenviar para você no WhatsApp. Você também pode mudar a quantidade (✎), remover ou acrescentar peças até o pedido ser enviado.
         </p>
 
         <section className="mt-4">
@@ -52,6 +52,8 @@ export default async function PedidoRevendedora({ params }: PageProps<"/revended
             disponibilidade={await buscarDisponibilidade()}
             substituir={substituirRevendedora.bind(null, p.id)}
             removerSubstituicao={removerSubstituicaoRevendedora.bind(null, p.id)}
+            acrescentar={acrescentarRevendedora.bind(null, p.id)}
+            mudarQuantidade={quantidadeRevendedora.bind(null, p.id)}
           />
         </section>
 

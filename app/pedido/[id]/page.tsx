@@ -51,7 +51,11 @@ export default async function PaginaPedido({ params, searchParams }: PageProps<"
   ].join("\n");
   const destino = pedido.revendedora ? `55${pedido.revendedora.whatsapp}` : loja.whatsapp;
   const linkWhatsapp = `https://wa.me/${destino}?text=${encodeURIComponent(mensagem)}`;
-  const conferenciaIniciada = Object.keys(pedido.conferencia ?? {}).length > 0;
+  // Mostra a conferência assim que a loja marca, troca, muda a quantidade ou acrescenta peça
+  const conferenciaIniciada =
+    Object.keys(pedido.conferencia ?? {}).length > 0 ||
+    Object.keys(pedido.quantidades ?? {}).length > 0 ||
+    (pedido.substituicoes?.length ?? 0) > 0;
   const podeSubstituir = clientePodeSubstituir(pedido);
 
   // Depois que a cliente troca peças em falta, ela reenvia o pedido atualizado para a vendedora

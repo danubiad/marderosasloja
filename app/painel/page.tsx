@@ -161,7 +161,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
                         {conf.conferidos} de {conf.totalLinhas} itens
                         {conf.faltas > 0 && <span className="text-promo"> · {conf.faltas} em falta</span>}
                         {(p.substituicoes?.length ?? 0) > 0 && (
-                          <span className="text-sky-800"> · {p.substituicoes!.length} substituição(ões)</span>
+                          <span className="text-sky-800"> · {p.substituicoes!.length} troca(s)/acréscimo(s)</span>
                         )}
                       </>
                     )}
