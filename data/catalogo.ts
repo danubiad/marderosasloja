@@ -3913,4 +3913,21 @@ export const catalogo: Produto[] = [
     tamanhos: ["XG"],
     criadoEm: "2026-11-23",
   },
+  {
+    id: "189",
+    slug: "body-sem-bojo-tule-bordado",
+    referencia: "MR-189",
+    nome: "Body Sem Bojo Tule Bordado",
+    descricao: "Body de tule bordado sem bojo, com tiras na cintura e costas abertas.",
+    categorias: ["Conjuntos"],
+    preco: 65.00,
+    novidade: true,
+    fotos: ["/produtos/body-sem-bojo-tule-bordado/1.webp","/produtos/body-sem-bojo-tule-bordado/2.webp","/produtos/body-sem-bojo-tule-bordado/3.webp","/produtos/body-sem-bojo-tule-bordado/4.webp","/produtos/body-sem-bojo-tule-bordado/5.webp","/produtos/body-sem-bojo-tule-bordado/6.webp"],
+    cores: [
+      { nome: "Vermelho", hex: "#b5121f", foto: "/produtos/body-sem-bojo-tule-bordado/1.webp", amostra: "/produtos/amostras/body-sem-bojo-tule-bordado-vermelho.webp" },
+      { nome: "Preto", hex: "#17151a", foto: "/produtos/body-sem-bojo-tule-bordado/6.webp", amostra: "/produtos/amostras/body-sem-bojo-tule-bordado-preto.webp" },
+    ],
+    tamanhos: ["P","M","G","GG"],
+    criadoEm: "2026-11-23",
+  },
 ];
