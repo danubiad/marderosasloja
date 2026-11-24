@@ -52,7 +52,7 @@ export const categorias = [
   "Camisolas",
   "Robes",
   "Baby Doll",
-  "Baby Doll Infantil",
+  "Infantil",
   "Pijama",
   "Cueca",
   "Sutiã Avulso",
