@@ -42,4 +42,5 @@ export const custosPorProduto: Record<string, number> = {
   "117": 36.00, // Conjunto de Tule Sem Bojo
   "118": 35.00, // Conjunto Tomara que Caia
   "126": 38.00, // Pijama Masculino
+  "196": 26.00, // Pijama Americano Infantil
 };
