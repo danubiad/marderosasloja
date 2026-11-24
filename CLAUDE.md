@@ -27,8 +27,12 @@ Tudo em `lib/config.ts`:
 - Entrega: **Excursão/Ônibus (R$ 30)** ou **A combinar pelos Correios** (frete cotado depois). Retirada na loja foi removida.
 - No catálogo da revendedora a entrega é "Combinar com a vendedora".
 - Cupom: `BEMVINDA10` (10%)
-- WhatsApp da loja: (62) 99524-9197 — o pedido é enviado para lá
+- WhatsApp da loja: (62) 98531-5031 (desde 09/11/2026) — o pedido é enviado para lá
 - Perfil/bio no topo estilo Instagram (@marderosasloja, Itaguari-GO, atacado desde 2010), banners e faixa de aviso no topo
+- **Banners em vídeo (desde 13/11/2026):** `banners` em `lib/config.ts` (vídeo .mp4 + capa .webp em `public/banners/`). Se não houver vídeo da cor da foto, pode usar outra cor (pedido da dona).
+  Embaixo, botão verde "Entre no grupo de clientes" (`grupoClientes`, link do grupo do WhatsApp), só no catálogo da loja (não aparece em `/r/<usuario>`).
+  Na Ita Bonita os banners continuam em foto
+- Fileira "Descubra cada detalhe em vídeo" (embaixo da vitrine, nos dois sites) abre no 2º vídeo, com um pedacinho dos lados aparecendo (13/11/2026)
 - Selos do cartão da loja (inspirado na Fiorenzo Moda Íntima, print em `OneDrive\Imagens\site\detalhes`): "✓ Atacado", "2.404 pedidos" e "1.170.493 visitas".
   Esses números são fixos, escolhidos pela dona (`perfil.pedidos` e `perfil.visitas` em `lib/config.ts`), e não são contados de verdade.
   Pedido mínimo e "desde 2010" saíram dos selos; o mínimo continua na faixa do topo, no rodapé e no carrinho
@@ -37,7 +41,7 @@ Tudo em `lib/config.ts`:
   (topo, cartão, título da página, prévia do link no WhatsApp, texto de compartilhar). No lugar vai a foto ou logo que ela envia no painel
   ("Sua foto ou logo", `FormFoto.tsx`), guardada em JPG no Redis (`revendedora-foto:<usuario>`) e servida por `/api/revendedora-foto/<usuario>`.
   O endereço do site (lojamarderosas.com.br) continua aparecendo no link
-- Conferência do pedido no painel com ✓/✕ e substituição de peças em falta em tempo real; a cliente também pode substituir e reenviar no WhatsApp
+- Conferência do pedido no painel com ✓/✕ e substituição de peças em falta em tempo real; a cliente também pode substituir e reenviar no WhatsApp. Desde 23/11/2026 a vendedora (loja e revendedora) muda a quantidade (✎), remove (`quantidades`, 0 = removida) e acrescenta peças (`substituicoes` com origem "acrescimo"); "Substituir esta peça" e "+ Acrescentar peça" abrem o catálogo inteiro
 - Meta Pixel (`lib/pixel.ts`, ID 483350873657439): visita, produto visto, carrinho e pedido enviado (= `InitiateCheckout`, "iniciou a compra")
 - **Compra (Purchase) só quando a dona confirma a venda no painel:** status "Confirmado" (ou Separando/Enviado/Concluído) envia a compra pela
   API de Conversões (`lib/meta-conversoes.ts`, token `META_CAPI_TOKEN` na Vercel), uma vez por pedido. O pedido guarda os cookies `_fbp`/`_fbc` no envio.
@@ -50,11 +54,12 @@ Tudo em `lib/config.ts`:
     Gasto diário da conta de anúncios soma com o gasto anotado ("outro tráfego, fora do Meta"); seguidores do Instagram são gravados no dia ao abrir a aba
   - Metas (`lib/metas.ts`): diária editável no painel (inicial R$ 5.000); semanal = ×7; mensal = × dias do mês; projeção do mês pelo ritmo atual
 - Rodapé da loja (`components/Rodape.tsx`, dados em `loja` no `lib/config.ts`): CNPJ 12.529.165/0001-34, endereço Av. Goiás nº 73, Centro, Itaguari-GO, CEP 76650-000, pagamento Pix ou até 12x no cartão, postagem imediata (pronta entrega)
-- **Sacolinha do Instagram (desde 19/10/2026):** `/api/catalogo-meta` é a lista de produtos (CSV) que o Gerenciador de Comércio da Meta lê todo dia; id = referência MR-0xx (igual ao Pixel). Produto com preço 0 fica de fora. As fotos vão em JPG por `/api/foto/produtos/<slug>/<n>.jpg` (converte o .webp; a Meta não aceita WebP). A loja do Instagram já existia ligada a outro site e foi trocada para este
+- **Sacolinha do Instagram (desde 19/10/2026):** `/api/catalogo-meta` é a lista de produtos (CSV) que o Gerenciador de Comércio da Meta lê todo dia; id = referência MR-0xx (igual ao Pixel). Produto com preço 0 fica de fora. As fotos vão em JPG por `/api/foto/produtos/<slug>/<n>.jpg` (converte o .webp; a Meta não aceita WebP). A loja do Instagram já existia ligada a outro site e foi trocada para este. **Desde 08/11/2026 os links do feed e o site da loja usam `https://srv2083377.hstgr.cloud`** (endereço grátis da VPS; o .com.br está verificado no Meta por outra empresa e a Vercel foi pausada). Verificado pela meta tag `facebook-domain-verification` em `app/layout.tsx` (código 53luuiwx…; o ligrcm… era do vercel.app): nunca tirar
 - Botão de baixar foto (`components/BotaoBaixarFoto.tsx`) em cada foto do produto: salva em JPG para as revendedoras postarem no Instagram
 - Página do produto (só no catálogo da loja): "Revenda por" = preço × 2, embaixo do preço. Carrinho da loja: barra de progresso até o pedido mínimo ("Falta R$ X para fechar seu pedido")
 - Microsoft Clarity (`lib/clarity.ts`, ID ytqi537gsd): grava a navegação das clientes; pausado no `/painel`. Botão "Clarity" no topo do painel abre o dashboard
 - Produto com `preco: 0` aparece como "Preço em breve" e não pode ser pedido
+- **Top 10 mais pedidos da semana primeiro (pedido da dona, 11/11/2026):** `lib/mais-pedidos.ts` soma as peças dos pedidos dos últimos 7 dias (sem cancelados, guardado 30 min); na ordem "Mais recentes" da vitrine (loja e revendedoras) os 10 primeiros que estão ativos vêm na frente (sem etiqueta: ela não quer), depois as novidades (`novidade: true`), depois o resto. Nunca tirar
 - **Aba Produtos do painel** (`/painel/produtos`, desde 20/10/2026): ativos primeiro, inativos embaixo, botão Ativar/Inativar; "Variações" desliga cor, tamanho inteiro
   ou combinação cor+tamanho (esgotado). Fica no Redis `produtos:disponibilidade` (`lib/disponibilidade.ts`, `lib/estoque.ts`) e vale na hora na loja, revendedoras,
   vídeos e sacolinha do Instagram (por isso essas páginas agora são geradas a cada acesso). O pedido com peça esgotada é recusado (`/api/pedidos`, erro 409)
@@ -91,7 +96,7 @@ Tudo em `lib/config.ts`:
   Cada kit conta como 1 peça no carrinho
 - **Preço por tamanho:** `precosTamanho` no produto (ex.: Pijama Mãe e Filha, adulto R$ 40 e infantil R$ 38 na mesma grade, tamanhos "P inf." etc.).
   O preço aparece embaixo de cada tamanho e vale no carrinho, no pedido, na substituição e na margem da revendedora
-- Categorias fixas, na ordem do filtro: Conjuntos, Calcinhas, Kits, Camisolas, Robes, Baby Doll, Baby Doll Infantil, Pijama, Cueca, Sutiã Avulso, Amamentação (desde 29/10/2026), Plus Size. Um produto pode estar em mais de uma.
+- Categorias fixas, na ordem do filtro: Conjuntos, Calcinhas, Kits, Camisolas, Robes, Baby Doll, Infantil (era "Baby Doll Infantil" até 24/11/2026: tudo que é infantil vai nela; Mãe e Filha fica em Pijama e Infantil), Pijama, Cueca, Sutiã Avulso, Amamentação (desde 29/10/2026), Fitness (desde 18/11/2026), Plus Size. Um produto pode estar em mais de uma.
 
 ## Como cadastrar produtos novos
 
@@ -101,7 +106,7 @@ Para achar os novos, olhe a data de modificação das pastas e compare com o que
 1. **Fotos:** converter para `.webp` em `public/produtos/<slug>/` (usar `sharp`, já instalado), no máximo 1200 px de largura (veja abaixo)
 2. **Bolinhas de cor:** recorte do tecido em `public/produtos/amostras/<slug>-<cor>.webp`
    (`npm run amostra -- <foto> <nome> <x%> <y%> [tamanho%]`); cada cor tem `nome`, `hex`, `foto` e `amostra`
-3. **Cadastro:** adicionar em `data/catalogo.ts` com a próxima referência `MR-0xx` (última usada: MR-135, em 30/10/2026), próximo `id`, `novidade: true` e `criadoEm` com a data do dia
+3. **Cadastro:** adicionar em `data/catalogo.ts` com a próxima referência `MR-0xx` (última usada: MR-198, em 24/11/2026), próximo `id`, `novidade: true` e `criadoEm` com a data do dia
 4. **Vídeos:** `.mp4` em `public/videos/<slug>/` e capa `.webp` ao lado; registrar em `data/videos.ts`.
    Para gerar a capa precisa de ffmpeg — instalar `ffmpeg-static` via npm na pasta temporária (scratchpad), não no projeto
 5. **Custo:** se a nota tiver custo, adicionar em `data/custos.ts` com o `id` do produto
@@ -133,7 +138,7 @@ Sem Redis configurado, os pedidos de teste ficam em `.data/pedidos.json`.
 
 ## Segurança (30/10/2026)
 
-- Next.js 16.4.3 (a 16.3.8 tinha falhas públicas). Rodar `npm audit --omit=dev` de vez em quando.
+- Next.js 16.4.6 (a 16.3.8 e a 16.4.3 tinham falhas públicas; o build recusa versão com falha). Rodar `npm audit --omit=dev` de vez em quando.
 - Revendedoras: senha mínima de 8; o cookie leva a versão da sessão (`sessao` no cadastro), e "Sair" ou senha nova desconectam todos os aparelhos.
   "Esqueci minha senha" grava `pedidoSenha`; no painel (Revendedoras) a dona toca em "Mandar link de senha nova", que abre o WhatsApp dela com o link
   `/revendedora/nova-senha?t=<código>` (vale 1 hora, uso único; no banco fica só o hash do código, `revendedora-senha:<sha256>`).
