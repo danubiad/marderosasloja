@@ -4223,4 +4223,21 @@ export const catalogo: Produto[] = [
     tamanhos: TAMANHOS_PADRAO,
     criadoEm: "2026-11-25",
   },
+  {
+    id: "206",
+    slug: "bermuda-leco",
+    referencia: "MR-206",
+    nome: "Bermuda Leco",
+    descricao: "Bermuda sem costura de cintura alta, modeladora, para usar por baixo da roupa.",
+    categorias: ["Calcinhas"],
+    preco: 44.90,
+    novidade: true,
+    fotos: ["/produtos/bermuda-leco/1.webp","/produtos/bermuda-leco/2.webp","/produtos/bermuda-leco/3.webp","/produtos/bermuda-leco/4.webp"],
+    cores: [
+      { nome: "Preto", hex: "#141416", foto: "/produtos/bermuda-leco/1.webp", amostra: "/produtos/amostras/bermuda-leco-preto.webp" },
+      { nome: "Nude", hex: "#d9c2a5", foto: "/produtos/bermuda-leco/3.webp", amostra: "/produtos/amostras/bermuda-leco-nude.webp" },
+    ],
+    tamanhos: TAMANHOS_PADRAO,
+    criadoEm: "2026-11-25",
+  },
 ];
