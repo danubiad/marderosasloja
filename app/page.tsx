@@ -1,3 +1,4 @@
+import { BannerBlackFriday } from "@/components/BannerBlackFriday";
 import { Banners } from "@/components/Banners";
 import { BioLoja } from "@/components/BioLoja";
 import { Cabecalho } from "@/components/Cabecalho";
@@ -14,6 +15,7 @@ export default async function Home() {
     <>
       <Cabecalho />
       <main className="flex-1">
+        <BannerBlackFriday />
         <Banners />
         <BioLoja totalProdutos={produtos.length} />
         <Vitrine produtos={produtos} categorias={categorias} maisPedidos={maisPedidos} />
