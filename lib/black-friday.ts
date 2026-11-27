@@ -26,9 +26,30 @@ export function descontoBlackFriday(p: Pick<Produto, "categorias">) {
 
 const comDesconto = (valor: number, desconto: number) => Math.round(valor * (1 - desconto) * 100) / 100;
 
+/** Cor preta do produto: "Preto" primeiro; senão a que começa com Preto/Preta ("Preto com Renda Rosa", "Preto Cisnes");
+ *  senão a que termina em preto sem ser mistura ("Vaquinha Preta", sim; "Vermelho com Preto", não). */
+function corPreta(p: Produto) {
+  const nome = (c: Produto["cores"][number]) => c.nome.trim().toLowerCase();
+  return (
+    p.cores.find((c) => nome(c) === "preto" || nome(c) === "preta") ??
+    p.cores.find((c) => /^pret[oa]\b/.test(nome(c))) ??
+    p.cores.find((c) => /\bpret[oa]s?$/.test(nome(c)) && !/ (com|e) /.test(nome(c)))
+  );
+}
+
+/** Na Black (pedido da dona, 27/11/2026): em produto que tem preto, a foto preta vira a capa e a bolinha preta vai para 1º. */
+function capaPreta<P extends Produto>(produto: P): P {
+  const preta = corPreta(produto);
+  if (!preta) return produto;
+  const fotos = preta.foto && produto.fotos.includes(preta.foto) ? [preta.foto, ...produto.fotos.filter((f) => f !== preta.foto)] : produto.fotos;
+  return { ...produto, fotos, cores: [preta, ...produto.cores.filter((c) => c !== preta)] };
+}
+
 /** Preço da Black: o normal (precoDe, se estava em promoção) vira o riscado e o novo é o normal com o desconto. */
-export function aplicarBlackFriday<P extends Produto>(produto: P): P {
-  if (!blackFridayAtiva() || !(produto.preco > 0)) return produto;
+export function aplicarBlackFriday<P extends Produto>(original: P): P {
+  if (!blackFridayAtiva()) return original;
+  const produto = capaPreta(original);
+  if (!(produto.preco > 0)) return produto;
   const desconto = descontoBlackFriday(produto);
   const normal = produto.precoDe && produto.precoDe > produto.preco ? produto.precoDe : produto.preco;
   return {
