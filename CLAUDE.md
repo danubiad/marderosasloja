@@ -148,3 +148,5 @@ Sem Redis configurado, os pedidos de teste ficam em `.data/pedidos.json`.
   RESEND_API_KEY na Vercel; sem domínio próprio o Resend só entrega no e-mail da conta dele), link de 30 min, uso único, pede o código.
   Emergência (perdeu o celular): PAINEL_SEM_AUTHENTICATOR=1 na Vercel desliga o código.
 - Falta: firewall da Vercel e aviso de consumo do Upstash.
+
+- **Black Friday 27 a 29/11/2026 (`lib/black-friday.ts`):** faixa do topo preta (só no catálogo da loja); desconto sobre o preço normal, ignorando promoções antigas: Calcinhas 7%, Baby Doll 6%, Conjuntos 5%, demais 4% (vale o maior); e foto preta como capa, com a bolinha preta em 1º, nos produtos que têm preto. Aplicado em `aplicarPreco`/`aplicarDisponibilidade`; a aba Produtos do painel usa `aplicarPrecoPainel` (sem a Black). Termina sozinha em 30/11 00:00 (Brasília), e aí voltam os preços, promoções e capas de antes (na Ita Bonita, a capa diferente).
