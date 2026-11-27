@@ -37,6 +37,11 @@ function corPreta(p: Produto) {
   );
 }
 
+/** Na Black, os produtos com preto vêm logo depois do top 10 mais pedidos na vitrine (pedido da dona, 27/11/2026). */
+export function destaquePreto(p: Produto) {
+  return blackFridayAtiva() && !!corPreta(p);
+}
+
 /** Na Black (pedido da dona, 27/11/2026): em produto que tem preto, a foto preta vira a capa e a bolinha preta vai para 1º. */
 function capaPreta<P extends Produto>(produto: P): P {
   const preta = corPreta(produto);

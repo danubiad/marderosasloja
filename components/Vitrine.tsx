@@ -8,6 +8,7 @@ import { FotoProduto } from "@/components/FotoProduto";
 import { IconeBusca, IconeSeta } from "@/components/icones";
 import type { Categoria, Produto } from "@/data/produtos";
 import { formatarPreco } from "@/lib/format";
+import { destaquePreto } from "@/lib/black-friday";
 
 type Ordem = "recentes" | "menor" | "maior" | "nome";
 
@@ -29,7 +30,8 @@ export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
   const [busca, setBusca] = useState("");
   const [menu, setMenu] = useState<"categorias" | "preco" | null>(null);
 
-  // Ordem de "Mais recentes": 1º o top 10 mais pedidos da semana (só os que estão no catálogo), 2º as novidades, depois o resto
+  // Ordem de "Mais recentes": 1º o top 10 mais pedidos da semana (só os que estão no catálogo), na Black os que têm preto,
+  // depois as novidades, depois o resto
   const top = useMemo(() => {
     const ativos = new Set(produtos.map((p) => p.id));
     return new Map(maisPedidos.filter((id) => ativos.has(id)).slice(0, 10).map((id, i) => [id, i]));
@@ -51,6 +53,8 @@ export function Vitrine({ produtos, categorias, maisPedidos = [] }: Props) {
       const ta = top.get(a.id) ?? 99;
       const tb = top.get(b.id) ?? 99;
       if (ta !== tb) return ta - tb;
+      const pa = destaquePreto(a);
+      if (pa !== destaquePreto(b)) return pa ? -1 : 1;
       if (!!a.novidade !== !!b.novidade) return a.novidade ? -1 : 1;
       return b.criadoEm.localeCompare(a.criadoEm);
     });
