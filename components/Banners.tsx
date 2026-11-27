@@ -11,7 +11,7 @@ import { banners, grupoClientes } from "@/lib/config";
  * No computador os vídeos aparecem lado a lado. Só toca o vídeo que está na tela.
  * Embaixo, o convite para o grupo de clientes no WhatsApp (só no catálogo da loja, não no das revendedoras).
  */
-export function Banners() {
+export function Banners({ soGrupo = false }: { soGrupo?: boolean }) {
   const { base, revendedora } = useLoja();
   const trilho = useRef<HTMLDivElement>(null);
   const [atual, setAtual] = useState(0);
@@ -49,6 +49,8 @@ export function Banners() {
 
   return (
     <>
+      {/* soGrupo: na Black Friday só fica o banner da Black (pedido da dona, 27/11/2026), sem estes */}
+      {!soGrupo && (
       <section className="relative">
         <div
           ref={trilho}
@@ -84,6 +86,7 @@ export function Banners() {
           ))}
         </div>
       </section>
+      )}
       {!revendedora && (
         <div className="px-4 pt-4 text-center">
           <a

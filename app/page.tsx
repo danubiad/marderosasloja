@@ -1,5 +1,6 @@
 import { BannerBlackFriday } from "@/components/BannerBlackFriday";
 import { Banners } from "@/components/Banners";
+import { blackFridayAtiva } from "@/lib/black-friday";
 import { BioLoja } from "@/components/BioLoja";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Rodape } from "@/components/Rodape";
@@ -16,7 +17,7 @@ export default async function Home() {
       <Cabecalho />
       <main className="flex-1">
         <BannerBlackFriday />
-        <Banners />
+        <Banners soGrupo={blackFridayAtiva()} />
         <BioLoja totalProdutos={produtos.length} />
         <Vitrine produtos={produtos} categorias={categorias} maisPedidos={maisPedidos} />
         <VideosEmDestaque itens={montarFeed(produtos)} />
