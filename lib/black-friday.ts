@@ -46,7 +46,8 @@ export function destaquePreto(p: Produto) {
 function capaPreta<P extends Produto>(produto: P): P {
   const preta = corPreta(produto);
   if (!preta) return produto;
-  const fotos = preta.foto && produto.fotos.includes(preta.foto) ? [preta.foto, ...produto.fotos.filter((f) => f !== preta.foto)] : produto.fotos;
+  // A foto da cor nem sempre está em `fotos` (ex.: Baby Doll Tifany, 20 produtos em 27/11/2026); entra na frente do mesmo jeito
+  const fotos = preta.foto ? [preta.foto, ...produto.fotos.filter((f) => f !== preta.foto)] : produto.fotos;
   return { ...produto, fotos, cores: [preta, ...produto.cores.filter((c) => c !== preta)] };
 }
 
