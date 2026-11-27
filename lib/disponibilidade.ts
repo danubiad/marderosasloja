@@ -1,6 +1,7 @@
 // O que está ativo ou esgotado em cada produto e o preço editado, marcados pela dona na aba Produtos do painel.
 // Pode ser usado no servidor e no navegador (não tem custo nem nada privado).
 import type { Produto } from "@/data/tipos";
+import { aplicarBlackFriday } from "@/lib/black-friday";
 
 export type DisponibilidadeProduto = {
   /** Produto fora do catálogo */
@@ -39,19 +40,24 @@ export function precosDoProduto(p: Pick<Produto, "preco" | "precoDe">) {
 }
 
 /** Usa o preço editado no painel; com promocional, o cheio vira o preço riscado (precoDe).
- *  Produto com preço por tamanho continua com o preço do cadastro. */
-export function aplicarPreco<P extends Produto>(produto: P, p: DisponibilidadeProduto | undefined): P {
+ *  Produto com preço por tamanho continua com o preço do cadastro. Sem a Black Friday: é o que a aba Produtos mostra e edita. */
+export function aplicarPrecoPainel<P extends Produto>(produto: P, p: DisponibilidadeProduto | undefined): P {
   if (p?.preco === undefined || produto.precosTamanho) return produto;
   return p.precoPromocional
     ? { ...produto, preco: p.precoPromocional, precoDe: p.preco }
     : { ...produto, preco: p.preco, precoDe: undefined };
 }
 
+/** Preço que vale para as clientes: o do painel e, enquanto durar, o desconto da Black Friday (lib/black-friday.ts). */
+export function aplicarPreco<P extends Produto>(produto: P, p: DisponibilidadeProduto | undefined): P {
+  return aplicarBlackFriday(aplicarPrecoPainel(produto, p));
+}
+
 /** Tira os produtos, cores e tamanhos desligados, marca as combinações esgotadas e aplica o preço do painel. */
 export function aplicarDisponibilidade<P extends Produto>(lista: P[], d: Disponibilidade): P[] {
   return lista.flatMap((original) => {
     const p = d[original.id];
-    if (!p) return [original];
+    if (!p) return [aplicarBlackFriday(original)];
     if (p.inativo) return [];
     const produto = aplicarPreco(original, p);
     const cores = produto.cores.filter((c) => !p.coresInativas?.includes(c.nome));

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { produtos } from "@/data/produtos";
-import { aplicarPreco } from "@/lib/disponibilidade";
+import { aplicarPrecoPainel } from "@/lib/disponibilidade";
 import { buscarCustos, buscarDisponibilidade } from "@/lib/estoque";
 import { AbasPainel } from "../AbasPainel";
 import { bloqueioPainel } from "../acesso";
@@ -18,7 +18,7 @@ export default async function Produtos() {
   const [disponibilidade, custos] = await Promise.all([buscarDisponibilidade(), buscarCustos()]);
   const lista: ProdutoPainel[] = [...produtos]
     .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
-    .map((cadastro) => aplicarPreco(cadastro, disponibilidade[cadastro.id]))
+    .map((cadastro) => aplicarPrecoPainel(cadastro, disponibilidade[cadastro.id]))
     .map((p) => ({
       id: p.id,
       nome: p.nome,
